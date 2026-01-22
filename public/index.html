@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Mi tienda</title>
+  <title>Mi tienda de juegos</title>
 
   <!-- Favicon -->
   <link rel="icon" href="images/favicon.png">
@@ -17,10 +17,12 @@
 <body>
   <div id="contenedor">
 
+    <!-- HEADER -->
     <header>
-      <h1>Mi tienda :)</h1>
+      <h1>Mi Tienda de Juegos</h1>
     </header>
 
+    <!-- NAV -->
     <nav>
       <ul>
         <li><a href="#">Inicio</a></li>
@@ -28,16 +30,66 @@
       </ul>
     </nav>
 
+    <!-- CONTENIDO -->
     <div id="contenido">
+      <!-- ASIDE / FORMULARIO -->
       <aside>
-        <!-- formulario -->
+        <h3>Añadir Producto</h3>
+        <form>
+          <div class="mb-2">
+            <input type="text" placeholder="Nombre del juego" class="form-control">
+          </div>
+          <div class="mb-2">
+            <input type="number" placeholder="Precio (€)" class="form-control">
+          </div>
+          <div class="mb-2">
+            <textarea placeholder="Descripción breve" class="form-control"></textarea>
+          </div>
+          <div class="mb-2">
+            <input type="file" class="form-control">
+          </div>
+          <button class="btn btn-success w-100">Añadir</button>
+        </form>
       </aside>
 
+      <!-- MAIN / PRODUCTOS -->
       <main>
-        <!-- productos -->
+        <!-- Producto 1 -->
+        <div class="card" style="width: 12rem;">
+          <img src="images/default.png" class="card-img-top" alt="Catan">
+          <div class="card-body">
+            <h5 class="card-title">Catan</h5>
+            <p class="card-text">Juego de estrategia para 3-4 jugadores.</p>
+            <p class="card-text"><strong>35€</strong></p>
+            <button class="btn btn-primary w-100">Añadir al carrito</button>
+          </div>
+        </div>
+
+        <!-- Producto 2 -->
+        <div class="card" style="width: 12rem;">
+          <img src="images/default.png" class="card-img-top" alt="Carcassonne">
+          <div class="card-body">
+            <h5 class="card-title">Carcassonne</h5>
+            <p class="card-text">Construye ciudades y caminos.</p>
+            <p class="card-text"><strong>25€</strong></p>
+            <button class="btn btn-primary w-100">Añadir al carrito</button>
+          </div>
+        </div>
+
+        <!-- Producto 3 -->
+        <div class="card" style="width: 12rem;">
+          <img src="images/default.png" class="card-img-top" alt="Ticket to Ride">
+          <div class="card-body">
+            <h5 class="card-title">Ticket to Ride</h5>
+            <p class="card-text">Conecta ciudades y completa rutas.</p>
+            <p class="card-text"><strong>40€</strong></p>
+            <button class="btn btn-primary w-100">Añadir al carrito</button>
+          </div>
+        </div>
       </main>
     </div>
 
+    <!-- FOOTER -->
     <footer>
       © Dawidawe taldea 
     </footer>
