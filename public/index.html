@@ -54,37 +54,27 @@
 
       <!-- MAIN / PRODUCTOS -->
       <main>
-        <!-- Producto 1 -->
-        <div class="card" style="width: 12rem;">
-          <img src="images/default.png" class="card-img-top" alt="Catan">
-          <div class="card-body">
-            <h5 class="card-title">Catan</h5>
-            <p class="card-text">Juego de estrategia para 3-4 jugadores.</p>
-            <p class="card-text"><strong>35€</strong></p>
-            <button class="btn btn-primary w-100">Añadir al carrito</button>
-          </div>
+        <div class="p-3">
+          <input type="text" id="buscador" class="form-control" placeholder="Buscar juego por nombre...">
+          <h2 id="titulo-tienda" class="mt-3">Todos los productos</h2>
         </div>
 
-        <!-- Producto 2 -->
-        <div class="card" style="width: 12rem;">
-          <img src="images/default.png" class="card-img-top" alt="Carcassonne">
-          <div class="card-body">
-            <h5 class="card-title">Carcassonne</h5>
-            <p class="card-text">Construye ciudades y caminos.</p>
-            <p class="card-text"><strong>25€</strong></p>
-            <button class="btn btn-primary w-100">Añadir al carrito</button>
+        <div id="lista-productos" class="d-flex flex-wrap gap-3 p-3">
           </div>
-        </div>
 
-        <!-- Producto 3 -->
-        <div class="card" style="width: 12rem;">
-          <img src="images/default.png" class="card-img-top" alt="Ticket to Ride">
-          <div class="card-body">
-            <h5 class="card-title">Ticket to Ride</h5>
-            <p class="card-text">Conecta ciudades y completa rutas.</p>
-            <p class="card-text"><strong>40€</strong></p>
-            <button class="btn btn-primary w-100">Añadir al carrito</button>
-          </div>
+        <div class="d-flex justify-content-center my-4">
+          <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm"> <li class="page-item">
+                <button class="page-link" id="btn-prev">&laquo; Anterior</button>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link" id="num-pagina">Página 1</span>
+              </li>
+              <li class="page-item">
+                <button class="page-link" id="btn-next">Siguiente &raquo;</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </main>
     </div>
