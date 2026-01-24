@@ -1,6 +1,6 @@
 # Tienda de Juegos - Primera Iteracion
 
-Este proyecto es una tienda online desarrollada para lal asignatura de Desarollo de Aplicaciones Web Enriquecidas.
+Este proyecto es una tienda online desarrollada para la asignatura de Desarollo de Aplicaciones Web Enriquecidas.
 ## Participantes
 - Ane Moreno 
 - Olatz Elejalde
