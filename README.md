@@ -9,7 +9,7 @@ Este proyecto es una tienda online desarrollada para lal asignatura de Desarollo
 
 ## Pasos a seguir para ejecutar el proyecto
 
-Para probar la aplicacion en local, sigu estos pasos:
+Para probar la aplicacion localmente, sigue estos pasos:
 
 ### 1. Instalar las dependencias
 Necesitamos instalar la herramienta 'http-server' para poder servir la web correctamente respetando la estructura de carpetas.
