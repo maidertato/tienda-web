@@ -26,7 +26,7 @@ export function renderizarTienda(productos) {
 }
 
 // Creamos unos juegos de prueba para empezar
-const catan = new JuegoEstrategia("Catan", 35, "Juego de estrategia.", "images/default.png", "Media");
+const catan = new JuegoEstrategia("Catan", 35, "Juego de estrategia.", "imagenes/default.png", "Media");
 inventario.push(catan);
 
 // Ejecutamos la función al cargar la página

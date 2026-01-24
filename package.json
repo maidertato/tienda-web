@@ -1,0 +1,22 @@
+{
+  "name": "tienda-web",
+  "version": "1.0.0",
+  "description": "Primera iteración de la tienda de juegos - Dawidawe",
+  "scripts": {
+    "start": "http-server public -p 8080 -c-1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maidertato/tienda-web.git"
+  },
+  "keywords": [
+    "tienda",
+    "javascript",
+    "dawe"
+  ],
+  "author": "Dawidawe taldea",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
