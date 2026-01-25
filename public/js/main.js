@@ -233,6 +233,47 @@ carritoContenedor.addEventListener('click', (e) => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const dropZone = document.getElementById("drop-zone");
+  const inputFile = document.getElementById("input-file");
+  const dropText = document.getElementById("drop-text");
+
+  if (!dropZone || !inputFile || !dropText) return;
+
+  ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+    dropZone.addEventListener(eventName, e => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  });
+
+  dropZone.addEventListener("dragenter", () => {
+    dropZone.classList.add("drop-zone-active");
+    dropText.textContent = "Suelta la imagen aquí";
+  });
+
+  dropZone.addEventListener("dragover", () => {
+    dropZone.classList.add("drop-zone-active");
+  });
+
+  dropZone.addEventListener("dragleave", e => {
+    if (!dropZone.contains(e.relatedTarget)) {
+      dropZone.classList.remove("drop-zone-active");
+      dropText.textContent = "Suelta tu archivo";
+    }
+  });
+
+  dropZone.addEventListener("drop", e => {
+    dropZone.classList.remove("drop-zone-active");
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      inputFile.files = files;
+      dropText.textContent = "Imagen cargada ✔";
+    }
+  });
+});
+
 function obtenerAtributoExtra(p) {
     if (p.plataforma) return `Plataforma: ${p.plataforma}`;
     if (p.dificultad) return `Dificultad: ${p.dificultad}`;
