@@ -207,10 +207,22 @@ carritoContenedor.addEventListener('change', (e) => {
         const item = carrito.get(id);
 
         if (nuevaCantidad > 20) {
-            const aviso = document.getElementById(`aviso-${id}`);
-            if (aviso) aviso.textContent = 'Máximo 20 copias'; 
             nuevaCantidad = 20;
-            setTimeout(() => { if(document.getElementById(`aviso-${id}`)) document.getElementById(`aviso-${id}`).textContent = ''; }, 2000);
+            // Primero renderizamos para asegurar que el HTML existe
+            renderizarCarrito();
+            renderizarTienda();
+
+            // Ahora buscamos el aviso en el nuevo HTML renderizado
+            const aviso = document.getElementById(`aviso-${id}`);
+            if (aviso) {
+                aviso.textContent = '⚠️ Máximo 20 copias permitidas';
+                // Lo borramos a los 2 segundos
+                setTimeout(() => {
+                    const avisoActualizado = document.getElementById(`aviso-${id}`);
+                    if (avisoActualizado) avisoActualizado.textContent = '';
+                }, 2000);
+            }
+            return; // Salimos para evitar que siga la lógica normal
         } 
 
         if (nuevaCantidad <= 0) {
@@ -218,6 +230,7 @@ carritoContenedor.addEventListener('change', (e) => {
         } else {
             item.cantidad = nuevaCantidad;
         }
+        
         renderizarCarrito();
         renderizarTienda();
     }
@@ -275,8 +288,24 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function obtenerAtributoExtra(p) {
-    if (p.plataforma) return `Plataforma: ${p.plataforma}`;
+    // 1. Cartas
+    if (p.coleccion) return `Colección: ${p.coleccion}`;
+    
+    // 2. Juego Estrategia
     if (p.dificultad) return `Dificultad: ${p.dificultad}`;
+    
+    // 3. Juego Mesa
+    if (p.edadRecomendada) return `Edad: ${p.edadRecomendada}`;
+    
+    // 4. Merchandising
+    if (p.tipoMaterial) return `Material: ${p.tipoMaterial}`;
+    
+    // 5. Juego Rol
+    if (p.ambientacion) return `Ambientación: ${p.ambientacion}`;
+    
+    // 6. Videojuego
+    if (p.plataforma) return `Plataforma: ${p.plataforma}`;
+
     return "Categoría: General";
 }
 
