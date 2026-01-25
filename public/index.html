@@ -45,9 +45,10 @@
       
       <!-- ASIDE / FORMULARIO -->
       <aside>
-       <h3>Añadir Nuevo Producto</h3>
+        <h3>Añadir Nuevo Producto</h3>
         <form id="form-producto">
           
+          <!-- Tipo de Producto (select) -->
           <div class="mb-3">
             <label class="form-label">Tipo de Producto</label>
             <select id="tipo-producto" class="form-select" required>
@@ -61,28 +62,34 @@
             </select>
           </div>
 
+          <!-- Contenedor para campos extra dinámicos -->
           <div id="campo-extra-container" class="mb-3"></div>
 
+          <!-- Nombre del Producto -->
           <div class="mb-3">
             <label class="form-label">Nombre del Producto</label>
             <input type="text" placeholder="Ej: Super Mario Bros" class="form-control" required>
           </div>
 
+          <!-- Precio -->
           <div class="mb-3">
             <label class="form-label">Precio (€)</label>
             <input type="number" placeholder="0.00" class="form-control" required>
           </div>
 
+          <!-- Descripción -->
           <div class="mb-3">
             <label class="form-label">Descripción</label>
             <textarea placeholder="Describe tu producto..." class="form-control" rows="3" required></textarea>
           </div>
 
+          <!-- Imagen del Producto (input file) -->
           <div class="mb-3">
             <label class="form-label">Imagen del Producto</label>
             <input type="file" id="input-file" class="form-control file-input">
           </div>
 
+          <!-- Zona de arrastrar y soltar -->
           <div class="mb-4">
             <label class="form-label">O arrastra la imagen aquí</label>
             <div id="drop-zone" class="drop-zone-style">
@@ -90,9 +97,26 @@
             </div>
           </div>
 
+          <!-- Botón principal -->
           <button type="submit" class="btn btn-custom w-100">
             + Añadir Producto
           </button>
+
+          <!-- Versión simplificada de la segunda versión (para no perder nada) -->
+          <hr>
+          <div class="mb-2">
+            <input type="text" placeholder="Nombre del juego (alternativo)" class="form-control">
+          </div>
+          <div class="mb-2">
+            <input type="number" placeholder="Precio (€) (alternativo)" class="form-control">
+          </div>
+          <div class="mb-2">
+            <textarea placeholder="Descripción breve (alternativa)" class="form-control"></textarea>
+          </div>
+          <div class="mb-2">
+            <input type="file" class="form-control">
+          </div>
+          <button class="btn btn-success w-100">Añadir (alternativo)</button>
 
         </form>
       </aside>
@@ -104,14 +128,12 @@
           <h2 id="titulo-tienda" class="mt-3">Todos los productos</h2>
         </div>
 
-        <div id="lista-productos" class="d-flex flex-wrap gap-3 p-3">
-          </div>
+        <div id="lista-productos" class="d-flex flex-wrap gap-3 p-3"></div>
 
         <!-- Contenedor alternativo para grid (compatibilidad JS avanzado) -->
-        <div id="grid-productos" class="row g-4 m-0 px-3">
-        </div>
+        <div id="grid-productos" class="row g-4 m-0 px-3"></div>
 
-
+        <!-- Paginación -->
         <div class="d-flex justify-content-center my-4">
           <nav aria-label="Page navigation">
             <ul class="pagination pagination-sm">
@@ -148,8 +170,7 @@
       <h5 class="offcanvas-title">🛍️ Tu Carrito</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
-    <div class="offcanvas-body" id="carrito-body">
-    </div>
+    <div class="offcanvas-body" id="carrito-body"></div>
   </div>
   
   <!-- Bootstrap JS -->
