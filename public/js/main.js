@@ -1,29 +1,33 @@
 import { inventario, JuegoEstrategia } from './tienda.js';
 
-//SELECTORES
+// SELECTORES
 const contenedor = document.getElementById('lista-productos');
-const carritoContenedor = document.getElementById('carrito');
+const carritoContenedor = document.getElementById('carrito-body'); 
 const form = document.querySelector('aside form');
 
-//ESTADO 
+// ESTADO
 const carrito = new Map();
 
-//RENDER TIENDA
+// RENDER TIENDA
 export function renderizarTienda(productos) {
-    contenedor.innerHTML = ''; // Limpiamos lo que haya
+    contenedor.innerHTML = ''; 
 
     productos.forEach(juego => {
+        const itemEnCarrito = carrito.get(juego.id);
+        const alcanzadoMaximo = itemEnCarrito && itemEnCarrito.cantidad >= 20;
+
         const card = document.createElement('div');
-        card.className = 'card m-2';
-        card.style.width = '12rem';
+        card.className = 'card m-2 card-producto-tienda'; // Clase personalizada
         card.innerHTML = `
             <img src="${juego.imagen}" class="card-img-top" alt="${juego.nombre}">
             <div class="card-body">
                 <h5 class="card-title">${juego.nombre}</h5>
-                <p class="card-text">${juego.descripcion}</p>
+                <p class="card-text descripcion-juego">${juego.descripcion}</p>
                 <p class="card-text"><strong>${juego.precio}€</strong></p>
-                <button class="btn btn-primary w-100 btn-agregar" data-id="${juego.id}">
-                    Añadir al carrito
+                <button class="btn btn-primary w-100 btn-agregar" 
+                        data-id="${juego.id}" 
+                        ${alcanzadoMaximo ? 'disabled' : ''}>
+                    ${alcanzadoMaximo ? 'Máximo alcanzado' : 'Añadir al carrito'}
                 </button>
             </div>
         `;
@@ -34,55 +38,86 @@ export function renderizarTienda(productos) {
 // RENDER CARRITO
 function renderizarCarrito() {
     carritoContenedor.innerHTML = '';
-    let total = 0;
+    let totalCarrito = 0;
 
-    // Recorremos el Map
+    if (carrito.size === 0) {
+        carritoContenedor.innerHTML = '<p class="carrito-vacio-msg">El carrito está vacío</p>';
+        return;
+    }
+
     carrito.forEach((item, id) => {
-        total += item.precio * item.cantidad;
-        
+        const precioTotalProducto = item.precio * item.cantidad;
+        totalCarrito += precioTotalProducto;
+
         const div = document.createElement('div');
-        // Añadimos 'mb-3' para separación entre items y 'p-3' para que el texto no toque el borde del div
-        div.className = 'carrito-item d-flex justify-content-between align-items-center mb-3 p-3 shadow-sm'; 
-        
+        div.className = 'carrito-item mb-4 animate__animated animate__fadeIn';
         div.innerHTML = `
-            <div class="d-flex flex-column">
-                <strong class="item-nombre" style="color: #4b2e83; font-size: 1.1rem;">${item.nombre}</strong>
-                <span class="item-info text-muted">
-                    ${item.cantidad} unidades x ${item.precio.toFixed(2)}€
-                </span>
+            <div class="d-flex align-items-center gap-3">
+                <img src="${item.imagen}" class="img-carrito-thumb">
+                <div class="flex-grow-1">
+                    <h6 class="mb-1 fw-bold">${item.nombre}</h6>
+                    <div class="d-flex align-items-center gap-2">
+                        <span>${item.precio}€ x</span>
+                        <input type="number" class="form-control form-control-sm input-cantidad" 
+                               data-id="${id}" value="${item.cantidad}" 
+                               min="0" max="21">
+                        <span>= <strong>${precioTotalProducto.toFixed(2)}€</strong></span>
+                    </div>
+                    <div id="aviso-${id}" class="aviso-maximo-texto fw-bold"></div>
+                </div>
             </div>
-            <button class="btn-eliminar" data-id="${id}" title="Eliminar producto">✕</button>
+            <hr class="my-2 text-muted">
         `;
         carritoContenedor.appendChild(div);
     });
 
-    // Si el carrito está vacío
-    if (carrito.size === 0) {
-        carritoContenedor.innerHTML = `
-            <div class="text-center mt-5 py-5">
-                <p style="font-size: 4rem; opacity: 0.6;">🛒</p>
-                <p class="text-muted fw-bold">¡Tu carrito está vacío!</p>
-                <p class="small text-muted">Añade algún juego para empezar.</p>
-            </div>`;
-    } else {
-        // Sección de total y vaciar
-        const footer = document.createElement('div');
-        // 'mt-4' separa el total de la lista de productos; 'p-3' le da margen interno
-        footer.className = 'total-seccion mt-4 p-3 bg-white rounded shadow-sm';
-        footer.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span style="font-weight:700; font-size: 1.1rem; color: #555;">Subtotal:</span>
-                <span style="font-weight:700; font-size: 1.4rem; color: #9a50cc;">${total.toFixed(2)}€</span>
-            </div>
-            <button id="vaciar-carrito" class="btn btn-outline-danger w-100 py-2 fw-bold">
-                🗑️ Vaciar Carrito
-            </button>
-        `;
-        carritoContenedor.appendChild(footer);
-    }
+    // Barra de total
+    const totalDiv = document.createElement('div');
+    totalDiv.className = 'p-3 mt-3 rounded carrito-total-barra';
+    totalDiv.innerHTML = `Total: ${totalCarrito.toFixed(2)}€`;
+    carritoContenedor.appendChild(totalDiv);
+
+    // Botón vaciar
+    const btnVaciar = document.createElement('button');
+    btnVaciar.id = 'vaciar-carrito';
+    btnVaciar.className = 'btn-vaciar-estilo'; 
+    btnVaciar.textContent = 'Vaciar Carrito';
+    carritoContenedor.appendChild(btnVaciar);
 }
 
-// EVENTO AÑADIR AL CARRITO
+// GESTIÓN DE CANTIDADES
+carritoContenedor.addEventListener('change', (e) => {
+    if (e.target.classList.contains('input-cantidad')) {
+        const id = e.target.dataset.id;
+        const nuevaCantidad = parseInt(e.target.value);
+        const item = carrito.get(id);
+
+        if (nuevaCantidad > 20) {
+            const aviso = document.getElementById(`aviso-${id}`);
+            if (aviso) {
+                aviso.textContent = 'No se permiten más de 20 copias'; 
+            }
+            e.target.value = 20;
+            item.cantidad = 20;
+
+            setTimeout(() => {
+                const avisoActualizado = document.getElementById(`aviso-${id}`);
+                if (avisoActualizado) avisoActualizado.textContent = '';
+            }, 2000);
+        } 
+        else if (nuevaCantidad <= 0) {
+            carrito.delete(id);
+            renderizarCarrito();
+        } 
+        else {
+            item.cantidad = nuevaCantidad;
+            renderizarCarrito();
+        }
+        renderizarTienda(inventario); 
+    }
+});
+
+// EVENTO AÑADIR
 contenedor.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-agregar')) {
         const id = e.target.dataset.id;
@@ -90,80 +125,60 @@ contenedor.addEventListener('click', (e) => {
 
         if (juego) {
             if (carrito.has(id)) {
-                carrito.get(id).cantidad++;
+                const item = carrito.get(id);
+                if (item.cantidad < 20) {
+                    item.cantidad++;
+                }
             } else {
                 carrito.set(id, { 
                     nombre: juego.nombre, 
                     precio: juego.precio, 
+                    imagen: juego.imagen,
                     cantidad: 1 
                 });
             }
             renderizarCarrito();
-            // Abrir el carrito automáticamente (opcional)
+            renderizarTienda(inventario);
+            
             const elCarrito = document.getElementById('carrito');
-            const instance = bootstrap.Offcanvas.getOrCreateInstance(elCarrito);
-            instance.show();
+            bootstrap.Offcanvas.getOrCreateInstance(elCarrito).show();
         }
     }
 });
 
-// EVENTOS DENTRO DEL CARRITO (ELIMINAR Y VACIAR)
+// EVENTO VACIAR
 carritoContenedor.addEventListener('click', (e) => {
-    
-    // Si pulsamos el botón de eliminar un producto
-    if (e.target.classList.contains('btn-eliminar')) {
-        const id = e.target.dataset.id;
-        
-        // Si hay más de uno, restamos cantidad. Si solo hay uno, borramos la entrada.
-        if (carrito.get(id).cantidad > 1) {
-            carrito.get(id).cantidad--;
-        } else {
-            carrito.delete(id);
-        }
-        
-        renderizarCarrito();
-    }
-
-    // Si pulsamos el botón de vaciar todo
     if (e.target.id === 'vaciar-carrito') {
-        if (confirm("¿Estás seguro de que quieres vaciar el carrito?")) {
-            carrito.clear(); // Borra todo el contenido del Map
+        if (confirm("¿Vaciar todo el carrito?")) {
+            carrito.clear();
             renderizarCarrito();
+            renderizarTienda(inventario);
         }
     }
 });
 
-// EVENTO FORMULARIO (AÑADIR PRODUCTO NUEVO)
+// FORMULARIO
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     const inputs = form.querySelectorAll('input, textarea');
-    const inputFoto = form.querySelector('input[type="file"]'); // Seleccionamos el input de archivo
-
+    const inputFoto = form.querySelector('input[type="file"]');
     const nombre = inputs[0].value;
     const precio = parseFloat(inputs[1].value);
     const desc = inputs[2].value;
     
-    // --- LÓGICA PARA LA FOTO ---
-    let urlImagen = "imagenes/default.png"; // Imagen por defecto
-    
+    let urlImagen = "imagenes/default.png";
     if (inputFoto.files && inputFoto.files[0]) {
-        // Creamos una URL temporal que el navegador puede leer
         urlImagen = URL.createObjectURL(inputFoto.files[0]);
     }
-    // ---------------------------
 
     if (nombre && !isNaN(precio)) {
-        // Ahora pasamos 'urlImagen' en lugar de la ruta fija
         const nuevo = new JuegoEstrategia(nombre, precio, desc, urlImagen, "Media");
-        
         inventario.push(nuevo);
         renderizarTienda(inventario);
         form.reset();
-    } else {
-        alert("Por favor, introduce un nombre y un precio válido.");
     }
 });
 
-// INICIO AL CARGAR
+// INICIO
 renderizarTienda(inventario);
 renderizarCarrito();
