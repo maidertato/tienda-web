@@ -91,8 +91,10 @@ nav ul li a:hover {
 #contenido {
   flex: 1;
   display: flex;
-  gap: 1.5rem;
+  flex-direction: row;
+  gap: 2rem;
   padding: 1.5rem 0;
+  align-items: flex-start;
 }
 
 /* =========================
@@ -227,40 +229,118 @@ aside button:hover {
 }
 
 /* =========================
-   MAIN / PRODUCTOS
+   MAIN / PRODUCTOS (CORREGIDO)
    ========================= */
 main {
-  width: 75%;
+  flex: 1;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 1.5rem;
-  font-family: 'Quicksand', sans-serif;
-  justify-content: flex-start;
+  min-width: 0; /* Evita que el flexbox se desborde */
 }
 
-main .card {
-  width: 14rem;
+/* Contenedor de la cuadrícula */
+#lista-productos {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los productos bajen si no caben */
+  gap: 1.5rem;
+  width: 100%;
+  padding: 0;
+  justify-content: flex-start; /* Alinea productos a la izquierda */
+}
+
+/* Columna dinámica (el div que envuelve a la card) */
+#lista-productos > div {
+  /* En PC ocupan aproximadamente 1/3 del ancho restando el gap */
+  flex: 1 1 calc(33.333% - 1.5rem); 
+  min-width: 280px; /* Tamaño mínimo antes de saltar de fila */
+  max-width: 100%;
+  display: flex;
+}
+
+/* La Tarjeta Individual */
+.card-producto-tienda {
+  width: 100% !important;
   border: none;
   border-radius: 20px !important;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #fff7fc;
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
 }
 
-main .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+.card-producto-tienda:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(156, 102, 212, 0.2);
 }
 
-main .card img {
-  border-radius: 15px 15px 0 0;
-}
-
+/* Imagen Ajustada */
 .card-img-top {
-  height: 180px;
-  object-fit: contain;
-  background: #fff;
+  width: 100%;
+  height: 220px;
+  object-fit: cover; /* Cubre el espacio sin deformarse */
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Estabilización de Textos (Truncado) */
+.card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Corta a 1 línea */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 700;
+  height: 1.4em;
+  margin-bottom: 0.5rem;
+  color: #521F84;
+}
+
+.descripcion-juego {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Corta a 3 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  height: 4.2em; /* Altura fija para que todas las cards midan igual */
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+/* Botón de añadir con feedback */
+.btn-agregar {
+  position: relative;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+/* Mensaje de éxito flotante */
+.mensaje-exito {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4b2e83;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  z-index: 10;
+  pointer-events: none;
+  animation: fadeInOut 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, 5px); }
+  20% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -5px); }
 }
 
 /* =========================
@@ -382,6 +462,51 @@ main .card img {
   text-align: center;
   border-radius: 10px;
   margin-top: 1rem;
+}
+
+.notificacion-carrito {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #521F84;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  animation: fadeInOut 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, 10px); }
+  20% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -10px); }
+}
+
+/* El botón debe tener posición relativa para que la notificación se ubique bien */
+.btn-agregar {
+  position: relative;
+}
+
+.pagination .page-link {
+  color: #9C66D4;
+  border-radius: 8px;
+  margin: 0 3px;
+  border: 1px solid #e0c5f2;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #9C66D4;
+  border-color: #9C66D4;
+}
+
+#info-paginacion {
+  font-weight: 600;
+  color: #521F84;
+  margin-bottom: 0.5rem;
 }
 
 /* =========================
