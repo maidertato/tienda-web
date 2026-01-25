@@ -52,4 +52,26 @@ export class Puzzle extends Producto {
 
 //Estructuras de datos globales
 export const inventario = [];
-export const carrito = {}; // Objeto Clave-Valor como pide el PDF
+export const carrito = {}; 
+
+// PRODUCTOS DE LA TIENDA
+
+inventario.push(
+    new JuegoEstrategia(
+        "Catan",
+        39.99,
+        "Juego de comercio y estrategia.",
+        "",
+        3
+    )
+);
+
+inventario.push(
+    new JuegoFamiliar(
+        "Dixit",
+        29.99,
+        "Juego creativo de imaginación.",
+        "",
+        8
+    )
+);
