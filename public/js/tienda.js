@@ -46,17 +46,16 @@ export const buscarProductoPorNombre = (nombre) => {
     return inventario.filter(p => p.nombre.toLowerCase().includes(nombre.toLowerCase()));
 };
 
-export const agregarProductoAlInventario = (tipo, ...args) => {
+export function agregarProductoAlInventario(tipo, nombre, precio, desc, imagen, extra) {
     let nuevo;
     switch (tipo) {
-        case 'juego_estrategia': nuevo = new JuegoEstrategia(...args); break;
-        case 'videojuego': nuevo = new Videojuego(...args); break;
-        case 'rol': nuevo = new JuegoRol(...args); break;
-        case 'cartas': nuevo = new Carta(...args); break;
-        case 'merch': nuevo = new Merchandising(...args); break;
-        case 'juego_mesa': nuevo = new JuegoMesa(...args); break;
-        default: nuevo = new JuegoEstrategia(...args); // Por defecto
+        case 'juego_estrategia': nuevo = new JuegoEstrategia(nombre, precio, desc, imagen, extra); break;
+        case 'videojuego': nuevo = new Videojuego(nombre, precio, desc, imagen, extra); break;
+        case 'rol': nuevo = new JuegoRol(nombre, precio, desc, imagen, extra); break;
+        case 'cartas': nuevo = new Carta(nombre, precio, desc, imagen, extra); break;
+        case 'merch': nuevo = new Merchandising(nombre, precio, desc, imagen, extra); break;
+        case 'juego_mesa': nuevo = new JuegoMesa(nombre, precio, desc, imagen, extra); break;
+        default: nuevo = new JuegoEstrategia(nombre, precio, desc, imagen, extra); // Por defecto
     }
     inventario.push(nuevo);
-    return nuevo;
 };

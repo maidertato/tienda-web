@@ -7,6 +7,7 @@ const form = document.querySelector('aside form');
 const buscador = document.getElementById('buscador');
 const tituloTienda = document.getElementById('titulo-tienda');
 
+const extraAtributo = document.getElementById('campo-extra-container');
 // ESTADO
 const carrito = new Map();
 let paginaActual = 1;
@@ -34,8 +35,13 @@ export function renderizarTienda() {
                 <img src="${juego.imagen}" class="card-img-top" alt="${juego.nombre}">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${juego.nombre}</h5>
-                    <p class="card-text extra-attr text-muted"><small>${obtenerAtributoExtra(juego)}</small></p>
+                    
                     <p class="card-text descripcion-juego">${juego.descripcion}</p>
+
+                    <p class="card-text extra-attr text-muted mt-2">
+                        <small><strong>${obtenerAtributoExtra(juego)}</strong></small>
+                    </p>
+
                     <p class="card-text mt-auto"><strong>${juego.precio}€</strong></p>
                     
                     <button class="btn btn-primary w-100 btn-agregar mt-2" 
@@ -64,7 +70,6 @@ function renderizarCarrito() {
     }
 
     carrito.forEach((item, id) => {
-        const precioNumerico = parseFloat(item.precio);
         const precioTotalProducto = item.precio * item.cantidad;
         totalCarrito += precioTotalProducto;
 
@@ -101,7 +106,7 @@ function renderizarCarrito() {
     carritoContenedor.appendChild(btnVaciar);
 }
 
-// Evento Click para Añadir (Delegado)
+// Evento Click para Añadir
 contenedor.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-agregar')) {
         const id = e.target.dataset.id;
@@ -118,13 +123,14 @@ contenedor.addEventListener('click', (e) => {
                 const item = carrito.get(id);
                 if (item.cantidad < 20) item.cantidad++;
             } else {
-                // FORZAMOS parseFloat aquí para que la suma del carrito funcione
                 carrito.set(id, { 
-                    ...juego, 
+                    id: juego.id,
+                    nombre: juego.nombre,
+                    imagen: juego.imagen,
                     precio: parseFloat(juego.precio), 
                     cantidad: 1 
-                });
-            }
+            });
+        }
 
             renderizarCarrito();
             renderizarTienda();
@@ -151,8 +157,8 @@ function actualizarInterfazPaginacion() {
     const numPaginas = Math.ceil(total / productosPorPagina);
     const mostrados = Math.min(paginaActual * productosPorPagina, total) - ((paginaActual - 1) * productosPorPagina);
     
-    document.getElementById('info-paginacion').textContent = 
-        `Mostrando ${mostrados > 0 ? mostrados : 0} productos de un total de ${total}`;
+    const infoPag = document.getElementById('info-paginacion');
+    if(infoPag) infoPag.textContent = `Mostrando ${mostrados > 0 ? mostrados : 0} productos de un total de ${total}`;
 
     const nav = document.getElementById('pagination-container');
     if (!nav) return;
@@ -177,26 +183,38 @@ window.cambiarPagina = (n) => {
     renderizarTienda();
 };
 
-// --- 4. FORMULARIO Y EVENTOS DE CARRITO (CANTIDADES/VACIAR) ---
+// --- 4. FORMULARIO Y EVENTOS DE CARRITO ---
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     const tipo = document.getElementById('tipo-producto').value;
-    const nombre = form.querySelector('input[placeholder="Ej: Super Mario Bros"]').value;
-    const precio = parseFloat(form.querySelector('input[placeholder="0.00"]').value);
+    const nombre = form.querySelector('input[type="text"]').value;
+    const precio = parseFloat(form.querySelector('input[type="number"]').value);
     const desc = form.querySelector('textarea').value;
-    const inputFoto = document.getElementById('input-file');
     
+    // 1. CAPTURAMOS EL VALOR EXTRA (Compañía, Edad, etc.)
+    const inputExtra = document.getElementById('valor-extra');
+    const valorAdicional = inputExtra ? inputExtra.value : "General";
+
+    const inputFoto = document.getElementById('input-file');
     let urlImagen = "imagenes/default.png";
     if (inputFoto.files && inputFoto.files[0]) {
         urlImagen = URL.createObjectURL(inputFoto.files[0]);
     }
 
     if (nombre && !isNaN(precio) && tipo) {
-        agregarProductoAlInventario(tipo, nombre, precio, desc, urlImagen, "General");
-        productosFiltrados = [...inventario]; // Actualizamos lista para que aparezca el nuevo
+        // 2. PASAMOS EL VALOR REAL EN VEZ DE "General"
+        agregarProductoAlInventario(tipo, nombre, precio, desc, urlImagen, valorAdicional);
+        
+        // 3. MANTENEMOS EL FILTRO DEL BUSCADOR
+        const termino = buscador.value.toLowerCase(); 
+        productosFiltrados = inventario.filter(p => p.nombre.toLowerCase().includes(termino));
+        
         renderizarTienda();
         form.reset();
+        
+        // 4. LIMPIAMOS EL CAMPO EXTRA DESPUÉS DE AÑADIR
+        extraContainer.innerHTML = ''; 
     }
 });
 
@@ -287,6 +305,55 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// --- LÓGICA PARA EL CAMPO DINÁMICO ---
+const selectTipo = document.getElementById('tipo-producto');
+const extraContainer = document.getElementById('campo-extra-container');
+
+if (selectTipo && extraContainer) {
+    selectTipo.addEventListener('change', () => {
+        const tipo = selectTipo.value;
+        let etiqueta = "";
+        let placeholder = "";
+
+        switch (tipo) {
+            case 'videojuego':
+                etiqueta = "Compañía";
+                placeholder = "Ej: Nintendo, Sony, Ubisoft...";
+                break;
+            case 'rol':
+                etiqueta = "Ambientación";
+                placeholder = "Ej: Fantasía, Terror...";
+                break;
+            case 'cartas':
+                etiqueta = "Colección";
+                placeholder = "Ej: Magic, Pokémon...";
+                break;
+            case 'juego_mesa':
+                etiqueta = "Edad Recomendada";
+                placeholder = "Ej: +8 años, +12...";
+                break;
+            case 'juego_estrategia':
+                etiqueta = "Dificultad";
+                placeholder = "Ej: Fácil, Media, Experto...";
+                break;
+            case 'merch':
+                etiqueta = "Material";
+                placeholder = "Ej: Resina, Algodón...";
+                break;
+            default:
+                extraContainer.innerHTML = '';
+                return;
+        }
+
+        extraContainer.innerHTML = `
+            <div class="mb-3 animate__animated animate__fadeIn">
+                <label class="form-label text-white fw-bold">${etiqueta}</label>
+                <input type="text" id="valor-extra" class="form-control" placeholder="${placeholder}" required>
+            </div>
+        `;
+    });
+}
+
 function obtenerAtributoExtra(p) {
     // 1. Cartas
     if (p.coleccion) return `Colección: ${p.coleccion}`;
@@ -313,4 +380,51 @@ function obtenerAtributoExtra(p) {
 document.addEventListener('DOMContentLoaded', () => {
     renderizarTienda();
     renderizarCarrito();
+
+    // --- LÓGICA PARA EL CAMPO DINÁMICO (MOVIDO AQUÍ DENTRO) ---
+    const selectTipo = document.getElementById('tipo-producto');
+    if (selectTipo && extraAtributo) {
+        selectTipo.addEventListener('change', () => {
+            const tipo = selectTipo.value;
+            let etiqueta = "";
+            let placeholder = "";
+
+            switch (tipo) {
+                case 'videojuego':
+                    etiqueta = "Plataforma";
+                    placeholder = "Ej: Nintendo, Sony...";
+                    break;
+                case 'rol':
+                    etiqueta = "Ambientación";
+                    placeholder = "Ej: Fantasía...";
+                    break;
+                case 'cartas':
+                    etiqueta = "Colección";
+                    placeholder = "Ej: Pokémon...";
+                    break;
+                case 'juego_mesa':
+                    etiqueta = "Edad Recomendada";
+                    placeholder = "Ej: +12 años...";
+                    break;
+                case 'juego_estrategia':
+                    etiqueta = "Dificultad";
+                    placeholder = "Ej: Alta...";
+                    break;
+                case 'merch':
+                    etiqueta = "Material";
+                    placeholder = "Ej: Resina...";
+                    break;
+                default:
+                    extraContainer.innerHTML = '';
+                    return;
+            }
+
+            extraContainer.innerHTML = `
+                <div class="mb-3 mt-3 animate__animated animate__fadeIn">
+                    <label class="form-label text-white fw-bold">${etiqueta}</label>
+                    <input type="text" id="valor-extra" class="form-control" placeholder="${placeholder}" required>
+                </div>
+            `;
+        });
+    }
 });
