@@ -36,8 +36,8 @@ body {
    HEADER (base + mejora)
    ========================= */
 header {
-  padding: 1rem;
-  background-color: #007bff;
+  padding: 2rem;
+  background: linear-gradient(90deg, #d0b4f5, #eec0c6);
   color: white;
   text-align: center;
   border-radius: 15px 15px 0 0;
@@ -75,7 +75,7 @@ nav ul {
 
 nav ul li a {
   text-decoration: none;
-  color: #007bff;
+  color: #521F84;
   font-weight: bold;
   transition: color 0.3s, transform 0.2s;
 }
@@ -101,45 +101,108 @@ nav ul li a:hover {
    ========================= */
 aside {
   width: 25%;
-  background-color: #fff5fb;
-  padding: 1.5rem;
-  border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  min-width: 300px;
+  background-color: #9C66D4;
+  color: white; 
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
 aside h3 {
-  margin-bottom: 1rem;
-  color: #c47aff;
-  text-align: center;
+  margin-bottom: 1.5rem;
+  color: white;
+  text-align: left;
   font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-aside input,
-aside textarea,
-aside select {
-  margin-bottom: 0.8rem;
-  border-radius: 8px;
-  border: 1px solid #e0c5f2;
-  padding: 0.6rem;
-  background-color: #fffafc;
-  font-family: 'Quicksand', sans-serif;
-  font-weight: 400;
+aside .form-label {
+    color: white;
+    margin-bottom: 5px;
 }
 
-aside button {
-  margin-top: 0.5rem;
-  border-radius: 8px;
-  font-weight: 700;
-  background-color: #f7c6f0;
-  color: #4b2e83;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+/* --- INPUTS Y EL NUEVO SELECT --- */
+/* AQUÍ ESTABA EL FALLO: Hemos añadido ", aside .form-select" */
+aside .form-control, 
+aside .form-select {
+  background-color: rgba(255, 255, 255, 0.2) !important; /* Más transparente */
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  border-radius: 10px !important;
 }
 
-aside button:hover {
-  background-color: #d0b4f5;
-  transform: scale(1.05);
+aside .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Para que las opciones del desplegable se lean bien (Fondo oscuro) */
+aside .form-select option {
+    background-color: #521F84;
+    color: white;
+}
+
+/* Efecto al hacer click */
+aside .form-control:focus, 
+aside .form-select:focus {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  border-color: white !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important; 
+  outline: none;
+}
+
+/* --- BOTÓN BLANCO (Arreglado) --- */
+/* Damos estilo tanto a .btn-custom como a .btn-success para asegurar que salga blanco */
+aside .btn-custom, 
+aside .btn-success {
+    background-color: white ; /* Fondo blanco OBLIGATORIO */
+    color: #9C66D4; /* Texto morado */
+    font-weight: 800 ;
+    border: 2px solid transparent ;
+    border-radius: 10px;
+    margin-top: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+aside .btn-custom:hover, 
+aside .btn-success:hover {
+    background-color: #DBC5F1 ; /* Lila clarito al pasar ratón */
+    color: #521F84 ;
+    transform: scale(1.02);
+    box-shadow: 0 0 20px #DBC5F1 ; /* Tu resplandor neón */
+}
+
+aside .btn-custom:active, 
+aside .btn-success:active {
+    transform: translateY(1px);
+    box-shadow: none !important;
+}
+
+/* --- ZONA DRAG & DROP (Necesaria para el requisito) --- */
+.drop-zone-style {
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.05);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+/* Clase activa cuando arrastras (JS) */
+.drop-zone-active {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    border-color: white !important;
+    transform: scale(1.02);
+}
+
+.success-message {
+    color: #fff !important;
+    font-weight: bold;
 }
 
 /* =========================
@@ -151,15 +214,18 @@ main {
   flex-wrap: wrap;
   gap: 1.5rem;
   font-family: 'Quicksand', sans-serif;
+  justify-content: flex-start;
 }
 
 /* Cards */
 main .card {
-  width: 12rem;
-  border-radius: 15px;
+  width: 14rem;
+  border: none;
+  border-radius: 20px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   transition: transform 0.2s, box-shadow 0.2s;
   background-color: #fff7fc;
+  overflow: hidden;
 }
 
 main .card:hover {
@@ -175,6 +241,7 @@ main .card img {
   height: 180px;
   object-fit: contain;
   background: #fff;
+  object-fit: contain;
 }
 
 .card {
@@ -279,8 +346,8 @@ main .card img {
    ========================= */
 footer {
   text-align: center;
-  padding: 0.5rem;
-  background-color: #007bff;
+  padding: 1rem;
+  background-color: #4b2e83;
   color: white;
   margin-top: auto;
   border-radius: 0 0 15px 15px;
