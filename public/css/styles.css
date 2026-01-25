@@ -188,6 +188,93 @@ main .card img {
 }
 
 /* =========================
+   ESTILO DEL CARRITO (OFFCANVAS)
+   ========================= */
+.offcanvas {
+    background-color: #fffafc; /* Fondo a juego con el body */
+    font-family: 'Quicksand', sans-serif;
+    border-right: 2px solid #e0c5f2;
+}
+
+.offcanvas-header {
+    background: linear-gradient(90deg, #d0b4f5, #f7c6f0);
+    color: #4b2e83;
+}
+
+.offcanvas-title {
+    font-weight: 700;
+}
+
+/* Items del carrito */
+.carrito-item {
+    background-color: white;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #f2eafa;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.carrito-item strong {
+    color: #9a50cc;
+}
+
+/* Botones del carrito */
+.btn-eliminar {
+    background-color: #ffcfdf;
+    color: #b0416d;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-eliminar:hover {
+    background-color: #ffb3cc;
+    color: #802a4a;
+}
+
+#vaciar-carrito {
+    border: 2px solid #d0b4f5;
+    color: #4b2e83;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+#vaciar-carrito:hover {
+    background-color: #d0b4f5;
+    color: white;
+}
+
+.total-seccion {
+    border-top: 2px dashed #e0c5f2;
+    padding-top: 15px;
+    color: #4b2e83;
+}
+
+/* La X de CERRAR el panel (Arriba) */
+.btn-close-custom {
+    background: #4b2e83; /* Color oscuro */
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+/* La X de ELIMINAR producto (En la lista) */
+.btn-eliminar {
+    background: #ffcfdf; /* Color rosita */
+    color: #b0416d;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* =========================
    FOOTER (base + mejora)
    ========================= */
 footer {
