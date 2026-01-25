@@ -1,5 +1,5 @@
 /* =========================
-   FUENTE (añadida del segundo)
+   FUENTE
    ========================= */
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap');
 
@@ -80,7 +80,6 @@ nav ul li a {
   transition: color 0.3s, transform 0.2s;
 }
 
-/* Hover añadido */
 nav ul li a:hover {
   color: #9a50cc;
   transform: scale(1.1);
@@ -118,15 +117,13 @@ aside h3 {
 }
 
 aside .form-label {
-    color: white;
-    margin-bottom: 5px;
+  color: white;
+  margin-bottom: 5px;
 }
 
-/* --- INPUTS Y EL NUEVO SELECT --- */
-/* AQUÍ ESTABA EL FALLO: Hemos añadido ", aside .form-select" */
 aside .form-control, 
 aside .form-select {
-  background-color: rgba(255, 255, 255, 0.2) !important; /* Más transparente */
+  background-color: rgba(255, 255, 255, 0.2) !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   color: white !important;
   border-radius: 10px !important;
@@ -136,13 +133,11 @@ aside .form-control::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Para que las opciones del desplegable se lean bien (Fondo oscuro) */
 aside .form-select option {
-    background-color: #521F84;
-    color: white;
+  background-color: #521F84;
+  color: white;
 }
 
-/* Efecto al hacer click */
 aside .form-control:focus, 
 aside .form-select:focus {
   background-color: rgba(255, 255, 255, 0.3) !important;
@@ -151,58 +146,84 @@ aside .form-select:focus {
   outline: none;
 }
 
-/* --- BOTÓN BLANCO (Arreglado) --- */
-/* Damos estilo tanto a .btn-custom como a .btn-success para asegurar que salga blanco */
 aside .btn-custom, 
 aside .btn-success {
-    background-color: white ; /* Fondo blanco OBLIGATORIO */
-    color: #9C66D4; /* Texto morado */
-    font-weight: 800 ;
-    border: 2px solid transparent ;
-    border-radius: 10px;
-    margin-top: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    width: 100%;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  background-color: white;
+  color: #9C66D4;
+  font-weight: 800;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  margin-top: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 aside .btn-custom:hover, 
 aside .btn-success:hover {
-    background-color: #DBC5F1 ; /* Lila clarito al pasar ratón */
-    color: #521F84 ;
-    transform: scale(1.02);
-    box-shadow: 0 0 20px #DBC5F1 ; /* Tu resplandor neón */
+  background-color: #DBC5F1;
+  color: #521F84;
+  transform: scale(1.02);
+  box-shadow: 0 0 20px #DBC5F1;
 }
 
 aside .btn-custom:active, 
 aside .btn-success:active {
-    transform: translateY(1px);
-    box-shadow: none !important;
+  transform: translateY(1px);
+  box-shadow: none !important;
 }
 
-/* --- ZONA DRAG & DROP (Necesaria para el requisito) --- */
+/* ZONA DRAG & DROP */
 .drop-zone-style {
-    border: 2px dashed rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.8);
-    background-color: rgba(255, 255, 255, 0.05);
-    margin-bottom: 15px;
-    cursor: pointer;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.05);
+  margin-bottom: 15px;
+  cursor: pointer;
 }
 
-/* Clase activa cuando arrastras (JS) */
 .drop-zone-active {
-    background-color: rgba(255, 255, 255, 0.25) !important;
-    border-color: white !important;
-    transform: scale(1.02);
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: white !important;
+  transform: scale(1.02);
 }
 
 .success-message {
-    color: #fff !important;
-    font-weight: bold;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+/* ADICIONAL v2 (no estaba en v1) */
+aside input,
+aside textarea,
+aside select {
+  margin-bottom: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #e0c5f2;
+  padding: 0.6rem;
+  background-color: #fffafc;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 400;
+}
+
+aside button {
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  background-color: #f7c6f0;
+  color: #4b2e83;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+aside button:hover {
+  background-color: #d0b4f5;
+  transform: scale(1.05);
 }
 
 /* =========================
@@ -217,15 +238,14 @@ main {
   justify-content: flex-start;
 }
 
-/* Cards */
 main .card {
   width: 14rem;
   border: none;
-  border-radius: 20px;
+  border-radius: 20px !important;
+  overflow: hidden;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   transition: transform 0.2s, box-shadow 0.2s;
   background-color: #fff7fc;
-  overflow: hidden;
 }
 
 main .card:hover {
@@ -241,104 +261,127 @@ main .card img {
   height: 180px;
   object-fit: contain;
   background: #fff;
-  object-fit: contain;
-}
-
-.card {
-  border: none;
-  border-radius: 20px !important;
-  overflow: hidden;
-}
-
-#grid-productos {
-  width: 100%;
 }
 
 /* =========================
    ESTILO DEL CARRITO (OFFCANVAS)
    ========================= */
+
 .offcanvas {
-    background-color: #fffafc; /* Fondo a juego con el body */
-    font-family: 'Quicksand', sans-serif;
-    border-right: 2px solid #e0c5f2;
+  background-color: #9C66D4;
+  font-family: 'Quicksand', sans-serif;
+  border-radius: 20px 0 0 20px;
+  padding: 1.5rem;
+  box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+  border: none;
+  /* ANCHO AMPLIADO */
+  width: 500px !important; 
+  max-width: 95vw;
 }
 
 .offcanvas-header {
-    background: linear-gradient(90deg, #d0b4f5, #f7c6f0);
-    color: #4b2e83;
+  background: #f8f4ff;
+  color: #521F84;
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .offcanvas-title {
-    font-weight: 700;
+  font-weight: 800;
 }
 
-/* Items del carrito */
 .carrito-item {
-    background-color: white;
-    border-radius: 12px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #f2eafa;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  background-color: #fdfbff; 
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 30px; 
+  border: 1px solid #eee;
+  transition: all 0.2s;
 }
 
-.carrito-item strong {
-    color: #9a50cc;
+.carrito-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
 }
 
-/* Botones del carrito */
-.btn-eliminar {
-    background-color: #ffcfdf;
-    color: #b0416d;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.2s;
+.carrito-item img {
+  width: 90px; 
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
-.btn-eliminar:hover {
-    background-color: #ffb3cc;
-    color: #802a4a;
+.carrito-info {
+  flex-grow: 1;
+  color: #333;
 }
 
-#vaciar-carrito {
-    border: 2px solid #d0b4f5;
-    color: #4b2e83;
-    border-radius: 10px;
-    font-weight: 700;
+.carrito-info .d-flex {
+  flex-wrap: nowrap !important; 
+  white-space: nowrap;          
 }
 
-#vaciar-carrito:hover {
-    background-color: #d0b4f5;
-    color: white;
+.carrito-info h6 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #521F84;
 }
 
-.total-seccion {
-    border-top: 2px dashed #e0c5f2;
-    padding-top: 15px;
-    color: #4b2e83;
+.input-cantidad {
+  width: 65px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.3rem;
+  background-color: white;
+  flex-shrink: 0; 
 }
 
-/* La X de CERRAR el panel (Arriba) */
-.btn-close-custom {
-    background: #4b2e83; /* Color oscuro */
-    color: white;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    border: none;
-    font-size: 1.2rem;
-    line-height: 1;
+.input-cantidad:focus {
+  border-color: #9C66D4;
+  outline: none;
 }
 
-/* La X de ELIMINAR producto (En la lista) */
-.btn-eliminar {
-    background: #ffcfdf; /* Color rosita */
-    color: #b0416d;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
+.aviso-maximo, .text-danger, .aviso-maximo-texto {
+  color: #dc3545;
+  font-size: 0.75rem;
+  margin-top: 5px;
+  height: 15px;
+  display: block;
+}
+
+.btn-vaciar-estilo {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.7rem;
+  background-color: white;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  border-radius: 10px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn-vaciar-estilo:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.carrito-total-barra {
+  background-color: #6c757d;
+  color: white;
+  padding: 1.2rem;
+  font-weight: bold;
+  font-size: 1.3rem;
+  text-align: center;
+  border-radius: 10px;
+  margin-top: 1rem;
 }
 
 /* =========================
@@ -355,7 +398,6 @@ footer {
   font-family: 'Quicksand', sans-serif;
 }
 
-/* Mejora visual */
 footer {
   background: linear-gradient(90deg, #d0b4f5);
   color: #4b2e83;
