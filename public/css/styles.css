@@ -84,6 +84,66 @@ nav ul li a:hover {
   color: #9a50cc;
   transform: scale(1.1);
 }
+.nav-expand {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.button-container {
+  display: flex;
+  background-color: #9C66D4;
+  width: 90px;
+  height: 45px;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 12px;
+  box-shadow:
+    0 5px 15px rgba(156, 102, 212, 0.6),
+    0 10px 25px rgba(156, 102, 212, 0.8);
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.button-container:hover {
+  width: 260px; /* ancho abierto */
+}
+
+/* Botones */
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  min-width: 40px;
+  transition: all 0.3s ease;
+}
+
+/* Texto oculto por defecto */
+.nav-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  font-weight: 700;
+}
+
+/* Aparece al hover */
+.button-container:hover .nav-text {
+  max-width: 100px;
+  opacity: 1;
+  margin-left: 4px;
+}
+
+/* Iconos */
+.icon {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.6));
+}
 
 /* =========================
    CONTENIDO PRINCIPAL
