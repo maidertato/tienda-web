@@ -8,17 +8,17 @@ import { Videojuego } from './videojuego.js';
 // INVENTARIO INICIAL
 export const inventario = [
     // Cartas
-    new Carta('Black Lotus', 150, 'La carta más rara.', 'imagenes/default.png', 'Alpha'),
-    new Carta('Charizard Holo', 500, 'Clásico de Pokémon.', 'imagenes/default.png', 'Base Set'),
-    new Carta('Blue-Eyes White Dragon', 200, 'El favorito de Kaiba.', 'imagenes/default.png', 'Legendary'),
+    new Carta('Black Lotus', 150, 'La carta más rara.', 'imagenes/productos/BlackLotus.png', 'Alpha'),
+    new Carta('Charizard Holo', 500, 'Clásico de Pokémon.', 'imagenes/productos/CharizardHolo.JPG', 'Base Set'),
+    new Carta('Blue-Eyes White Dragon', 200, 'El favorito de Kaiba.', 'imagenes/productos/Blue-Eyes White Dragon.jpg', 'Legendary'),
 
     // Juego Estrategia
-    new JuegoEstrategia('Catan', 40, 'Coloniza la isla.', 'imagenes/default.png', 'Media'),
-    new JuegoEstrategia('Age of Empires IV', 50, 'Estrategia histórica.', 'imagenes/default.png', 'Alta'),
-    new JuegoEstrategia('Risk', 30, 'Conquista el mundo.', 'imagenes/default.png', 'Baja'),
+    new JuegoEstrategia('Catan', 40, 'Coloniza la isla.', 'imagenes/productos/Catan.jpg', 'Media'),
+    new JuegoEstrategia('Age of Empires IV', 50, 'Estrategia histórica.', 'imagenes/productos/Age of Empires IV.jpg', 'Alta'),
+    new JuegoEstrategia('Risk', 30, 'Conquista el mundo.', 'imagenes/productos/Risk.jpg', 'Baja'),
 
     // Juego Mesa
-    new JuegoMesa('Monopoly', 25, 'Arruina a tus amigos.', 'imagenes/default.png', '8+ años'),
+    new JuegoMesa('Monopoly', 25, 'Arruina a tus amigos.', 'imagenes/productos/Monopoly.jpg', '8+ años'),
     new JuegoMesa('Dixit', 30, 'Juego de imaginación.', 'imagenes/default.png', '10+ años'),
     new JuegoMesa('Cluedo', 20, 'Resuelve el misterio.', 'imagenes/default.png', '12+ años'),
 
