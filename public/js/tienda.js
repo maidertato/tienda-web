@@ -8,14 +8,14 @@ import { Videojuego } from './videojuego.js';
 // INVENTARIO INICIAL
 export const inventario = [
     // Juguetes (No se si existen los ha hecho la IA)
-    new Juguete('Pelota de Goma', 10, 'Pelota resistente para perros.', 'imagenes/defautl.jpg', 'Goma', 'Mediano', true),
-    new Juguete('Ratón de Peluche', 8, 'Juguete suave para gatos.', 'imagenes/defautl.jpg', 'Tela', 'Pequeño', false),
-    new Juguete('Hueso de Nylon', 12, 'Hueso duradero para masticar.', 'imagenes/defautl.jpg', 'Nylon', 'Grande', true),
+    new Juguete('Pelota de Goma', 10, 'Pelota resistente para perros.', 'imagenes/default.png', 'Goma', 'Mediano', true),
+    new Juguete('Ratón de Peluche', 8, 'Juguete suave para gatos.', 'imagenes/default.png', 'Tela', 'Pequeño', false),
+    new Juguete('Hueso de Nylon', 12, 'Hueso duradero para masticar.', 'imagenes/default.png', 'Nylon', 'Grande', true),
 
     //Alimentacion (No se si existen los ha hecho la IA)
-    new Alimentacion('Croquetas para Perros', 30, 'Alimento balanceado para perros adultos.', 'imagenes/defautl.jpg', 'Perro', 'Seco'),
-    new Alimentacion('Comida Húmeda para Gatos', 20, 'Deliciosa comida húmeda para gatos.', 'imagenes/defautl.jpg', 'Gato', 'Húmedo'),
-    new Alimentacion('Snacks para Aves', 15, 'Snacks nutritivos para aves pequeñas.', 'imagenes/defautl.jpg', 'Ave', 'Snack'),
+    new Alimentacion('Croquetas para Perros', 30, 'Alimento balanceado para perros adultos.', 'imagenes/default.png', 'Perro', 'Seco'),
+    new Alimentacion('Comida Húmeda para Gatos', 20, 'Deliciosa comida húmeda para gatos.', 'imagenes/default.png', 'Gato', 'Húmedo'),
+    new Alimentacion('Snacks para Aves', 15, 'Snacks nutritivos para aves pequeñas.', 'imagenes/default.png', 'Ave', 'Snack'),
 
     // Juego Mesa
     new JuegoMesa('Monopoly', 25, 'Arruina a tus amigos.', 'imagenes/productos/Monopoly.jpg', '8+ años'),

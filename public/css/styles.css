@@ -7,7 +7,7 @@
    FONDO GENERAL (VERSIÓN 1)
    ========================= */
 body {
-  background-image: url("../imagenes/fondo.jpg");
+  background-image: url("../imagenes/fondo.png");
   background-repeat: repeat;
   background-color: #F2EAFA;
   margin: 0;
@@ -46,10 +46,18 @@ header {
 
 /* Mejora visual opcional (segundo CSS) */
 header {
-  background: linear-gradient(90deg, #d0b4f5);
-  color: #4b2e83;
   padding: 2rem;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+    url("../imagenes/fondo-huellas.png");
+  background-size: cover;
+  background-position: center;
+
+  color: #4b2e83;
+  text-align: center;
+  border-radius: 15px 15px 0 0;
 }
+
 
 header h1 {
   margin: 0;
@@ -588,6 +596,65 @@ main {
   align-items: center;
   justify-content: center;
 }
+/* =========================
+   VISTA CARRITO VACÍO (REUTILIZA ESTILO)
+   ========================= */
+
+.carrito-vacio-vista {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
+  text-align: center;
+  color: #f8f4ff;
+  padding: 2rem;
+}
+
+.vacio-imagen {
+  width: 130px;
+  margin-bottom: 1.5rem;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));
+}
+
+.carrito-vacio-vista h4 {
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.4rem;
+}
+
+.carrito-vacio-vista p {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+/* BOTÓN INICIO — REUTILIZA TU ESTILO DE BOTÓN */
+.btn-inicio {
+  background-color: #f8f4ff;
+  color: #521F84;
+  border: none;
+  border-radius: 20px;
+  padding: 0.6rem 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-inicio:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  background-color: white;
+}
+
+.icono-casa {
+  font-size: 1.1rem;
+}
 
 /* TEXTO UNIDADES */
 .btn-cart::after {
@@ -610,12 +677,13 @@ main {
 
 /* ICONO */
 .icon-cart {
-  width: 20px;
-  height: 24px;
+  width: 30px;   
+  height: 36px; 
   transition: 0.2s ease;
-  filter: drop-shadow(0 0 6px #9f3cff)
-          drop-shadow(0 0 10px #9f3cff);
+  filter: drop-shadow(0 0 8px #9f3cff)
+          drop-shadow(0 0 14px #9f3cff);
 }
+
 
 .icon-cart path {
   fill: #7b1cff;
@@ -637,6 +705,23 @@ main {
   opacity: 1;
   visibility: visible;
   bottom: 2px;
+}
+
+/* ICONOS BLANCOS VISTA CARRITO VACÍO */
+
+.vacio-icono-cart {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.5rem;
+  color: white;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.6));
+  opacity: 0.95;
+}
+
+.vacio-icono-home {
+  width: 18px;
+  height: 18px;
+  color: #521F84;
 }
 
 /* TEXTO TU CARRITO */
