@@ -59,6 +59,18 @@ export function renderizarTienda() {
 }
 
 // --- 2. GESTIÓN DEL CARRITO (RENDER Y LÓGICA) ---
+function actualizarIconoCarrito() {
+  const cartIcon = document.getElementById("cart-icon");
+  if (!cartIcon) return;
+
+  let total = 0;
+
+  carrito.forEach(item => {
+    total += item.cantidad;
+  });
+
+  cartIcon.setAttribute("data-quantity", total);
+}
 
 function renderizarCarrito() {
     carritoContenedor.innerHTML = '';
@@ -66,6 +78,7 @@ function renderizarCarrito() {
 
     if (carrito.size === 0) {
         carritoContenedor.innerHTML = '<p class="carrito-vacio-msg">El carrito está vacío</p>';
+        actualizarIconoCarrito();
         return;
     }
 
@@ -93,7 +106,7 @@ function renderizarCarrito() {
         `;
         carritoContenedor.appendChild(div);
     });
-
+    actualizarIconoCarrito();
     const totalDiv = document.createElement('div');
     totalDiv.className = 'p-3 mt-3 rounded carrito-total-barra';
     totalDiv.innerHTML = `Total: ${totalCarrito.toFixed(2)}€`;

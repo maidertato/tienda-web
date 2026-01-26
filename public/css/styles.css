@@ -508,6 +508,111 @@ main {
   margin-bottom: 0.5rem;
 }
 
+
+.carrito-header-custom {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* BOTÓN CARRITO */
+.btn-cart {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* TEXTO UNIDADES */
+.btn-cart::after {
+  content: attr(data-quantity);
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 900;
+  color: #ff2cff;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s ease;
+  text-shadow:
+    0 0 6px #ff2cff,
+    0 0 12px #c77dff,
+    0 0 20px #c77dff;
+}
+
+/* ICONO */
+.icon-cart {
+  width: 20px;
+  height: 24px;
+  transition: 0.2s ease;
+  filter: drop-shadow(0 0 6px #9f3cff)
+          drop-shadow(0 0 10px #9f3cff);
+}
+
+.icon-cart path {
+  fill: #7b1cff;
+  transition: 0.2s ease;
+}
+
+/* HOVER EFECTOS */
+.btn-cart:hover > .icon-cart {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 10px #c77dff)
+          drop-shadow(0 0 20px #c77dff);
+}
+
+.btn-cart:hover > .icon-cart path {
+  fill: #c77dff;
+}
+
+.btn-cart:hover::after {
+  opacity: 1;
+  visibility: visible;
+  bottom: 2px;
+}
+
+/* TEXTO TU CARRITO */
+.offcanvas-title {
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: #521F84;
+  letter-spacing: 0.5px;
+}
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Fondo solo para la parte izquierda */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8f4ff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 15px;
+}
+
+/* X limpia, flotando */
+.btn-close-custom {
+  opacity: 0.7;
+  transition: 0.2s ease;
+}
+
+.btn-close-custom:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
 /* =========================
    FOOTER (base + mejora)
    ========================= */
