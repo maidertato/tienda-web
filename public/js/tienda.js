@@ -1,5 +1,5 @@
-import { Carta } from './cartas.js';
-import { JuegoEstrategia } from './juegoDeEstrategia.js';
+import { Juguete } from './juguete.js';
+import { Alimentacion } from './alimentacion.js';
 import { JuegoMesa } from './juegoDeMesa.js';
 import { Merchandising } from './merchandising.js';
 import { JuegoRol } from './rol.js';
@@ -7,15 +7,15 @@ import { Videojuego } from './videojuego.js';
 
 // INVENTARIO INICIAL
 export const inventario = [
-    // Cartas
-    new Carta('Black Lotus', 150, 'La carta más rara.', 'imagenes/productos/BlackLotus.png', 'Alpha'),
-    new Carta('Charizard Holo', 500, 'Clásico de Pokémon.', 'imagenes/productos/CharizardHolo.JPG', 'Base Set'),
-    new Carta('Blue-Eyes White Dragon', 200, 'El favorito de Kaiba.', 'imagenes/productos/Blue-Eyes White Dragon.jpg', 'Legendary'),
+    // Juguetes (No se si existen los ha hecho la IA)
+    new Juguete('Pelota de Goma', 10, 'Pelota resistente para perros.', 'imagenes/defautl.jpg', 'Goma', 'Mediano', true),
+    new Juguete('Ratón de Peluche', 8, 'Juguete suave para gatos.', 'imagenes/defautl.jpg', 'Tela', 'Pequeño', false),
+    new Juguete('Hueso de Nylon', 12, 'Hueso duradero para masticar.', 'imagenes/defautl.jpg', 'Nylon', 'Grande', true),
 
-    // Juego Estrategia
-    new JuegoEstrategia('Catan', 40, 'Coloniza la isla.', 'imagenes/productos/Catan.jpg', 'Media'),
-    new JuegoEstrategia('Age of Empires IV', 50, 'Estrategia histórica.', 'imagenes/productos/Age of Empires IV.jpg', 'Alta'),
-    new JuegoEstrategia('Risk', 30, 'Conquista el mundo.', 'imagenes/productos/Risk.jpg', 'Baja'),
+    //Alimentacion (No se si existen los ha hecho la IA)
+    new Alimentacion('Croquetas para Perros', 30, 'Alimento balanceado para perros adultos.', 'imagenes/defautl.jpg', 'Perro', 'Seco'),
+    new Alimentacion('Comida Húmeda para Gatos', 20, 'Deliciosa comida húmeda para gatos.', 'imagenes/defautl.jpg', 'Gato', 'Húmedo'),
+    new Alimentacion('Snacks para Aves', 15, 'Snacks nutritivos para aves pequeñas.', 'imagenes/defautl.jpg', 'Ave', 'Snack'),
 
     // Juego Mesa
     new JuegoMesa('Monopoly', 25, 'Arruina a tus amigos.', 'imagenes/productos/Monopoly.jpg', '8+ años'),
@@ -49,12 +49,12 @@ export const buscarProductoPorNombre = (nombre) => {
 export function agregarProductoAlInventario(tipo, nombre, precio, desc, imagen, extra) {
     let nuevo;
     switch (tipo) {
-        case 'juego_estrategia': nuevo = new JuegoEstrategia(nombre, precio, desc, imagen, extra); break;
         case 'videojuego': nuevo = new Videojuego(nombre, precio, desc, imagen, extra); break;
         case 'rol': nuevo = new JuegoRol(nombre, precio, desc, imagen, extra); break;
-        case 'cartas': nuevo = new Carta(nombre, precio, desc, imagen, extra); break;
+        case 'juguete': nuevo = new Juguete(nombre, precio, desc, imagen, ...extra); break;
         case 'merch': nuevo = new Merchandising(nombre, precio, desc, imagen, extra); break;
         case 'juego_mesa': nuevo = new JuegoMesa(nombre, precio, desc, imagen, extra); break;
+        case 'alimentacion': nuevo = new Alimentacion(nombre, precio, desc, imagen, extra); break;
         default: nuevo = new JuegoEstrategia(nombre, precio, desc, imagen, extra); // Por defecto
     }
     inventario.push(nuevo);
