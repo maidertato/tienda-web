@@ -758,6 +758,30 @@ main {
   transform: scale(1.2);
 }
 
+.btn-papelera {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #a0a0a0; /* Gris suave por defecto */
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-papelera svg {
+    width: 22px;
+    height: 22px;
+}
+
+.btn-papelera:hover {
+    color: #e63946; /* Rojo elegante al pasar el ratón */
+    background-color: #ffeeee; /* Fondo suave circular */
+    border-radius: 50%;
+    transform: scale(1.1);
+}
+
 /* =========================
    FOOTER (base + mejora)
    ========================= */
@@ -777,3 +801,4 @@ footer {
   color: #4b2e83;
   padding: 1rem;
 }
+

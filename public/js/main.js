@@ -108,23 +108,29 @@ function renderizarCarrito() {
         const precioTotalProducto = item.precio * item.cantidad;
         totalCarrito += precioTotalProducto;
 
+        // Dentro de tu carrito.forEach en main.js
         const div = document.createElement('div');
-        div.className = 'carrito-item mb-4 animate__animated animate__fadeIn';
+        div.className = 'carrito-item p-2 mb-3 shadow-sm d-flex align-items-center justify-content-between';
+
         div.innerHTML = `
             <div class="d-flex align-items-center gap-3">
-                <img src="${item.imagen}" class="img-carrito-thumb" style="width: 50px;">
-                <div class="flex-grow-1">
-                    <h6 class="mb-1 fw-bold">${item.nombre}</h6>
+                <img src="${item.imagen}" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                <div>
+                    <h6 class="mb-0 fw-bold">${item.nombre}</h6>
                     <div class="d-flex align-items-center gap-2">
-                        <span>${item.precio}€ x</span>
                         <input type="number" class="form-control form-control-sm input-cantidad" 
-                               data-id="${id}" value="${item.cantidad}" min="0" max="21" style="width: 60px;">
-                        <span>= <strong>${precioTotalProducto.toFixed(2)}€</strong></span>
+                            data-id="${id}" value="${item.cantidad}" min="0" max="21" style="width: 50px;">
+                        <span class="small text-muted">x ${item.precio}€</span>
                     </div>
-                    <div id="aviso-${id}" class="aviso-maximo-texto fw-bold text-danger"></div>
                 </div>
             </div>
-            <hr class="my-2 text-muted">
+
+            <button class="btn-papelera" data-id="${id}" title="Eliminar">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 11V17M14 11V17M4 7H20M19 7L18.133 19.142C18.0617 20.1427 17.2262 21 16.223 21H7.777C6.77382 21 5.93827 20.1427 5.867 19.142L5 7H19ZM9 7V4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V7H9Z" 
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         `;
         carritoContenedor.appendChild(div);
     });
@@ -288,7 +294,7 @@ carritoContenedor.addEventListener('change', (e) => {
         renderizarTienda();
     }
 });
-
+//VACIAR CARRITO
 carritoContenedor.addEventListener('click', (e) => {
     if (e.target.id === 'vaciar-carrito') {
         if (confirm("¿Vaciar todo el carrito?")) {
@@ -298,7 +304,16 @@ carritoContenedor.addEventListener('click', (e) => {
         }
     }
 });
-
+//QUITAR UN SOLO PRODUCTO
+carritoContenedor.addEventListener('click', (e) => {
+    // Buscamos el botón o el SVG de la papelera
+    const btn = e.target.closest('.btn-papelera');
+    if (btn) {
+        const id = btn.dataset.id;
+        carrito.delete(id); // Borramos el producto del Map
+        renderizarCarrito(); // Refrescamos la vista
+    }
+});
 carritoContenedor.addEventListener("click", (e) => {
   if (e.target.closest(".btn-inicio")) {
     window.scrollTo({ top: 0, behavior: "smooth" });
