@@ -145,9 +145,9 @@ function renderizarCarrito() {
 contenedor.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-agregar')) {
         const id = e.target.dataset.id;
-        const juego = inventario.find(j => j.id === id);
+        const mascotas = inventario.find(j => j.id === id);
 
-        if (juego) {
+        if (mascotas) {
             const feedback = document.createElement('div');
             feedback.className = 'mensaje-exito';
             feedback.textContent = '¡Añadido con éxito!';
@@ -159,10 +159,10 @@ contenedor.addEventListener('click', (e) => {
                 if (item.cantidad < 20) item.cantidad++;
             } else {
                 carrito.set(id, { 
-                    id: juego.id,
-                    nombre: juego.nombre,
-                    imagen: juego.imagen,
-                    precio: parseFloat(juego.precio), 
+                    id: mascotas.id,
+                    nombre: mascotas.nombre,
+                    imagen: mascotas.imagen,
+                    precio: parseFloat(mascotas.precio), 
                     cantidad: 1 
             });
         }
@@ -361,25 +361,25 @@ if (selectTipo && extraContainer) {
         let placeholder = "";
 
         switch (tipo) {
-            case 'videojuego':
-                etiqueta = "Compañía";
-                placeholder = "Ej: Nintendo, Sony, Ubisoft...";
+            case 'mobiliario':
+                etiqueta = "Material";
+                placeholder = "Ej: Madera, Plástico...";
                 break;
-            case 'rol':
-                etiqueta = "Ambientación";
-                placeholder = "Ej: Fantasía, Terror...";
+            case 'descanso':
+                etiqueta = "Dimensiones";
+                placeholder = "Ej: 80x60 cm...";
                 break;
-            case 'cartas':
-                etiqueta = "Colección";
-                placeholder = "Ej: Magic, Pokémon...";
+            case 'juguete':
+                etiqueta = "Material";
+                placeholder = "Ej: Goma, Tela...";
                 break;
             case 'juego_mesa':
                 etiqueta = "Edad Recomendada";
-                placeholder = "Ej: +8 años, +12...";
+                placeholder = "Ej: +12 años...";
                 break;
-            case 'juego_estrategia':
-                etiqueta = "Dificultad";
-                placeholder = "Ej: Fácil, Media, Experto...";
+            case 'alimentacion':
+                etiqueta = "Tipo de Alimentación";
+                placeholder = "Ej: Seco, Húmedo...";
                 break;
             case 'merch':
                 etiqueta = "Material";
@@ -400,11 +400,11 @@ if (selectTipo && extraContainer) {
 }
 
 function obtenerAtributoExtra(p) {
-    // 1. Cartas
-    if (p.coleccion) return `Colección: ${p.coleccion}`;
+    // 1. Juguete
+    if (p.material) return `Material: ${p.material}`;
     
-    // 2. Juego Estrategia
-    if (p.dificultad) return `Dificultad: ${p.dificultad}`;
+    // 2. Alimentación
+    if (p.tipoAlimentacion) return `Tipo de Alimentación: ${p.tipoAlimentacion}`;
     
     // 3. Juego Mesa
     if (p.edadRecomendada) return `Edad: ${p.edadRecomendada}`;
@@ -412,11 +412,11 @@ function obtenerAtributoExtra(p) {
     // 4. Merchandising
     if (p.tipoMaterial) return `Material: ${p.tipoMaterial}`;
     
-    // 5. Juego Rol
-    if (p.ambientacion) return `Ambientación: ${p.ambientacion}`;
+    // 5. Descanso
+    if (p.dimensiones) return `Dimensiones: ${p.dimensiones}`;
     
-    // 6. Videojuego
-    if (p.plataforma) return `Plataforma: ${p.plataforma}`;
+    // 6. Mobiliario
+    if (p.materialMobiliario) return `Material: ${p.materialMobiliario}`;
 
     return "Categoría: General";
 }
@@ -436,29 +436,29 @@ document.addEventListener('DOMContentLoaded', () => {
             let placeholder = "";
 
             switch (tipo) {
-                case 'videojuego':
-                    etiqueta = "Plataforma";
-                    placeholder = "Ej: Nintendo, Sony...";
+                case 'mobiliario':
+                    etiqueta = "Material";
+                    placeholder = "Ej: Madera, Plástico...";
                     break;
-                case 'rol':
-                    etiqueta = "Ambientación";
-                    placeholder = "Ej: Fantasía...";
+                case 'descanso':
+                    etiqueta = "Dimensiones";
+                    placeholder = "Ej: 80x60 cm...";
                     break;
-                case 'cartas':
-                    etiqueta = "Colección";
-                    placeholder = "Ej: Pokémon...";
+                case 'juguete':
+                    etiqueta = "Material";
+                    placeholder = "Ej: Goma, Tela...";
                     break;
                 case 'juego_mesa':
                     etiqueta = "Edad Recomendada";
                     placeholder = "Ej: +12 años...";
                     break;
-                case 'juego_estrategia':
-                    etiqueta = "Dificultad";
-                    placeholder = "Ej: Alta...";
+                case 'alimentacion':
+                    etiqueta = "Tipo de Alimentación";
+                    placeholder = "Ej: Seco, Húmedo...";
                     break;
                 case 'merch':
                     etiqueta = "Material";
-                    placeholder = "Ej: Resina...";
+                    placeholder = "Ej: Resina, Algodón...";
                     break;
                 default:
                     extraContainer.innerHTML = '';

@@ -2,8 +2,8 @@ import { Juguete } from './juguete.js';
 import { Alimentacion } from './alimentacion.js';
 import { JuegoMesa } from './juegoDeMesa.js';
 import { Merchandising } from './merchandising.js';
-import { JuegoRol } from './rol.js';
-import { Videojuego } from './videojuego.js';
+import { Descanso } from './descanso.js';
+import { Mobiliario } from './mobiliario.js';
 
 // INVENTARIO INICIAL
 export const inventario = [
@@ -22,20 +22,20 @@ export const inventario = [
     new JuegoMesa('Dixit', 30, 'Juego de imaginación.', 'imagenes/default.png', '10+ años'),
     new JuegoMesa('Cluedo', 20, 'Resuelve el misterio.', 'imagenes/default.png', '12+ años'),
 
-    // Merchandising
-    new Merchandising('Figura Geralt', 120, 'Estatua de resina.', 'imagenes/default.png', 'Resina'),
-    new Merchandising('Camiseta Zelda', 20, 'Algodón 100%.', 'imagenes/default.png', 'Algodón'),
-    new Merchandising('Taza Pac-Man', 12, 'Taza térmica.', 'imagenes/default.png', 'Cerámica'),
+    // Merchandising (Hechos por IA)
+    new Merchandising('Correa para perro', 12, 'Correa para perro', 'imagenes/default.png', 'Mediano', 'Perro', 'Rojo'),
+    new Merchandising('Collar para gato', 10, 'Collar para gato', 'imagenes/default.png', 'Pequeño', 'Gato', 'Negro'),
+    new Merchandising('Plato de comida', 8, 'Plato de comida para mascotas', 'imagenes/default.png', 'Mediano', 'Perro', 'Blanco'),
 
-    // Juego Rol
-    new JuegoRol('D&D Manual', 45, 'Reglas básicas 5.0.', 'imagenes/default.png', 'Fantasía'),
-    new JuegoRol('Cyberpunk RED', 50, 'Futuro distópico.', 'imagenes/default.png', 'Ciencia Ficción'),
-    new JuegoRol('Call of Cthulhu', 40, 'Terror cósmico.', 'imagenes/default.png', 'Terror'),
+    // Descanso (Hechas por IA mirarr)
+    new Descanso('Cama perro', 50, 'Cama cómoda para perros.', 'imagenes/default.png', '80x60 cm', true),
+    new Descanso('Cama gato', 40, 'Cama suave para gatos.', 'imagenes/default.png', '60x40 cm', false),
+    new Descanso('Alfombra mascotas', 30, 'Alfombra antideslizante.', 'imagenes/default.png', '100x70 cm', true),
 
-    // Videojuego
-    new Videojuego('Elden Ring', 60, 'Desafío extremo.', 'imagenes/default.png', 'PS5/PC'),
-    new Videojuego('Mario Odyssey', 55, 'Aventuras en 3D.', 'imagenes/default.png', 'Switch'),
-    new Videojuego('Halo Infinite', 60, 'Shooter legendario.', 'imagenes/default.png', 'Xbox/PC')
+    // Mobiliario (Hechos por IA)
+    new Mobiliario('Mesa para mascotas', 80, 'Mesa resistente para mascotas.', 'imagenes/default.png', 'Madera', true),
+    new Mobiliario('Silla para mascotas', 60, 'Silla cómoda para mascotas.', 'imagenes/default.png', 'Plástico', false),
+    new Mobiliario('Caja de almacenamiento', 40, 'Caja para almacenar artículos.', 'imagenes/default.png', 'Plástico', true),
 ];
 
 // LISTA VACÍA PARA EL CARRITO (Requisito 4.3)
@@ -49,8 +49,8 @@ export const buscarProductoPorNombre = (nombre) => {
 export function agregarProductoAlInventario(tipo, nombre, precio, desc, imagen, extra) {
     let nuevo;
     switch (tipo) {
-        case 'videojuego': nuevo = new Videojuego(nombre, precio, desc, imagen, extra); break;
-        case 'rol': nuevo = new JuegoRol(nombre, precio, desc, imagen, extra); break;
+        case 'mobiliario': nuevo = new Mobiliario(nombre, precio, desc, imagen, ...extra); break;
+        case 'descanso': nuevo = new Descanso(nombre, precio, desc, imagen, ...extra); break;
         case 'juguete': nuevo = new Juguete(nombre, precio, desc, imagen, ...extra); break;
         case 'merch': nuevo = new Merchandising(nombre, precio, desc, imagen, extra); break;
         case 'juego_mesa': nuevo = new JuegoMesa(nombre, precio, desc, imagen, extra); break;

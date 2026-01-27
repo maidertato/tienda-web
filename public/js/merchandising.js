@@ -1,13 +1,23 @@
 import { Producto } from './producto.js';
 
 export class Merchandising extends Producto {
-    #tipoMaterial;
+    #talla;
+    #tipoMascota;
+    #color;
 
-    constructor(n, p, d, i, material) {
+    constructor(n, p, d, i, talla, tipoMascota, color) {
         super(n, p, d, i);
-        this.#tipoMaterial = material;
+        this.#talla = talla;
+        this.#tipoMascota = tipoMascota;
+        this.#color = color;
     }
 
-    get tipoMaterial() { return this.#tipoMaterial; }
-    set tipoMaterial(v) { this.#tipoMaterial = v; }
+    get talla() { return this.#talla; }
+    set talla(v) { this.#talla = v; }
+
+    get tipoMascota() { return this.#tipoMascota; }
+    set tipoMascota(v) { this.#tipoMascota = v; }
+
+    get color() { return this.#color; }
+    set color(v) { this.#color = v; }
 }
