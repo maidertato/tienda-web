@@ -13,7 +13,7 @@ export class Producto {
         this.#precio = precio;
         this.#descripcion = descripcion;
         // Imagen por defecto si es null/undefined
-        this.#imagen = imagen || 'imagenes/sin-imagen.png';
+        this.#imagen = imagen || 'imagenes/productos/default.png';
     }
 
     get id() { return this.#id; }
