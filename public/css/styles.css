@@ -176,6 +176,7 @@ aside {
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  margin-top: 95px;
 }
 
 aside h3 {
@@ -306,6 +307,36 @@ main {
   gap: 1.5rem;
   min-width: 0; /* Evita que el flexbox se desborde */
 }
+
+/* Boton Buscador */
+/* BUSCADOR MORADO PRO */
+.buscador-custom {
+  max-width: 260px;
+  border-radius: 12px;
+  border: 2px solid #9b5cff;
+  transition: all 0.25s ease;
+  background-color: #f8f3ff;
+  font-weight: 500;
+  margin-right: 60px;
+}
+
+/* Al pasar el ratón */
+.buscador-custom:hover {
+  border-color: #7b2ff7;
+}
+
+/* Al hacer click */
+.buscador-custom:focus {
+  border-color: #c77dff;
+  box-shadow: 0 0 12px rgba(155, 92, 255, 0.6);
+  background-color: #f2e9ff;
+}
+
+/* Placeholder */
+.buscador-custom::placeholder {
+  color: #7d6aa5;
+}
+
 
 /* Contenedor de la cuadrícula */
 #lista-productos {
