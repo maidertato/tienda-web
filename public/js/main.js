@@ -260,7 +260,7 @@ form.addEventListener('submit', (e) => {
     }
 });
 
-carritoContenedor.addEventListener('change', (e) => {
+carritoContenedor.addEventListener('input', (e) => {
     if (e.target.classList.contains('input-cantidad')) {
         const id = e.target.dataset.id;
         let nuevaCantidad = parseInt(e.target.value);
@@ -268,6 +268,8 @@ carritoContenedor.addEventListener('change', (e) => {
 
         if (nuevaCantidad > 20) {
             nuevaCantidad = 20;
+            // Para que nunca llegue a aparecer el número 21
+            e.target.value = 20; 
             // Primero renderizamos para asegurar que el HTML existe
             renderizarCarrito();
             renderizarTienda();
