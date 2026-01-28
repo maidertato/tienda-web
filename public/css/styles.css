@@ -834,3 +834,6 @@ footer {
   padding: 1rem;
 }
 
+.imagen-producto {
+  cursor: pointer;
+}

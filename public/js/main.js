@@ -32,7 +32,7 @@ export function renderizarTienda() {
         card.className = 'col-12 col-md-6 col-lg-4';        
         card.innerHTML = `
             <div class="card h-100 position-relative m-2 card-producto-tienda" style="width: 100%;">
-                <img src="${juego.imagen}" class="card-img-top" alt="${juego.nombre}">
+                <img src="${juego.imagen}" class="card-img-top imagen-producto" data-id="${juego.id}" alt="${juego.nombre}">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${juego.nombre}</h5>
                     
@@ -181,6 +181,30 @@ contenedor.addEventListener('click', (e) => {
             bootstrap.Offcanvas.getOrCreateInstance(elCarrito).show();
         }
     }
+});
+
+// Evento para el detalle del producto
+contenedor.addEventListener('click', (e) => {
+    const img = e.target.closest('.imagen-producto');
+    if (!img) return;
+
+    const id = img.dataset.id;
+    const producto = inventario.find(p => p.id === id);
+    if (!producto) return;
+
+    // Rellenar modal
+    document.getElementById('modal-img').src = producto.imagen;
+    document.getElementById('modal-titulo').textContent = producto.nombre;
+    document.getElementById('modal-descripcion').textContent = producto.descripcion;
+    document.getElementById('modal-precio').innerHTML = `<strong>Precio:</strong> ${producto.precio}€`;
+    document.getElementById('modal-extra').innerHTML =
+        `<strong>${obtenerAtributoExtra(producto)}</strong>`;
+
+    // Mostrar modal
+    const modal = new bootstrap.Modal(
+        document.getElementById('modalDesripcion')
+    );
+    modal.show();
 });
 
 // --- 3. BUSCADOR Y PAGINACIÓN ---
