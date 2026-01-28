@@ -122,6 +122,7 @@ function renderizarCarrito() {
                             data-id="${id}" value="${item.cantidad}" min="0" max="21" style="width: 50px;">
                         <span class="small text-muted">x ${item.precio}€</span>
                     </div>
+                    <span id="aviso-${id}" class="aviso-maximo-texto"></span>
                 </div>
             </div>
 
