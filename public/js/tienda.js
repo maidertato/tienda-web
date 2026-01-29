@@ -11,11 +11,20 @@ export const inventario = [
     new Juguete('Pelota de Goma', 10, 'Pelota resistente para perros.', 'imagenes/productos/pelotaGoma.png', 'Goma', 'Mediano', true),
     new Juguete('Ratón de Peluche', 8, 'Juguete suave para gatos.', 'imagenes/productos/ratonPeluche.png', 'Tela', 'Pequeño', false),
     new Juguete('Hueso de Nylon', 12, 'Hueso duradero para masticar.', 'imagenes/productos/huesoNylon.png', 'Nylon', 'Grande', true),
+    new Juguete('Peluche con sonido', 15, 'Peluche que emite sonido al apretarlo.', 'imagenes/productos/pelucheSonido.png', 'Tela', 'Mediano', true),
 
-    //Alimentacion (Hechos porIA)
+    //Alimentacion 
     new Alimentacion('Croquetas para Perros', 30, 'Alimento balanceado para perros adultos.', 'imagenes/productos/croquetasPerro.png', 'Perro', 'Seco'),
     new Alimentacion('Comida Húmeda para Gatos', 20, 'Deliciosa comida húmeda para gatos.', 'imagenes/productos/comidaHumeda.png', 'Gato', 'Húmedo'),
     new Alimentacion('Snacks para Aves', 15, 'Snacks nutritivos para aves pequeñas.', 'imagenes/productos/snackAves.png', 'Ave', 'Snack'),
+    new Alimentacion('Alimento para Peces', 25, 'Alimento completo para peces de acuario.', 'imagenes/productos/alimentoPeces.png', 'Pez', 'Seco'),
+    new Alimentacion('Pienso hipoalergico para perros', 35, 'Pienso especial para perros con alergias.', 'imagenes/productos/piensoHipoalergenico.png', 'Perro', 'Seco'),
+    new Alimentacion('Comida orgánica para gatos', 28, 'Comida orgánica y saludable para gatos.', 'imagenes/productos/comidaOrganicaGato.png', 'Gato', 'Húmedo'),
+    //Premios y chuches
+    new Alimentacion('Snacks dentales para perros', 18, 'Snacks que ayudan a la salud dental.', 'imagenes/productos/snacksDentales.png', 'Perro', 'Snack'),
+    new Alimentacion('Galletas para perros', 12, 'Galletas sabrosas para perros.', 'imagenes/productos/galletasPerro.png', 'Perro', 'Snack'),
+    new Alimentacion('Bocaditos para gatos', 14, 'Bocaditos deliciosos para gatos.', 'imagenes/productos/bocaditosGato.png', 'Gato', 'Snack'),
+
 
     // Merchandising (Hechos por IA)
     new Merchandising('Correa para perro', 12, 'Correa para perro', 'imagenes/productos/correaPerro.png', 'Mediano', 'Perro', 'Rojo'),
