@@ -186,7 +186,7 @@
   
   <!-- MODAL DESCRIPCIÓN PRODUCTO -->
   <div class="modal fade" id="modalDesripcion" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
+  <div class="modal-dialog modal-md modal-dialog-centered custom-modal">
     <div class="modal-content">
 
       <div class="modal-header">
@@ -194,16 +194,23 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <div class="modal-body d-flex gap-4">
-        <img id="modal-img" src="" alt=""
-             style="width: 40%; object-fit: contain;">
+      <div class="modal-body modal-body-custom">
+        <div class="modal-card-hover">
 
-        <div style="max-height: 300px; overflow-y: auto;">
-          <p id="modal-descripcion"></p>
-          <p id="modal-extra" class="fw-bold mt-2"></p>
-          <p id="modal-precio" class="text-muted"></p>
+          <div class="modal-front">
+            <img id="modal-img" src="" alt="">
+            <h5 id="modal-titulo" class="mt-3"></h5>
+          </div>
+
+          <div class="modal-back">
+            <p id="modal-descripcion"></p>
+            <p id="modal-extra" class="fw-bold mt-2"></p>
+            <p id="modal-precio" class="text-muted"></p>
+          </div>
+
         </div>
       </div>
+
 
     </div>
   </div>
