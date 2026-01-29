@@ -802,11 +802,13 @@ main {
     justify-content: center;
 }
 
+
 .btn-papelera svg {
     width: 22px;
     height: 22px;
 }
 
+/*comentario para borrar*/
 .btn-papelera:hover {
     color: #e63946; /* Rojo elegante al pasar el ratón */
     background-color: #ffeeee; /* Fondo suave circular */
