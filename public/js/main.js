@@ -407,7 +407,7 @@ if (selectTipo && extraContainer) {
                 etiqueta = "Material";
                 placeholder = "Ej: Madera, Plástico...";
                 break;
-            case 'descanso':
+            case 'cabello':
                 etiqueta = "Dimensiones";
                 placeholder = "Ej: 80x60 cm...";
                 break;
@@ -454,7 +454,7 @@ function obtenerAtributoExtra(p) {
     // 4. Merchandising
     if (p.tipoMaterial) return `Material: ${p.tipoMaterial}`;
     
-    // 5. Descanso
+    // 5. Cabello
     if (p.dimensiones) return `Dimensiones: ${p.dimensiones}`;
     
     // 6. Mobiliario
@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     etiqueta = "Material";
                     placeholder = "Ej: Madera, Plástico...";
                     break;
-                case 'descanso':
+                case 'cabello':
                     etiqueta = "Dimensiones";
                     placeholder = "Ej: 80x60 cm...";
                     break;
