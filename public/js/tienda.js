@@ -33,7 +33,7 @@ export const inventario = [
     //________________________________________________________________________
     // Pelucas 
     new Cabello('Peluca Azul', 30, 'Peluca divertida de color azul brillante para darle un estilo único a tu perrito.', 'imagenes/productos/peluAzul.png', 'Pequeño', 'Perro', 'Azul'),
-    new Cabello('Peluca Black', 35, 'Peluca elegante de color negro con estilo afro para un look moderno y llamativo.', 'imagenes/productos/peluBlack.png', 'Pequeño', 'Perro', 'Negro'),
+    new Cabello('Peluca Pelocho', 35, 'Peluca elegante de color negro con estilo afro para un look moderno y llamativo.', 'imagenes/productos/peluBlack.png', 'Pequeño', 'Perro', 'Negro'),
     new Cabello('Peluca Nada Que Ver', 28, 'Peluca graciosa y alocada para perros con mucho estilo y personalidad.', 'imagenes/productos/pelucaNadaQueVer.png', 'Pequeño', 'Perro', 'Marrón'),
     new Cabello('Peluca Coqueta', 32, 'Peluca blanca con moñito ideal para perritos tiernos y coquetos.', 'imagenes/productos/peluCoqueta.png', 'Pequeño', 'Perro', 'Blanco'),
     new Cabello('Peluca Rasta', 40, 'Peluca estilo rasta para un look salvaje, divertido y lleno de actitud.', 'imagenes/productos/peluRast.png', 'Pequeño', 'Perro', 'Marrón'),
