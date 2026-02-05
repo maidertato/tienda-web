@@ -1,6 +1,5 @@
 import { Juguete } from './juguete.js';
 import { Alimentacion } from './alimentacion.js';
-import { JuegoMesa } from './juegoDeMesa.js';
 import { Merchandising } from './merchandising.js';
 import { Descanso } from './descanso.js';
 import { Mobiliario } from './mobiliario.js';
@@ -48,9 +47,7 @@ export function agregarProductoAlInventario(tipo, nombre, precio, desc, imagen, 
         case 'descanso': nuevo = new Descanso(nombre, precio, desc, imagen, ...extra); break;
         case 'juguete': nuevo = new Juguete(nombre, precio, desc, imagen, ...extra); break;
         case 'merch': nuevo = new Merchandising(nombre, precio, desc, imagen, extra); break;
-        case 'juego_mesa': nuevo = new JuegoMesa(nombre, precio, desc, imagen, extra); break;
         case 'alimentacion': nuevo = new Alimentacion(nombre, precio, desc, imagen, extra); break;
-        default: nuevo = new JuegoEstrategia(nombre, precio, desc, imagen, extra); // Por defecto
     }
     inventario.push(nuevo);
 };

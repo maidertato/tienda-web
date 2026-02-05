@@ -84,7 +84,6 @@ nav ul {
 nav ul li a {
   text-decoration: none;
   color: #521F84;
-  font-weight: bold;
   transition: color 0.3s, transform 0.2s;
 }
 

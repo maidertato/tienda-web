@@ -403,7 +403,7 @@ if (selectTipo && extraContainer) {
         let placeholder = "";
 
         switch (tipo) {
-            case 'mobiliario':
+            case 'muebles':
                 etiqueta = "Material";
                 placeholder = "Ej: Madera, Plástico...";
                 break;
@@ -414,10 +414,6 @@ if (selectTipo && extraContainer) {
             case 'juguete':
                 etiqueta = "Material";
                 placeholder = "Ej: Goma, Tela...";
-                break;
-            case 'juego_mesa':
-                etiqueta = "Edad Recomendada";
-                placeholder = "Ej: +12 años...";
                 break;
             case 'alimentacion':
                 etiqueta = "Tipo de Alimentación";
@@ -447,17 +443,14 @@ function obtenerAtributoExtra(p) {
     
     // 2. Alimentación
     if (p.tipoAlimentacion) return `Tipo de Alimentación: ${p.tipoAlimentacion}`;
-    
-    // 3. Juego Mesa
-    if (p.edadRecomendada) return `Edad: ${p.edadRecomendada}`;
-    
-    // 4. Merchandising
+        
+    // 3. Merchandising
     if (p.tipoMaterial) return `Material: ${p.tipoMaterial}`;
     
-    // 5. Descanso
+    // 4. Descanso
     if (p.dimensiones) return `Dimensiones: ${p.dimensiones}`;
     
-    // 6. Mobiliario
+    // 5. Mobiliario
     if (p.materialMobiliario) return `Material: ${p.materialMobiliario}`;
 
     return "Categoría: General";
@@ -489,10 +482,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'juguete':
                     etiqueta = "Material";
                     placeholder = "Ej: Goma, Tela...";
-                    break;
-                case 'juego_mesa':
-                    etiqueta = "Edad Recomendada";
-                    placeholder = "Ej: +12 años...";
                     break;
                 case 'alimentacion':
                     etiqueta = "Tipo de Alimentación";
