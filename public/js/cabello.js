@@ -1,6 +1,6 @@
 import { Producto } from './producto.js';
 
-export class Descanso extends Producto {
+export class Cabello extends Producto {
     #dimensiones;
     #lavable;
 

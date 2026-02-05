@@ -407,7 +407,7 @@ if (selectTipo && extraContainer) {
                 etiqueta = "Material";
                 placeholder = "Ej: Madera, Plástico...";
                 break;
-            case 'descanso':
+            case 'cabello':
                 etiqueta = "Dimensiones";
                 placeholder = "Ej: 80x60 cm...";
                 break;
@@ -447,7 +447,11 @@ function obtenerAtributoExtra(p) {
     // 3. Merchandising
     if (p.tipoMaterial) return `Material: ${p.tipoMaterial}`;
     
+<<<<<<< HEAD
     // 4. Descanso
+=======
+    // 5. Cabello
+>>>>>>> 2f2b4829ee6f747149f4508b885025a22059a24b
     if (p.dimensiones) return `Dimensiones: ${p.dimensiones}`;
     
     // 5. Mobiliario
@@ -475,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     etiqueta = "Material";
                     placeholder = "Ej: Madera, Plástico...";
                     break;
-                case 'descanso':
+                case 'cabello':
                     etiqueta = "Dimensiones";
                     placeholder = "Ej: 80x60 cm...";
                     break;
