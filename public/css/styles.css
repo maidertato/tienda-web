@@ -71,9 +71,8 @@ header h1 {
    ========================= */
 nav ul {
   list-style: none;
-  display: flex;
   gap: 2rem;
-  padding: 0.7rem;
+  padding: 0;
   margin: 0;
   justify-content: center;
   background-color: #fff0f6;
@@ -84,6 +83,7 @@ nav ul {
 nav ul li a {
   text-decoration: none;
   color: #521F84;
+  font-weight: bold;
   transition: color 0.3s, transform 0.2s;
 }
 
@@ -100,8 +100,8 @@ nav ul li a:hover {
 .button-container {
   display: flex;
   background-color: #9C66D4;
-  width: 90px;
-  height: 45px;
+  width: 140px;
+  height: 50px;
   align-items: center;
   justify-content: space-evenly;
   border-radius: 12px;
@@ -110,7 +110,12 @@ nav ul li a:hover {
     0 10px 25px rgba(156, 102, 212, 0.8);
   transition: all 0.4s ease;
   overflow: hidden;
+ }
+
+.button-container li {
+  display: inline-flex; /* Asegura que los elementos de lista no ocupen todo el ancho */
 }
+
 
 .button-container:hover {
   width: 260px; /* ancho abierto */
