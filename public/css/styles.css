@@ -346,22 +346,22 @@ main {
 #lista-productos {
   display: flex;
   flex-wrap: wrap; 
-  gap: 1.5rem;
+  gap: 20px;
   width: 100%;
-  padding: 0;
+  padding: 20px 0;
   justify-content: flex-start;
   align-content: flex-start;
 }
 
 #lista-productos > div {
-  flex: 0 0  calc(33.333% - 1.5rem); 
-  min-width: 280px; 
-  max-width: 100%;
+  flex: 0 0  calc(33.333% - 20px); 
+  min-width: 300px; 
+  max-width: 250%;
   display: flex;
 }
 
 /* La Tarjeta Individual */
-..card-producto-tienda {
+.card-producto-tienda {
   width: 100% !important;
   border: none;
   border-radius: 20px !important;
