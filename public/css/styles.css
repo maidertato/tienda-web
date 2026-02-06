@@ -361,11 +361,12 @@ main {
 }
 
 /* La Tarjeta Individual */
-.card-producto-tienda {
+..card-producto-tienda {
   width: 100% !important;
   border: none;
   border-radius: 20px !important;
-  overflow: hidden;
+  /* IMPORTANTE: Quitamos overflow: hidden para que el globito de arriba no se corte */
+  overflow: visible !important; 
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #fff7fc;
@@ -412,15 +413,52 @@ main {
   color: #666;
 }
 
-/* Botón de añadir con feedback */
-.btn-agregar {
-  position: relative;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-radius: 10px;
-  transition: all 0.3s;
+/* Botón circular con colores personalizados */
+.btn-agregar-flotante {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #E6E6FA; 
+  border: 2px solid #D8BFD8; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 10; /* Un poco más alto */
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
+
+/* Color del icono del carrito (Morado) */
+.btn-agregar-flotante svg {
+    width: 22px;
+    height: 22px;
+    /* Color morado para el carrito */
+    stroke: #800080; 
+}
+
+/* Efecto al pasar el ratón */
+.btn-agregar-flotante:hover:not(:disabled) {
+    transform: scale(1.1);
+    background-color: #B19CD9; /* FONDO */
+    border-color: #9C66D4; 
+}
+
+/* Estilo para cuando el botón está deshabilitado */
+.btn-agregar-flotante:disabled {
+    background-color: #F5F5F5;
+    border-color: #B19CD9;
+    cursor: not-allowed;
+}
+
+.btn-agregar-flotante:disabled svg {
+    stroke: #B0B0B0;
+}
+
+
 
 /* Mensaje de éxito flotante */
 .mensaje-exito {
@@ -436,6 +474,47 @@ main {
   z-index: 10;
   pointer-events: none;
   animation: fadeInOut 1.5s ease-in-out forwards;
+}
+/* Mensaje de éxito flotante (Globito sobre el botón) */
+.mensaje-exito-flotante {
+  position: absolute;
+  top: -25px;            /* Se posiciona justo encima del botón circular */
+  right: 5px;           /* Alineado con el botón */
+  background-color: #521F84; /* Morado a juego con tu diseño */
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 20;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  animation: popUp 0.3s ease-out forwards;
+}
+
+/* Flechita del globo apuntando hacia abajo (al botón) */
+.mensaje-exito-flotante::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  right: 15px;
+  border-width: 5px 5px 0 5px;
+  border-style: solid;
+  border-color: #521F84 transparent transparent transparent;
+}
+
+/* Animación de entrada */
+@keyframes popUp {
+  0% { opacity: 0; transform: translateY(10px) scale(0.8); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Clase para el desvanecimiento (usada en el JS) */
+.mensaje-exito-flotante.fade-out {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
 }
 
 @keyframes fadeInOut {
