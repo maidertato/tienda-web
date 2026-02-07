@@ -137,7 +137,12 @@ function renderizarCarrito() {
                     <input type="number" class="input-cantidad form-control form-control-sm" data-id="${id}" value="${item.cantidad}" style="width: 50px;">
                 </div>
             </div>
-            <button class="btn-papelera btn btn-sm text-danger" onclick="eliminarDelCarrito('${id}')">🗑️</button>
+            <button class="btn-papelera" onclick="eliminarDelCarrito('${id}')" title="Eliminar producto">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 6h18M9 6v-2a1 1 0 011-1h4a1 1 0 011 1v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" 
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         `;
         carritoContenedor.appendChild(div);
     });
