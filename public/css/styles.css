@@ -133,6 +133,30 @@ nav ul li a:hover {
   transition: all 0.3s ease;
 }
 
+/* Estilo del circulito */
+.cart-badge {
+  position: absolute;
+  /* Estas coordenadas lo sitúan abajo a la derecha del icono */
+  bottom: 14px; 
+  right: -12px;
+  
+  background-color: #9C66D4; 
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  
+  width: 14px;
+  height: 14px;
+  border-radius: 50%; /* Esto lo hace círculo */
+  
+  display: none; /* Se activa por JS */
+  align-items: center;
+  justify-content: center;
+  
+  border: 2px solid #fffafc; /* Un pequeño borde para que resalte sobre el fondo */
+  z-index: 5;
+}
+
 /* Texto oculto por defecto */
 .nav-text {
   max-width: 0;
@@ -457,6 +481,8 @@ main {
 .btn-agregar-flotante:disabled svg {
     stroke: #B0B0B0;
 }
+
+
 
 
 

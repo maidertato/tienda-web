@@ -137,7 +137,7 @@ function renderizarCarrito() {
                     <input type="number" class="input-cantidad form-control form-control-sm" data-id="${id}" value="${item.cantidad}" style="width: 50px;">
                 </div>
             </div>
-            <button class="btn-papelera btn btn-sm text-danger" data-id="${id}">🗑️</button>
+            <button class="btn-papelera btn btn-sm text-danger" onclick="eliminarDelCarrito('${id}')">🗑️</button>
         `;
         carritoContenedor.appendChild(div);
     });
@@ -149,10 +149,37 @@ function renderizarCarrito() {
     footer.innerHTML = `<strong>Total: ${totalCarrito.toFixed(2)}€</strong>`;
     carritoContenedor.appendChild(footer);
 }
+    // FUNCION ELIMINAR
+window.eliminarDelCarrito = (id) => {
+    // 1. Eliminamos el producto del Map usando su ID
+    if (carrito.has(id)) {
+        carrito.delete(id);
+        
+        // 2. Volvemos a dibujar el carrito para que desaparezca visualmente
+        renderizarCarrito();
+        
+        // 3. Opcional: Si quieres que la tienda se actualice (por si cambian estados de botones)
+        if (typeof renderizarTienda === 'function') {
+            renderizarTienda();
+        }
+        
+        console.log(`Producto ${id} eliminado`);
+    }
+};
+
 
 function actualizarIconoCarrito(total) {
+    const counter = document.getElementById("cart-counter");
     const cartIcon = document.getElementById("cart-icon");
     if (cartIcon) cartIcon.setAttribute("data-quantity", total);
+    if (counter) {
+        if (total > 0) {
+            counter.textContent = total;
+            counter.style.display = 'flex'; // Muestra el círculo
+        } else {
+            counter.style.display = 'none'; // Lo oculta si es 0
+        }
+    }
 }
 
 function obtenerAtributoExtra(p) {
