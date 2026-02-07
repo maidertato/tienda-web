@@ -163,6 +163,7 @@ function renderizarCarrito() {
             const id = e.target.getAttribute('data-id');
             let nuevaCantidad = parseInt(e.target.value);
 
+            let aviso = e.target.parentElement.querySelector('.aviso-maximo-texto');
             if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
                 nuevaCantidad = 1; // Forzamos que el valor interno sea 1
                 e.target.value = 1; // Forzamos que el dibujo del input muestre 1
@@ -170,8 +171,22 @@ function renderizarCarrito() {
 
             // 2. Si quieres poner un límite máximo (ejemplo 20)
             if (nuevaCantidad > 20) {
-                nuevaCantidad = 20;
-                e.target.value = 20;
+                if (nuevaCantidad > 20) {
+                    nuevaCantidad = 20;
+                    e.target.value = 20;
+                }
+                
+                // Si no existe el mensaje de aviso, lo creamos
+                if (!aviso) {
+                    aviso = document.createElement('div');
+                    aviso.className = 'aviso-maximo-texto text-danger fw-bold';
+                    aviso.style.fontSize = '11px';
+                    aviso.textContent = '¡Solo se permiten 20 copias!';
+                    e.target.parentElement.appendChild(aviso);
+                }
+            } else {
+                // Si baja de 20, borramos el aviso si existe
+                if (aviso) aviso.remove();
             }
 
 
