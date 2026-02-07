@@ -153,7 +153,59 @@ function renderizarCarrito() {
     footer.className = 'mt-3 p-2 bg-dark text-white rounded';
     footer.innerHTML = `<strong>Total: ${totalCarrito.toFixed(2)}€</strong>`;
     carritoContenedor.appendChild(footer);
-}
+
+    // Logica para actualizar el carrito al darle a flecha o borrar cantidad
+    const inputsCantidad = carritoContenedor.querySelectorAll('.input-cantidad');
+
+    inputsCantidad.forEach(input => {
+        // Usamos 'input' en lugar de 'change' para detección instantánea
+        input.addEventListener('input', (e) => {
+            const id = e.target.getAttribute('data-id');
+            let nuevaCantidad = parseInt(e.target.value);
+
+            if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
+                nuevaCantidad = 1; // Forzamos que el valor interno sea 1
+                e.target.value = 1; // Forzamos que el dibujo del input muestre 1
+            }
+
+            // 2. Si quieres poner un límite máximo (ejemplo 20)
+            if (nuevaCantidad > 20) {
+                nuevaCantidad = 20;
+                e.target.value = 20;
+            }
+
+
+            // 1. Actualizamos el producto en el Map
+            if (carrito.has(id)) {
+                const producto = carrito.get(id);
+                producto.cantidad = nuevaCantidad;
+
+                // 2. Recalculamos el total de unidades para el globo rojo
+                let totalUnidades = 0;
+                carrito.forEach(p => totalUnidades += p.cantidad);
+                actualizarIconoCarrito(totalUnidades);
+
+                // 3. Actualizamos el precio total del carrito (el texto de abajo)
+                let nuevoTotalEuros = 0;
+                carrito.forEach(p => nuevoTotalEuros += p.precio * p.cantidad);
+                
+                const totalDisplay = carritoContenedor.querySelector('strong');
+                if (totalDisplay) {
+                    totalDisplay.textContent = `Total: ${nuevoTotalEuros.toFixed(2)}€`;
+                }
+            }
+        });
+
+        // Evento extra por si el usuario deja el campo vacío y pincha fuera
+        input.addEventListener('blur', (e) => {
+            if (e.target.value === '' || parseInt(e.target.value) < 1) {
+                const id = e.target.getAttribute('data-id');
+                eliminarDelCarrito(id);
+            }
+        });
+    });
+ };
+
     // FUNCION ELIMINAR
 window.eliminarDelCarrito = (id) => {
     // 1. Eliminamos el producto del Map usando su ID
