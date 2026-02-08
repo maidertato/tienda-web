@@ -33,7 +33,7 @@ export const inventario = [
     //________________________________________________________________________
     // Pelucas 
     new Cabello('Peluca Azul', 30, 'Peluca divertida de color azul brillante para darle un estilo único a tu perrito.', 'imagenes/productos/peluAzul.png', 'Pequeño', 'Perro', 'Azul'),
-    new Cabello('Peluca Pelocho', 35, 'Peluca elegante de color negro con estilo afro para un look moderno y llamativo.', 'imagenes/productos/peluBlack.png', 'Pequeño', 'Perro', 'Negro'),
+    new Cabello('Peluca Pelocho', 35, 'Peluca elegante de color negro con estilo afro para un look moderno y llamativo.', 'imagenes/productos/pelucaPelocho.png', 'Pequeño', 'Perro', 'Negro'),
     new Cabello('Peluca Nada Que Ver', 28, 'Peluca graciosa y alocada para perros con mucho estilo y personalidad.', 'imagenes/productos/pelucaNadaQueVer.png', 'Pequeño', 'Perro', 'Marrón'),
     new Cabello('Peluca Coqueta', 32, 'Peluca blanca con moñito ideal para perritos tiernos y coquetos.', 'imagenes/productos/peluCoqueta.png', 'Pequeño', 'Perro', 'Blanco'),
     new Cabello('Peluca Rasta', 40, 'Peluca estilo rasta para un look salvaje, divertido y lleno de actitud.', 'imagenes/productos/peluRast.png', 'Pequeño', 'Perro', 'Marrón'),
@@ -48,6 +48,112 @@ export const inventario = [
     new Mobiliario('Cama gato', 40, 'Cama suave para gatos.', 'imagenes/productos/camaGato.png', '60x40 cm', false),
     new Mobiliario('Alfombra mascotas', 30, 'Alfombra antideslizante.', 'imagenes/productos/alfombrAntideslizante.png', '100x70 cm', true),
 
+];
+
+// ================= IMÁGENES EXTRA POR PRODUCTO =================
+
+// JUGUETES
+inventario.find(p => p.nombre === 'Pelota de Goma').variantes = [
+  { nombre: 'Modelo 1', imagen: 'imagenes/productos/pelotaGoma.png' },
+  { nombre: 'Modelo 2', imagen: 'imagenes/productos/pelotaGoma2.png' },
+  { nombre: 'Modelo 3', imagen: 'imagenes/productos/pelotaGoma3.png' }
+];
+
+inventario.find(p => p.nombre === 'Ratón de Peluche').variantes = [
+  { nombre: 'Rosa', imagen: 'imagenes/productos/ratonPeluche.png' },
+  { nombre: 'Gris', imagen: 'imagenes/productos/ratonPeluche2.png' }
+];
+
+inventario.find(p => p.nombre === 'Hueso de Nylon').variantes = [
+  { nombre: 'Clásico', imagen: 'imagenes/productos/huesoNylon.png' },
+  { nombre: 'Grande', imagen: 'imagenes/productos/huesoNylon2.png' }
+];
+
+
+// MERCHANDISING
+inventario.find(p => p.nombre === 'Correa para perro').variantes = [
+  { nombre: 'Roja', imagen: 'imagenes/productos/correaPerro.png' },
+  { nombre: 'Azul', imagen: 'imagenes/productos/correaPerro2.png' }
+];
+
+inventario.find(p => p.nombre === 'Collar para gato').variantes = [
+  { nombre: 'Negro', imagen: 'imagenes/productos/collarGato.png' },
+  { nombre: 'Rosa', imagen: 'imagenes/productos/collarGato2.png' }
+];
+
+inventario.find(p => p.nombre === 'Plato de comida').variantes = [
+  { nombre: 'Blanco', imagen: 'imagenes/productos/platoComida.png' },
+  { nombre: 'Verde', imagen: 'imagenes/productos/platoComida2.png' }
+];
+
+inventario.find(p => p.nombre === 'Chubasquero').variantes = [
+  { nombre: 'Transparente', imagen: 'imagenes/productos/chubasqueroPerro.png' },
+  { nombre: 'Azul', imagen: 'imagenes/productos/chubasqueroPerro2.png' }
+];
+
+
+
+// CABELLO
+inventario.find(p => p.nombre === 'Peluca Azul').variantes = [
+  { nombre: 'Azul claro', imagen: 'imagenes/productos/peluAzul.png' },
+  { nombre: 'Azul oscuro', imagen: 'imagenes/productos/peluAzul2.png' }
+];
+
+inventario.find(p => p.nombre === 'Peluca Pelocho').variantes = [
+  { nombre: 'Negra', imagen: 'imagenes/productos/pelucaPelocho.png' },
+  { nombre: 'Negra afro', imagen: 'imagenes/productos/pelucaPelocho2.png' }
+];
+
+inventario.find(p => p.nombre === 'Peluca Nada Que Ver').variantes = [
+  { nombre: 'Azul claro', imagen: 'imagenes/productos/pelucaNadaQueVer.png' },
+  { nombre: 'Azul oscuro', imagen: 'imagenes/productos/pelucaNadaQueVer2.png' }
+];
+
+inventario.find(p => p.nombre === 'Peluca Coqueta').variantes = [
+  { nombre: 'Negra lisa', imagen: 'imagenes/productos/peluCoqueta.png' },
+  { nombre: 'Negra afro', imagen: 'imagenes/productos/peluCoqueta2.png' }
+];
+
+inventario.find(p => p.nombre === 'Peluca Rasta').variantes = [
+  { nombre: 'Modelo 1', imagen: 'imagenes/productos/peluRast.png' },
+  { nombre: 'Modelo 2', imagen: 'imagenes/productos/peluRast2.png' }
+];
+
+inventario.find(p => p.nombre === 'Peluca Gato').variantes = [
+  { nombre: 'Marrón claro', imagen: 'imagenes/productos/pelucaGato.png' },
+  { nombre: 'Marrón oscuro', imagen: 'imagenes/productos/pelucaGato2.png' }
+];
+
+
+// MOBILIARIO
+inventario.find(p => p.nombre === 'Mesa para mascotas').variantes = [
+  { nombre: 'Modelo pequeño', imagen: 'imagenes/productos/mesaMascota.png' },
+  { nombre: 'Modelo grande', imagen: 'imagenes/productos/mesaMascota2.png' }
+];
+
+inventario.find(p => p.nombre === 'Silla para mascotas').variantes = [
+  { nombre: 'Plástico', imagen: 'imagenes/productos/sillaMascota.png' },
+  { nombre: 'Acolchada', imagen: 'imagenes/productos/sillaMascota2.png' }
+];
+
+inventario.find(p => p.nombre === 'Caja de almacenamiento').variantes = [
+  { nombre: 'Pequeña', imagen: 'imagenes/productos/cajaAlmacenamiento.png' },
+  { nombre: 'Grande', imagen: 'imagenes/productos/cajaAlmacenamiento2.png' }
+];
+
+inventario.find(p => p.nombre === 'Cama perro').variantes = [
+  { nombre: '80x60 cm', imagen: 'imagenes/productos/camaPerro.png' },
+  { nombre: '100x70 cm', imagen: 'imagenes/productos/camaPerro2.png' }
+];
+
+inventario.find(p => p.nombre === 'Cama gato').variantes = [
+  { nombre: '60x40 cm', imagen: 'imagenes/productos/camaGato.png' },
+  { nombre: '70x50 cm', imagen: 'imagenes/productos/camaGato2.png' }
+];
+
+inventario.find(p => p.nombre === 'Alfombra mascotas').variantes = [
+  { nombre: '100x70 cm', imagen: 'imagenes/productos/alfombrAntideslizante.png' },
+  { nombre: '120x90 cm', imagen: 'imagenes/productos/alfombrAntideslizante2.png' }
 ];
 
 // LISTA VACÍA PARA EL CARRITO (Requisito 4.3)

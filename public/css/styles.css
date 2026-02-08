@@ -481,11 +481,6 @@ main {
 .btn-agregar-flotante:disabled svg {
     stroke: #B0B0B0;
 }
-
-
-
-
-
 /* Mensaje de éxito flotante */
 .mensaje-exito {
   position: absolute;
@@ -549,6 +544,77 @@ main {
   80% { opacity: 1; transform: translate(-50%, 0); }
   100% { opacity: 0; transform: translate(-50%, -5px); }
 }
+
+/* FLECHAS PRODUCTOS */
+.imagen-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Flechas redonditas */
+.flecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  line-height: 1;
+
+
+  background: #9C66D4; /* morado */
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+
+  box-shadow: 0 4px 10px rgba(168, 85, 247, 0.35);
+}
+
+/* Posición */
+.flecha-izq {
+  left: 10px;
+}
+
+.flecha-der {
+  right: 10px;
+}
+
+/* Aparecen al hover */
+.imagen-wrapper:hover .flecha {
+  opacity: 1;
+}
+
+/* Hover más mono */
+.flecha:hover {
+  transform: translateY(-50%) scale(1.12);
+  box-shadow: 0 6px 14px rgba(168, 85, 247, 0.55);
+}
+
+.flecha-der::after {
+  content: '›';
+  font-size: 22px;
+  line-height: 1;
+  transform: translate(1px, -2px);
+}
+
+.flecha-izq::after {
+  content: '‹';
+  font-size: 22px;
+  line-height: 1;
+  transform: translate(-1px, -2px);
+}
+
 
 
 /* =========================

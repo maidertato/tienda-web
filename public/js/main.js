@@ -7,6 +7,8 @@ const form = document.querySelector('aside form');
 const buscador = document.getElementById('buscador');
 const tituloTienda = document.getElementById('titulo-tienda');
 const extraContainer = document.getElementById('campo-extra-container');
+const varianteActualPorProducto = new Map();
+
 
 // --- ESTADO ---
 const carrito = new Map();
@@ -24,6 +26,18 @@ export function renderizarTienda() {
     const productosPagina = productosFiltrados.slice(inicio, fin);
 
     productosPagina.forEach(juego => {
+        const variantes = juego.variantes;
+
+        let imagenMostrada = juego.imagen;
+        let nombreMostrado = juego.nombre;
+
+        if (variantes && variantes.length > 0) {
+            const index = varianteActualPorProducto.get(juego.id) || 0;
+            imagenMostrada = variantes[index].imagen;
+            nombreMostrado = `${juego.nombre} – ${variantes[index].nombre}`;
+        }
+
+
         const itemEnCarrito = carrito.get(juego.id);
         const alcanzadoMaximo = itemEnCarrito && itemEnCarrito.cantidad >= 20;
 
@@ -41,10 +55,17 @@ export function renderizarTienda() {
                     </svg>
                 </button>
 
-                <img src="${juego.imagen}" class="card-img-top imagen-producto" data-id="${juego.id}" alt="${juego.nombre}">
-                
+                <div class="imagen-wrapper">
+                    <img src="${imagenMostrada}" class="card-img-top imagen-producto">
+
+                    ${variantes && variantes.length > 1 ? `
+                        <div class="flecha flecha-izq" data-id="${juego.id}" data-dir="-1"></div>
+                        <div class="flecha flecha-der" data-id="${juego.id}" data-dir="1"></div>
+                    ` : ''}
+                </div>
+
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title line-clamp-2">${juego.nombre}</h5>
+                    <h5 class="card-title line-clamp-2">${nombreMostrado}</h5>
                     <p class="card-text descripcion-juego line-clamp-3">${juego.descripcion}</p>
                     <p class="card-text extra-attr text-muted mt-2">
                         <small><strong>${obtenerAtributoExtra(juego)}</strong></small>
@@ -66,6 +87,16 @@ contenedor.addEventListener('click', (e) => {
     if (btn) {
         const id = btn.dataset.id;
         const producto = inventario.find(j => j.id === id);
+        const index = varianteActualPorProducto.get(id) || 0;
+        const variante = producto.variantes?.[index];
+        const nombreFinal = variante
+            ? `${producto.nombre} – ${variante.nombre}`
+            : producto.nombre;
+
+        const imagenFinal = variante
+            ? variante.imagen
+            : producto.imagen;
+
 
         if (producto) {
             // 1. CREAR EL GLOBITO (Aparecerá al lado del carro)
@@ -75,28 +106,34 @@ contenedor.addEventListener('click', (e) => {
             btn.parentElement.appendChild(globo);
 
             setTimeout(() => {
-                mensaje.classList.add('fade-out');
+                globo.classList.add('fade-out');
                 setTimeout(() => {
-                    mensaje.remove();
+                    globo.remove();
                     renderizarTienda(); 
                 }, 300);
             }, 1500);
 
             // 2. LÓGICA DE CARRITO
-            if (carrito.has(id)) {
-                const item = carrito.get(id);
+            // Creamos una clave ÚNICA por variante
+            const claveCarrito = variante
+                ? `${id}_${variante.nombre}`
+                : id;
+                
+            if (carrito.has(claveCarrito)) {
+                const item = carrito.get(claveCarrito);
                 if (item.cantidad < 20) item.cantidad++;
             } else {
-                // ASEGÚRATE DE QUE ESTOS NOMBRES COINCIDAN CON TU OBJETO
-                carrito.set(id, { 
-                    id: producto.id,
-                    nombre: producto.nombre, // Si en tu inventario es 'name', cámbialo aquí
-                    imagen: producto.imagen, // Si es 'img', cámbialo aquí
-                    precio: parseFloat(producto.precio) || 0, // Evita el NaN convirtiendo a número
-                    cantidad: 1 
+                carrito.set(claveCarrito, {
+                    id: claveCarrito,
+                    nombre: nombreFinal,
+                    imagen: imagenFinal,
+                    precio: parseFloat(producto.precio) || 0,
+                    cantidad: 1
                 });
             }
+
             renderizarCarrito();
+
 
             // 3. DESVANECER Y LUEGO ACTUALIZAR TIENDA
             setTimeout(() => {
@@ -109,6 +146,27 @@ contenedor.addEventListener('click', (e) => {
         }
     }
 });
+
+// EVENTO CLICK PARA CAMBIAR IMAGEN
+contenedor.addEventListener('click', (e) => {
+    const flecha = e.target.closest('.flecha');
+    if (!flecha) return;
+
+    const id = flecha.dataset.id;
+    const dir = parseInt(flecha.dataset.dir);
+    const producto = inventario.find(p => p.id === id);
+
+    if (!producto?.variantes) return;
+
+    const total = producto.variantes.length;
+    const actual = varianteActualPorProducto.get(id) || 0;
+    const siguiente = (actual + dir + total) % total;
+
+    varianteActualPorProducto.set(id, siguiente);
+    renderizarTienda();
+});
+
+
 
 // --- 3. RESTO DE FUNCIONES (CARRITO Y AUXILIARES) ---
 
@@ -238,6 +296,7 @@ window.eliminarDelCarrito = (id) => {
         console.log(`Producto ${id} eliminado`);
     }
 };
+
 
 
 function actualizarIconoCarrito(total) {
