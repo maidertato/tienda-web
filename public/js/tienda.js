@@ -49,6 +49,13 @@ export const inventario = [
     new Mobiliario('Alfombra mascotas', 30, 'Alfombra antideslizante.', 'imagenes/productos/alfombrAntideslizante.png', '100x70 cm', true),
 
 ];
+inventario.forEach(p => {
+    if (p instanceof Juguete) p.tipo = 'juguete';
+    else if (p instanceof Alimentacion) p.tipo = 'alimentacion';
+    else if (p instanceof Merchandising) p.tipo = 'merch';
+    else if (p instanceof Cabello) p.tipo = 'cabello';
+    else if (p instanceof Mobiliario) p.tipo = 'mobiliario';
+});
 
 // ================= IMÁGENES EXTRA POR PRODUCTO =================
 
@@ -167,11 +174,11 @@ export const buscarProductoPorNombre = (nombre) => {
 export function agregarProductoAlInventario(tipo, nombre, precio, desc, imagen, extra) {
     let nuevo;
     switch (tipo) {
-        case 'mobiliario': nuevo = new Mobiliario(nombre, precio, desc, imagen, ...extra); break;
-        case 'cabello': nuevo = new Cabello(nombre, precio, desc, imagen, ...extra); break;
-        case 'juguete': nuevo = new Juguete(nombre, precio, desc, imagen, ...extra); break;
-        case 'merch': nuevo = new Merchandising(nombre, precio, desc, imagen, extra); break;
-        case 'alimentacion': nuevo = new Alimentacion(nombre, precio, desc, imagen, extra); break;
+        case 'mobiliario': nuevo = new Mobiliario(nombre, precio, desc, imagen, tipo, ...extra); break;
+        case 'cabello': nuevo = new Cabello(nombre, precio, desc, imagen, tipo, ...extra); break;
+        case 'juguete': nuevo = new Juguete(nombre, precio, desc, imagen, tipo, ...extra); break;
+        case 'merch': nuevo = new Merchandising(nombre, precio, desc, imagen, tipo, extra); break;
+        case 'alimentacion': nuevo = new Alimentacion(nombre, precio, desc, imagen, tipo, extra); break;
     }
     inventario.push(nuevo);
 };

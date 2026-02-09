@@ -143,7 +143,20 @@
       <main>
         <div class="d-flex justify-content-between align-items-center p-3">
           <h2 id="titulo-tienda" class="m-0">Todos los productos</h2>
-          <input type="text" id="buscador" class="form-control buscador-custom" placeholder="Buscar por nombre...">
+          <div class="d-flex gap-2 align-items-center">
+            <!-- Buscador -->
+             <input type="text" id="buscador" class="form-control buscador-custom" placeholder="Buscar por nombre...">
+
+             <!-- Botón para filtrar por categorias -->
+              <div class="dropdown">
+              <button class="btn btn-primary rounded-circle p-2" type="button" id="btn-categorias" data-bs-toggle="dropdown" aria-expanded="false">
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btn-categorias" id="lista-categorias">
+                <!-- Categorías se llenarán con JS -->
+              </ul>
+            </div>
+          </div>
+          
         </div>
 
         <div id="lista-productos" class="row g-4 px-3"></div>

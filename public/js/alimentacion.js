@@ -8,6 +8,9 @@ export class Alimentacion extends Producto {
         super(n, p, d, i);
         this.#tipoMascota = tipoMascota;
         this.#tipoAlimento = tipoAlimento;
+
+        this.tipo = 'alimentacion';
+
     }
 
     get tipoMascota() { return this.#tipoMascota; }

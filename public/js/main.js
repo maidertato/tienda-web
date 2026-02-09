@@ -9,12 +9,43 @@ const tituloTienda = document.getElementById('titulo-tienda');
 const extraContainer = document.getElementById('campo-extra-container');
 const varianteActualPorProducto = new Map();
 
+// --- FILTRO POR CATEGORÍA ---
+const categorias = ["mobiliario", "descanso", "cabello", "juguete", "merch", "alimentacion"];
+const listaCategorias = document.getElementById("lista-categorias");
+
+// Llenamos el dropdown con las categorías
+categorias.forEach(cat => {
+    const li = document.createElement('li');
+    li.innerHTML = `<a class="dropdown-item" href="#" data-categoria="${cat}">${cat}</a>`;
+    listaCategorias.appendChild(li);
+});
+
+// Filtrar al hacer click en la categoría
+listaCategorias.addEventListener('click', (e) => {
+    e.preventDefault();
+    const categoria = e.target.dataset.categoria;
+    if (!categoria) return;
+
+    productosFiltrados = inventario.filter(p => {
+        // Filtra por tipo o por campo extra (como material o tipoAlimentacion)
+        if (p.tipo === categoria) return true;
+        if (p.tipoAlimentacion && p.tipoAlimentacion === categoria) return true;
+        return false;
+    });
+
+    paginaActual = 1;
+    tituloTienda.textContent = `Categoría: ${categoria}`;
+    renderizarTienda();
+});
+
 
 // --- ESTADO ---
 const carrito = new Map();
 let paginaActual = 1;
 const productosPorPagina = 6;
 let productosFiltrados = [...inventario];
+let categoriaSeleccionada = "all";
+
 
 // --- 1. RENDER TIENDA (CON EL BOTÓN FLOTANTE RESTAURADO) ---
 export function renderizarTienda() {
@@ -338,12 +369,41 @@ window.cambiarPagina = (n) => {
     renderizarTienda();
 };
 
+function aplicarFiltros() {
+    const termino = buscador.value.toLowerCase();
+
+    productosFiltrados = inventario.filter(p => {
+        const coincideTexto =
+            p.nombre.toLowerCase().includes(termino);
+
+        const coincideCategoria =
+            categoriaSeleccionada === "all" ||
+            p.categoria === categoriaSeleccionada; 
+            // ⚠️ usa AQUÍ el campo real que tengáis (categoria / tipo / seccion)
+
+        return coincideTexto && coincideCategoria;
+    });
+
+    paginaActual = 1;
+    renderizarTienda();
+}
+
+
 // Buscador
-buscador?.addEventListener('input', (e) => {
+/* buscador?.addEventListener('input', (e) => {
     const termino = e.target.value.toLowerCase();
     productosFiltrados = inventario.filter(p => p.nombre.toLowerCase().includes(termino));
     paginaActual = 1; 
     renderizarTienda();
+}); */
+
+buscador?.addEventListener('input', aplicarFiltros)
+
+document.querySelectorAll(".dropdown-item").forEach(item => {
+    item.addEventListener("click", () => {
+        categoriaSeleccionada = item.dataset.categoria;
+        aplicarFiltros();
+    });
 });
 
 // Inicio
