@@ -361,14 +361,38 @@ function actualizarInterfazPaginacion() {
     const total = productosFiltrados.length;
     const numPaginas = Math.ceil(total / productosPorPagina);
     const nav = document.getElementById('pagination-container');
-    if (nav) {
-        nav.innerHTML = '';
-        for (let i = 1; i <= numPaginas; i++) {
-            nav.innerHTML += `<li class="page-item ${i === paginaActual ? 'active' : ''}">
-                <button class="page-link" onclick="cambiarPagina(${i})">${i}</button></li>`;
-        }
+    if (!nav) return;
+
+    nav.innerHTML = '';
+
+    // ANTERIOR
+    nav.innerHTML += `
+        <li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
+            <button class="page-link" onclick="cambiarPagina(${paginaActual - 1})">
+                Anterior
+            </button>
+        </li>
+    `;
+
+    // NÚMEROS
+    for (let i = 1; i <= numPaginas; i++) {
+        nav.innerHTML += `
+            <li class="page-item ${i === paginaActual ? 'active' : ''}">
+                <button class="page-link" onclick="cambiarPagina(${i})">${i}</button>
+            </li>
+        `;
     }
+
+    // SIGUIENTE
+    nav.innerHTML += `
+        <li class="page-item ${paginaActual === numPaginas ? 'disabled' : ''}">
+            <button class="page-link" onclick="cambiarPagina(${paginaActual + 1})">
+                Siguiente
+            </button>
+        </li>
+    `;
 }
+
 
 window.cambiarPagina = (n) => {
     paginaActual = n;
