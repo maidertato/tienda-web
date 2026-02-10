@@ -348,6 +348,31 @@ main {
   margin-right: 60px;
 }
 
+/*Filtro*/
+/* Estilos para el Rango de Precio */
+.custom-range::-webkit-slider-thumb {
+    background: #DBC5F1 !important; /* Morado claro como tus botones */
+    border: 2px solid white;
+}
+
+.custom-range::-moz-range-thumb {
+    background: #DBC5F1 !important;
+    border: 2px solid white;
+}
+
+.custom-range::-ms-thumb {
+    background: #DBC5F1 !important;
+    border: 2px solid white;
+}
+
+#precio-max-valor {
+    font-weight: 800;
+    color: black;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
 /* Al pasar el ratón */
 .buscador-custom:hover {
   border-color: #7b2ff7;

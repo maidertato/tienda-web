@@ -12,12 +12,17 @@ const varianteActualPorProducto = new Map();
 // --- FILTRO POR CATEGORÍA ---
 const categorias = ["mobiliario", "descanso", "cabello", "juguete", "merch", "alimentacion"];
 const listaCategorias = document.getElementById("lista-categorias");
-
+const filtroPrecio = document.getElementById('filtro-precio');
+const precioMaxValor = document.getElementById('precio-max-valor');
 // Llenamos el dropdown con las categorías
 categorias.forEach(cat => {
     const li = document.createElement('li');
     li.innerHTML = `<a class="dropdown-item" href="#" data-categoria="${cat}">${cat}</a>`;
     listaCategorias.appendChild(li);
+});
+//Evitar que el dropdown se cierre al interactuar con el slider
+document.querySelector('.dropdown-menu').addEventListener('click', function (e) {
+    e.stopPropagation();
 });
 
 // Filtrar al hacer click en la categoría
@@ -369,24 +374,44 @@ window.cambiarPagina = (n) => {
     renderizarTienda();
 };
 
+// Función centralizada de filtrado
 function aplicarFiltros() {
     const termino = buscador.value.toLowerCase();
+    const precioMax = parseFloat(filtroPrecio.value);
+    
+    // Actualizar etiqueta de precio en la UI
+    precioMaxValor.textContent = precioMax;
 
     productosFiltrados = inventario.filter(p => {
-        const coincideTexto =
-            p.nombre.toLowerCase().includes(termino);
+        const coincideTexto = p.nombre.toLowerCase().includes(termino);
+        const coincidePrecio = p.precio <= precioMax;
+        const coincideCategoria = categoriaSeleccionada === "all" || p.tipo === categoriaSeleccionada;
 
-        const coincideCategoria =
-            categoriaSeleccionada === "all" ||
-            p.categoria === categoriaSeleccionada; 
-            // ⚠️ usa AQUÍ el campo real que tengáis (categoria / tipo / seccion)
-
-        return coincideTexto && coincideCategoria;
+        return coincideTexto && coincidePrecio && coincideCategoria;
     });
 
     paginaActual = 1;
     renderizarTienda();
 }
+
+// Eventos para el filtrado en tiempo real
+buscador?.addEventListener('input', aplicarFiltros);
+filtroPrecio?.addEventListener('input', aplicarFiltros);
+
+// Modifica tu lógica actual de categorías para que use 'aplicarFiltros'
+listaCategorias.addEventListener('click', (e) => {
+    e.preventDefault();
+    const link = e.target.closest('.dropdown-item');
+    if (!link) return;
+
+    categoriaSeleccionada = link.dataset.categoria;
+    
+    // Opcional: Marcar visualmente la categoría seleccionada
+    document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
+    link.classList.add('active');
+
+    aplicarFiltros(); 
+});
 
 
 // Buscador
