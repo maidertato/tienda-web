@@ -14,6 +14,7 @@ const categorias = ["mobiliario", "descanso", "cabello", "juguete", "merch", "al
 const listaCategorias = document.getElementById("lista-categorias");
 const filtroPrecio = document.getElementById('filtro-precio');
 const precioMaxValor = document.getElementById('precio-max-valor');
+
 // Llenamos el dropdown con las categorías
 categorias.forEach(cat => {
     const li = document.createElement('li');
@@ -377,15 +378,14 @@ window.cambiarPagina = (n) => {
 // Función centralizada de filtrado
 function aplicarFiltros() {
     const termino = buscador.value.toLowerCase();
-    const precioMax = parseFloat(filtroPrecio.value);
-    
-    // Actualizar etiqueta de precio en la UI
-    precioMaxValor.textContent = precioMax;
+    const precioMax = parseFloat(document.getElementById('filtro-precio').value);
 
     productosFiltrados = inventario.filter(p => {
         const coincideTexto = p.nombre.toLowerCase().includes(termino);
         const coincidePrecio = p.precio <= precioMax;
-        const coincideCategoria = categoriaSeleccionada === "all" || p.tipo === categoriaSeleccionada;
+        
+        // Comprobamos la categoría (He visto que usas p.tipo en tu producto.js)
+        const coincideCategoria = (categoriaSeleccionada === "all" || p.tipo === categoriaSeleccionada);
 
         return coincideTexto && coincidePrecio && coincideCategoria;
     });
@@ -424,12 +424,34 @@ listaCategorias.addEventListener('click', (e) => {
 
 buscador?.addEventListener('input', aplicarFiltros)
 
-document.querySelectorAll(".dropdown-item").forEach(item => {
-    item.addEventListener("click", () => {
-        categoriaSeleccionada = item.dataset.categoria;
-        aplicarFiltros();
-    });
+// Borrar filtro
+const btnBorrar = document.getElementById('btn-borrar-filtros');
+
+btnBorrar?.addEventListener('click', () => {
+    // 1. Limpiar Buscador
+    buscador.value = "";
+    
+    // 2. Resetear Precio (Volver al máximo)
+    filtroPrecio.value = 200;
+    precioMaxValor.textContent = 200;
+    
+    // 3. Resetear Categoría
+    categoriaSeleccionada = "all";
+    
+    // Quitar la clase 'active' de los botones de categoría si los tienes
+    document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
+
+    // Resetear el título
+    tituloTienda.textContent = "Todos los productos"
+
+    // 4. Aplicar los cambios (Volverá a mostrar todo)
+    aplicarFiltros();
 });
+
+filtroPrecio.addEventListener('input', () => {
+    precioMaxValor.textContent = filtroPrecio.value;
+});
+
 
 // Inicio
 document.addEventListener('DOMContentLoaded', () => {

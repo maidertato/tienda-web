@@ -372,6 +372,38 @@ main {
     padding: 2px 8px;
     border-radius: 5px;
 }
+/* Animación del botón de filtro */
+#btn-categorias {
+    transition: all 0.3s ease; /* Suaviza el movimiento */
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#btn-categorias:hover {
+    transform: scale(1.1); /* Se hace un poco más grande */
+    background-color: #8e44ad !important; /* Un morado un poco más oscuro */
+    box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4); /* Sombra más intensa */
+}
+
+/* Para que el icono dentro también reaccione */
+#btn-categorias:hover svg {
+    stroke-width: 2.5px;
+}
+
+/* Boton borrar filtros */
+#btn-borrar-filtros {
+    transition: all 0.2s ease;
+}
+
+#btn-borrar-filtros:hover {
+    background-color: #f1aeb5 !important; /* Un rojo un poco más fuerte */
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#btn-borrar-filtros:active {
+    transform: translateY(0);
+}
 
 /* Al pasar el ratón */
 .buscador-custom:hover {
