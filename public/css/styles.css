@@ -133,6 +133,23 @@ nav ul li a:hover {
   transition: all 0.3s ease;
 }
 
+/* Boton mas detalles */
+/* Animación para el botón de detalles */
+.btn-detalles {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto elástico */
+    cursor: pointer;
+}
+
+.btn-detalles:hover {
+    transform: scale(1.08); /* Se agranda un 8% */
+    filter: brightness(1.1); /* Brilla un poquito más */
+    box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3); /* Sombra morada suave */
+}
+
+.btn-detalles:active {
+    transform: scale(0.95); /* Al hacer clic se encoge un poco (efecto pulsación) */
+}
+
 /* Estilo del circulito */
 .cart-badge {
   position: absolute;
@@ -351,7 +368,7 @@ main {
 /*Filtro*/
 /* Estilos para el Rango de Precio */
 .custom-range::-webkit-slider-thumb {
-    background: #DBC5F1 !important; /* Morado claro como tus botones */
+    background: #DBC5F1 !important; 
     border: 2px solid white;
 }
 

@@ -15,6 +15,7 @@ const listaCategorias = document.getElementById("lista-categorias");
 const filtroPrecio = document.getElementById('filtro-precio');
 const precioMaxValor = document.getElementById('precio-max-valor');
 
+
 // Llenamos el dropdown con las categorías
 categorias.forEach(cat => {
     const li = document.createElement('li');
@@ -108,6 +109,11 @@ export function renderizarTienda() {
                         <small><strong>${obtenerAtributoExtra(juego)}</strong></small>
                     </p>
                     <p class="card-text mt-auto fw-bold fs-5">${juego.precio}€</p>
+                    <button class="btn btn-detalles btn-sm w-100 mt-2 text-white" 
+                            onclick="abrirDetalleProducto('${juego.id}')" 
+                            style="background-color: #9b59b6; border: none; border-radius: 8px;">
+                        Más detalles
+                    </button>
                 </div>
             </div>
         `;
@@ -412,6 +418,7 @@ function aplicarFiltros() {
         const coincideCategoria = (categoriaSeleccionada === "all" || p.tipo === categoriaSeleccionada);
 
         return coincideTexto && coincidePrecio && coincideCategoria;
+        
     });
 
     paginaActual = 1;
@@ -436,6 +443,7 @@ listaCategorias.addEventListener('click', (e) => {
 
     aplicarFiltros(); 
 });
+
 
 
 // Buscador
@@ -476,6 +484,34 @@ filtroPrecio.addEventListener('input', () => {
     precioMaxValor.textContent = filtroPrecio.value;
 });
 
+//Funcion para abrir el modal con el detalle del producto
+window.abrirDetalleProducto = (id) => {
+    // 1. Buscar el producto por ID
+    const p = inventario.find(prod => prod.id === id);
+    
+    if (p) {
+        // 2. Rellenar los campos del modal
+        document.getElementById('modal-titulo').textContent = p.nombre;
+        document.getElementById('modal-img').src = p.imagen;
+        document.getElementById('modal-descripcion').textContent = p.descripcion;
+        document.getElementById('modal-precio').textContent = `Precio final: ${p.precio}€`;
+
+        // 3. Manejar información extra (opcional, según el tipo de producto)
+        const extra = document.getElementById('modal-extra');
+        if (p.tipo === 'alimentacion') {
+            extra.textContent = `Sabor: ${p.sabor || 'Natural'}`;
+        } else if (p.tipo === 'juguete') {
+            extra.textContent = `Material: ${p.material || 'Resistente'}`;
+        } else {
+            extra.textContent = "";
+        }
+
+        // 4. Abrir el modal usando Bootstrap
+        const modalElement = document.getElementById('modalDesripcion');
+        const instance = bootstrap.Modal.getOrCreateInstance(modalElement);
+        instance.show();
+    }
+};
 
 // Inicio
 document.addEventListener('DOMContentLoaded', () => {
