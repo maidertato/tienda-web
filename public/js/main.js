@@ -1,4 +1,4 @@
-import { inventario, agregarProductoAlInventario } from './tienda.js';
+import { inventario, agregarProductoAlInventario, carrito } from './tienda.js';
 
 // --- SELECTORES ---
 const contenedor = document.getElementById('lista-productos');
@@ -14,6 +14,7 @@ const categorias = ["mobiliario", "descanso", "cabello", "juguete", "merch", "al
 const listaCategorias = document.getElementById("lista-categorias");
 const filtroPrecio = document.getElementById('filtro-precio');
 const precioMaxValor = document.getElementById('precio-max-valor');
+
 
 
 // Llenamos el dropdown con las categorías
@@ -47,7 +48,6 @@ listaCategorias.addEventListener('click', (e) => {
 
 
 // --- ESTADO ---
-const carrito = new Map();
 let paginaActual = 1;
 const productosPorPagina = 6;
 let productosFiltrados = [...inventario];
@@ -94,7 +94,7 @@ export function renderizarTienda() {
                 </button>
 
                 <div class="imagen-wrapper">
-                    <img src="${imagenMostrada}" class="card-img-top imagen-producto">
+                    <img src="${imagenMostrada}" class="card-img-top imagen-producto" data-id=${juego.id}>
 
                     ${variantes && variantes.length > 1 ? `
                         <div class="flecha flecha-izq" data-id="${juego.id}" data-dir="-1"></div>
@@ -109,11 +109,6 @@ export function renderizarTienda() {
                         <small><strong>${obtenerAtributoExtra(juego)}</strong></small>
                     </p>
                     <p class="card-text mt-auto fw-bold fs-5">${juego.precio}€</p>
-                    <button class="btn btn-detalles btn-sm w-100 mt-2 text-white" 
-                            onclick="abrirDetalleProducto('${juego.id}')" 
-                            style="background-color: #9b59b6; border: none; border-radius: 8px;">
-                        Más detalles
-                    </button>
                 </div>
             </div>
         `;
@@ -174,9 +169,8 @@ contenedor.addEventListener('click', (e) => {
                     cantidad: 1
                 });
             }
-
+            
             renderizarCarrito();
-
 
             // 3. DESVANECER Y LUEGO ACTUALIZAR TIENDA
             setTimeout(() => {
@@ -187,6 +181,11 @@ contenedor.addEventListener('click', (e) => {
                 }, 300);
             }, 1500); 
         }
+    }
+    //Click sobre la imagen
+    if (e.target.classList.contains('imagen-producto')) {
+                const id = e.target.dataset.id;
+                abrirDetalleProducto(id);
     }
 });
 
@@ -484,34 +483,142 @@ filtroPrecio.addEventListener('input', () => {
     precioMaxValor.textContent = filtroPrecio.value;
 });
 
-//Funcion para abrir el modal con el detalle del producto
+
+
+
+// Modal para ver los detalles del producto
 window.abrirDetalleProducto = (id) => {
     // 1. Buscar el producto por ID
     const p = inventario.find(prod => prod.id === id);
     
-    if (p) {
-        // 2. Rellenar los campos del modal
-        document.getElementById('modal-titulo').textContent = p.nombre;
-        document.getElementById('modal-img').src = p.imagen;
-        document.getElementById('modal-descripcion').textContent = p.descripcion;
-        document.getElementById('modal-precio').textContent = `Precio final: ${p.precio}€`;
+    if(!p)
+        return;
 
-        // 3. Manejar información extra (opcional, según el tipo de producto)
-        const extra = document.getElementById('modal-extra');
-        if (p.tipo === 'alimentacion') {
-            extra.textContent = `Sabor: ${p.sabor || 'Natural'}`;
-        } else if (p.tipo === 'juguete') {
-            extra.textContent = `Material: ${p.material || 'Resistente'}`;
-        } else {
-            extra.textContent = "";
+    // Fondo con opacidad menor a 1 (Overlay)
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = '9999';
+
+    // Caja con la info
+    const detalle = document.createElement('div');
+    detalle.style.backgroundColor = '#ffffff';
+    detalle.style.borderRadius = '20px';
+    detalle.style.width = '60%';
+    detalle.style.maxWidth = '900px';
+    detalle.style.maxHeight = '75vh';
+    detalle.style.display = 'flex';
+    detalle.style.borderRadius = '12px';
+    detalle.style.overflow = 'hidden';
+    detalle.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+    
+    // Columna izquierda con la imagen
+    const columnaImagen = document.createElement('div');
+    columnaImagen.style.flex = '1';
+    columnaImagen.style.display = 'flex';
+    columnaImagen.style.alignItems = 'center';
+    columnaImagen.style.justifyContent = 'center';
+    columnaImagen.style.backgroundColor = '#f5f5f5';
+    columnaImagen.style.borderRight = '1px solid #ddd';
+
+    const img = document.createElement('img');
+    img.src = p.imagen;
+    img.style.maxWidth = '100%';
+    img.style.maxHeight = '100%';
+    img.style.objectFit = 'contain';
+
+    columnaImagen.appendChild(img);
+
+    // Columna derecha con la información del prooducto
+    const columnaInfo = document.createElement('div');
+    columnaInfo.style.flex = '1';
+    columnaInfo.style.display = 'flex';
+    columnaInfo.style.flexDirection = 'column';
+    columnaInfo.style.justifyContent = 'flex-start';
+    columnaInfo.style.overflowY = 'auto';
+    columnaInfo.style.padding = '30px';
+
+
+    columnaInfo.innerHTML = `
+        <h3 style="background:#9b59b6; color:white; padding:18px 22px; border-radius:10px; font-size:24px; font-weight:700; margin-bottom:30px; display:inline-block; margin-right: 40px;">
+            ${p.nombre}
+        </h3>
+
+        <div style="background:#f3e9fb; padding:12px 16px; border-radius:12px; margin-top:15px; margin-bottom:30px; display:inline-block;margin-right: 40px;">
+            <span style="font-size:18px; font-weight:600; color:#7d3c98;">Precio:</span>
+            <span style="font-size:24px; font-weight:700; color:#555; margin-left:8px;">
+                ${p.precio}€
+            </span>
+        </div>
+
+
+        <div style=" background:#f9f6fc; padding:10px 15px; border-radius:10px; margin-bottom:20px; display:inline-block; margin-right: 40px;">
+            <span style="font-weight:600; color:#7d3c98;">Tipo:</span>
+            <span style="color:#555; margin-left:8px;"> 
+                ${p.tipo}</span>
+        </div>
+
+
+        <div style=" margin-top:20px; padding-top:20px; border-top:1px solid #eee; margin-right: 40px; margin-left: 10px;">
+            <p style=" font-weight:600; margin-bottom:10px; color:#7d3c98; ">Descripción:</p>
+            <p style=" line-height:1.6; color:#555;">
+                ${p.descripcion}
+            </p>
+        </div>
+    `;
+
+    // La x para cerrar
+    const cerrar = document.createElement('button');
+    cerrar.textContent = '✕';
+    cerrar.style.position = 'absolute';
+    cerrar.style.top = '15px';
+    cerrar.style.right = '20px';
+    cerrar.style.border = 'none';
+    cerrar.style.background = 'transparent';
+    cerrar.style.fontSize = '20px';
+    cerrar.style.cursor = 'pointer';
+    cerrar.style.color = '#333';
+    cerrar.style.fontWeight = 'bold';
+
+
+    cerrar.addEventListener('click', () => {
+        overlay.remove();
+    });
+
+    detalle.style.position = 'relative';
+    detalle.appendChild(cerrar);
+
+    // Todo junto
+    detalle.appendChild(columnaImagen);
+    detalle.appendChild(columnaInfo);
+    overlay.appendChild(detalle);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden'; // Para que lo de detrás no se pueda scrollear
+
+    // Efecto al modal para que cuando se abra mole mas jeje
+    detalle.style.opacity = '0';
+    detalle.style.transition = 'opacity 0.3s ease';
+
+    setTimeout(() => {
+        detalle.style.opacity = '1';
+    }, 10);
+
+    // Al clickar fuera --> Se cierra
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            overlay.remove();
+            document.body.style.overflow = ''; // Para que no se mueva el fondo
         }
-
-        // 4. Abrir el modal usando Bootstrap
-        const modalElement = document.getElementById('modalDesripcion');
-        const instance = bootstrap.Modal.getOrCreateInstance(modalElement);
-        instance.show();
-    }
+    });
 };
+
 
 // Inicio
 document.addEventListener('DOMContentLoaded', () => {
