@@ -490,7 +490,10 @@ filtroPrecio.addEventListener('input', () => {
 window.abrirDetalleProducto = (id) => {
     // 1. Buscar el producto por ID
     const p = inventario.find(prod => prod.id === id);
-    
+    const index = varianteActualPorProducto.get(id) || 0;
+    const variante = p.variantes?.[index];
+
+
     if(!p)
         return;
 
@@ -529,7 +532,7 @@ window.abrirDetalleProducto = (id) => {
     columnaImagen.style.borderRight = '1px solid #ddd';
 
     const img = document.createElement('img');
-    img.src = p.imagen;
+    img.src = variante ? variante.imagen : p.imagen;
     img.style.maxWidth = '100%';
     img.style.maxHeight = '100%';
     img.style.objectFit = 'contain';
@@ -548,7 +551,7 @@ window.abrirDetalleProducto = (id) => {
 
     columnaInfo.innerHTML = `
         <h3 style="background:#9b59b6; color:white; padding:18px 22px; border-radius:10px; font-size:24px; font-weight:700; margin-bottom:30px; display:inline-block; margin-right: 40px;">
-            ${p.nombre}
+            ${variante ? `${p.nombre} – ${variante.nombre}` : p.nombre}
         </h3>
 
         <div style="background:#f3e9fb; padding:12px 16px; border-radius:12px; margin-top:15px; margin-bottom:30px; display:inline-block;margin-right: 40px;">
