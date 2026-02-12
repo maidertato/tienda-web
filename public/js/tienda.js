@@ -171,14 +171,76 @@ export const buscarProductoPorNombre = (nombre) => {
     return inventario.filter(p => p.nombre.toLowerCase().includes(nombre.toLowerCase()));
 };
 
-export function agregarProductoAlInventario(tipo, nombre, precio, desc, imagen, extra) {
-    let nuevo;
+// ==================================== Agregar productos al inventario --> Con el formulario! ====================================
+export function agregarProductoAlInventario(tipo, datos) {
+    let nuevoProducto;
+
     switch (tipo) {
-        case 'mobiliario': nuevo = new Mobiliario(nombre, precio, desc, imagen, tipo, ...extra); break;
-        case 'cabello': nuevo = new Cabello(nombre, precio, desc, imagen, tipo, ...extra); break;
-        case 'juguete': nuevo = new Juguete(nombre, precio, desc, imagen, tipo, ...extra); break;
-        case 'merch': nuevo = new Merchandising(nombre, precio, desc, imagen, tipo, extra); break;
-        case 'alimentacion': nuevo = new Alimentacion(nombre, precio, desc, imagen, tipo, extra); break;
+
+        case 'mobiliario':
+            nuevoProducto = new Mobiliario(
+                datos.nombre,
+                datos.precio,
+                datos.descripcion,
+                datos.imagen,
+                datos.extra || "Material genérico",
+                false
+            );
+            break;
+
+        case 'cabello':
+            nuevoProducto = new Cabello(
+                datos.nombre,
+                datos.precio,
+                datos.descripcion,
+                datos.imagen,
+                datos.extra || "Tamaño estándar",
+                "General",
+                "Sin color"
+            );
+            break;
+
+        case 'juguete':
+            nuevoProducto = new Juguete(
+                datos.nombre,
+                datos.precio,
+                datos.descripcion,
+                datos.imagen,
+                datos.extra || "Plástico",
+                "Mediano",
+                true
+            );
+            break;
+
+        case 'merch':
+            nuevoProducto = new Merchandising(
+                datos.nombre,
+                datos.precio,
+                datos.descripcion,
+                datos.imagen,
+                datos.extra || "Estándar",
+                "General",
+                "Negro"
+            );
+            break;
+
+        case 'alimentacion':
+            nuevoProducto = new Alimentacion(
+                datos.nombre,
+                datos.precio,
+                datos.descripcion,
+                datos.imagen,
+                "General",
+                datos.extra || "Seco"
+            );
+            break;
+
+        default:
+            return false;
     }
-    inventario.push(nuevo);
-};
+
+    nuevoProducto.tipo = tipo;
+    inventario.push(nuevoProducto);
+
+    return true;
+}

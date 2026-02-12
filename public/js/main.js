@@ -3,7 +3,10 @@ import { inventario, agregarProductoAlInventario, carrito } from './tienda.js';
 // --- SELECTORES ---
 const contenedor = document.getElementById('lista-productos');
 const carritoContenedor = document.getElementById('carrito-body'); 
-const form = document.querySelector('aside form');
+const form = document.getElementById('form-producto');
+const selectTipo = document.getElementById('tipo-producto');
+const inputFile = document.getElementById('input-file');
+const dropZone = document.getElementById('drop-zone');
 const buscador = document.getElementById('buscador');
 const tituloTienda = document.getElementById('titulo-tienda');
 const extraContainer = document.getElementById('campo-extra-container');
@@ -54,7 +57,7 @@ let productosFiltrados = [...inventario];
 let categoriaSeleccionada = "all";
 
 
-// --- 1. RENDER TIENDA (CON EL BOTÓN FLOTANTE RESTAURADO) ---
+// --- 1. RENDER TIENDA ---
 export function renderizarTienda() {
     if (!contenedor) return;
     contenedor.innerHTML = ''; 
@@ -118,7 +121,7 @@ export function renderizarTienda() {
     actualizarInterfazPaginacion();
 }
 
-// --- 2. EVENTO CLICK PARA EL BOTÓN FLOTANTE ---
+// ==================================== BOTÓN FLOTANTE ====================================
 contenedor.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-agregar-flotante');
     
@@ -189,7 +192,7 @@ contenedor.addEventListener('click', (e) => {
     }
 });
 
-// EVENTO CLICK PARA CAMBIAR IMAGEN
+// ==================================== > y < para cambiar de producto ====================================
 contenedor.addEventListener('click', (e) => {
     const flecha = e.target.closest('.flecha');
     if (!flecha) return;
@@ -208,6 +211,173 @@ contenedor.addEventListener('click', (e) => {
     renderizarTienda();
 });
 
+// ==================================== DRAG & DROP ====================================
+
+inputFile.accept = "image/jpeg, image/png";
+
+inputFile.addEventListener('change', () => {
+    const file = inputFile.files[0];
+    if (!file) return;
+
+    if (!validarArchivo(file)) {
+        inputFile.value = '';
+        return;
+    }
+
+    mostrarMensajeDrop("Imagen añadida correctamente", "success");
+});
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('drop-hover');
+});
+
+dropZone.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drop-hover');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drop-hover');
+
+    const archivos = e.dataTransfer.files;
+
+    if (archivos.length > 1) {
+        mostrarMensajeDrop("Solo puedes subir una imagen", "error");
+        return;
+    }
+
+    const archivo = archivos[0];
+
+    if (!validarArchivo(archivo)) return;
+
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(archivo);
+    inputFile.files = dataTransfer.files;
+
+    mostrarMensajeDrop("Imagen añadida correctamente", "success");
+});
+
+function validarArchivo(file) {
+    const tiposValidos = ["image/jpeg", "image/png"];
+
+    if (!tiposValidos.includes(file.type)) {
+        mostrarMensajeDrop("Solo se permiten archivos JPG o PNG", "error");
+        return false;
+    }
+
+    return true;
+}
+
+function mostrarMensajeDrop(texto, tipo) {
+    const mensaje = document.createElement("div");
+
+    mensaje.textContent = texto;
+    mensaje.style.marginTop = "10px";
+    mensaje.style.padding = "8px";
+    mensaje.style.borderRadius = "6px";
+    mensaje.style.fontSize = "14px";
+    mensaje.style.textAlign = "center";
+
+    if (tipo === "error") {
+        mensaje.style.backgroundColor = "#f8d7da";
+        mensaje.style.color = "#842029";
+    } else {
+        mensaje.style.backgroundColor = "#d1e7dd";
+        mensaje.style.color = "#0f5132";
+    }
+
+    dropZone.appendChild(mensaje);
+
+    setTimeout(() => {
+        mensaje.remove();
+    }, 1500);
+}
+
+
+// ====================================  FORMULARIO  ====================================
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const tipo = selectTipo.value;
+
+    if (!tipo) {
+        alert("Debes escoger un tipo válido");
+        return;
+    }
+
+    const nombre = form.querySelector('input[type="text"]').value.trim();
+    const precio = parseFloat(form.querySelector('input[type="number"]').value);
+    const descripcion = form.querySelector('textarea').value.trim();
+    const campoExtra = document.getElementById('campo-extra')?.value.trim();
+
+    if (!nombre || isNaN(precio) || precio < 0) {
+        alert("Revisa nombre y precio");
+        return;
+    }
+
+    const file = inputFile.files[0];
+
+    if (inputFile.files.length > 1) {
+        alert("Solo puedes subir una imagen");
+        return;
+    }
+
+    if (file && !["image/jpeg", "image/png"].includes(file.type)) {
+        alert("Solo se permiten JPG o PNG");
+        return;
+    }
+
+    const imagenFinal = file
+        ? URL.createObjectURL(file)
+        : "imagenes/productos/default.png"; 
+
+    agregarProductoAlInventario(
+        tipo,
+        nombre,
+        precio,
+        descripcion,
+        imagenFinal,
+        campoExtra
+    );
+
+    // Actualizar la tienda
+    productosFiltrados = [...inventario];
+    renderizarTienda();
+
+    // Formulario limpio
+    form.reset();
+    extraContainer.innerHTML = '';
+    
+});
+
+selectTipo.addEventListener('change', () => {
+    extraContainer.innerHTML = '';
+
+    if (!selectTipo.value) return;
+
+    const inputExtra = document.createElement('input');
+    inputExtra.className = 'form-control';
+    inputExtra.required = true;
+
+    if (selectTipo.value === 'mobiliario') {
+        inputExtra.placeholder = "Material";
+        inputExtra.id = "campo-extra";
+    }
+
+    if (selectTipo.value === 'alimentacion') {
+        inputExtra.placeholder = "Tipo de alimentación";
+        inputExtra.id = "campo-extra";
+    }
+
+    if (selectTipo.value === 'cabello') {
+        inputExtra.placeholder = "Tamaño";
+        inputExtra.id = "campo-extra";
+    }
+
+    extraContainer.appendChild(inputExtra);
+});
 
 
 // --- 3. RESTO DE FUNCIONES (CARRITO Y AUXILIARES) ---
@@ -485,14 +655,12 @@ filtroPrecio.addEventListener('input', () => {
 
 
 
-
-// Modal para ver los detalles del producto
+// ==================================== Modal para ver los detalles del producto ==================================== 
 window.abrirDetalleProducto = (id) => {
     // 1. Buscar el producto por ID
     const p = inventario.find(prod => prod.id === id);
     const index = varianteActualPorProducto.get(id) || 0;
     const variante = p.variantes?.[index];
-
 
     if(!p)
         return;
@@ -603,7 +771,7 @@ window.abrirDetalleProducto = (id) => {
     detalle.appendChild(columnaInfo);
     overlay.appendChild(detalle);
     document.body.appendChild(overlay);
-    document.body.style.overflow = 'hidden'; // Para que lo de detrás no se pueda scrollear
+    //document.body.style.overflow = 'hidden'; // Para que lo de detrás no se pueda scrollear
 
     // Efecto al modal para que cuando se abra mole mas jeje
     detalle.style.opacity = '0';
@@ -623,7 +791,7 @@ window.abrirDetalleProducto = (id) => {
 };
 
 
-// Inicio
+// ==================================== DOM inicial ====================================
 document.addEventListener('DOMContentLoaded', () => {
     renderizarTienda();
     renderizarCarrito();
