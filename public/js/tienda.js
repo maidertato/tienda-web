@@ -68,7 +68,8 @@ inventario.find(p => p.nombre === 'Pelota de Goma').variantes = [
 
 inventario.find(p => p.nombre === 'Ratón de Peluche').variantes = [
   { nombre: 'Rosa', imagen: 'imagenes/productos/ratonPeluche.png' },
-  { nombre: 'Gris', imagen: 'imagenes/productos/ratonPeluche2.png' }
+  { nombre: 'Gris', imagen: 'imagenes/productos/ratonPeluche2.png' },
+  { nombre: 'Azul', imagen: 'imagenes/productos/ratonPeluche3.png' }
 ];
 
 inventario.find(p => p.nombre === 'Hueso de Nylon').variantes = [
