@@ -858,6 +858,8 @@ main {
 }
 
 
+
+
 .carrito-header-custom {
   display: flex;
   align-items: center;
@@ -877,9 +879,6 @@ main {
   align-items: center;
   justify-content: center;
 }
-/* =========================
-   VISTA CARRITO VACÍO (REUTILIZA ESTILO)
-   ========================= */
 
 .carrito-vacio-vista {
   display: flex;
@@ -1004,13 +1003,7 @@ main {
   height: 18px;
   color: #521F84;
 }
-/*Boton anterior y siguiente*/
-.pagination .page-link:hover {
-  background-color: #9C66D4;
-  border-color: #9C66D4;
-  color: white;
-  transform: translateY(-1px);
-}
+
 /* TEXTO TU CARRITO */
 .offcanvas-title {
   font-weight: 900;
