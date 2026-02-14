@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="imagenes/icon/favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="imagenes/icon/favicon.svg">
@@ -16,10 +16,10 @@
   <!-- Titulo de la Web -->
   <title>Tienda de Mascotas</title>
   <meta name="description" content="Esta tienda contiene multiples productos de mesa, para todos los gustos.">
-  
+
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  
+
   <!-- CSS -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -27,53 +27,54 @@
 <body>
 
   <div id="contenedor">
-    
+
     <!-- HEADER -->
     <header>
       <h1> Tienda de Mascotas 🐾</h1>
     </header>
 
     <!-- NAV -->
-      <nav class="nav-expand">
-        <ul class="button-container">
+    <nav class="nav-expand">
+      <ul class="button-container">
 
-          <!-- INICIO -->
-          <li>
-            <a href="#" class="nav-btn">
-              <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                <path fill="currentColor"
-                  d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2z"/>
+        <!-- INICIO -->
+        <li>
+          <a href="#" class="nav-btn">
+            <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+              <path fill="currentColor"
+                d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2z" />
+            </svg>
+            <span class="nav-text">Inicio</span>
+          </a>
+        </li>
+
+        <!-- CARRITO -->
+        <li>
+          <a href="#" class="nav-btn" data-bs-toggle="offcanvas" data-bs-target="#carrito">
+            <div style="position: relative; display: flex;"> <svg class="icon" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
               </svg>
-              <span class="nav-text">Inicio</span>
-            </a>
-          </li>
-
-          <!-- CARRITO -->
-          <li>
-            <a href="#" class="nav-btn" data-bs-toggle="offcanvas" data-bs-target="#carrito">
-              <div style="position: relative; display: flex;"> <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="currentColor" d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                  <circle cx="9" cy="21" r="1"/>
-                  <circle cx="20" cy="21" r="1"/>
-                </svg>
-                <span id="cart-counter" class="cart-badge"></span>
-              </div>
-              <span class="nav-text">Carrito</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+              <span id="cart-counter" class="cart-badge"></span>
+            </div>
+            <span class="nav-text">Carrito</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 
 
 
     <!-- CONTENIDO -->
     <div id="contenido">
-      
+
       <!-- ASIDE / FORMULARIO -->
       <aside>
         <h3>Añadir Nuevo Producto</h3>
         <form id="form-producto">
-          
+
           <!-- Tipo de Producto (select) -->
           <div class="mb-3">
             <label class="form-label">Tipo de Producto</label>
@@ -99,14 +100,7 @@
           <!-- Precio -->
           <div class="mb-3">
             <label class="form-label">Precio (€)</label>
-            <input 
-              type="number" 
-              placeholder="0.00" 
-              class="form-control" 
-              min="0.00" 
-              step="0.01" 
-              required
-            >
+            <input type="number" placeholder="0.00" class="form-control" min="0.00" step="0.01" required>
           </div>
 
           <!-- Descripción -->
@@ -114,7 +108,7 @@
             <label class="form-label">Descripción</label>
             <textarea placeholder="Describe tu producto..." class="form-control" rows="3" required></textarea>
           </div>
-          
+
           <!-- Imagen del Producto (input file) -->
           <div class="mb-3">
             <label class="form-label">Imagen del Producto</label>
@@ -143,12 +137,14 @@
           <h2 id="titulo-tienda" class="m-0">Todos los productos</h2>
           <div class="d-flex gap-2 align-items-center">
             <!-- Buscador -->
-             <input type="text" id="buscador" class="form-control buscador-custom" placeholder="Buscar por nombre...">
-             <!-- Botón para filtrar por categorias -->
-              <div class="dropdown">
-              <button class="btn btn-primary p-0" type="button" id="btn-categorias" data-bs-toggle="dropdown" aria-expanded="false" 
-                      style="width: 45px; height: 45px; background-color: #8e29b6; border: none; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <input type="text" id="buscador" class="form-control buscador-custom" placeholder="Buscar por nombre...">
+            <!-- Botón para filtrar por categorias -->
+            <div class="dropdown">
+              <button class="btn btn-primary p-0" type="button" id="btn-categorias" data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="width: 45px; height: 45px; background-color: #8e29b6; border: none; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="4" y1="21" x2="4" y2="14"></line>
                   <line x1="4" y1="10" x2="4" y2="3"></line>
                   <line x1="12" y1="21" x2="12" y2="12"></line>
@@ -160,42 +156,45 @@
                   <line x1="18" y1="16" x2="22" y2="16"></line>
                 </svg>
               </button>
-              <div class="dropdown-menu p-3 shadow" aria-labelledby="btn-categorias" style="min-width: 250px; border-radius: 12px;">
+              <div class="dropdown-menu p-3 shadow" aria-labelledby="btn-categorias"
+                style="min-width: 250px; border-radius: 12px;">
                 <h6 class="dropdown-header text-dark fw-bold ps-0">Categoría</h6>
                 <ul class="list-unstyled mb-2" id="lista-categorias">
-                  </ul>
-                
+                </ul>
+
                 <hr class="dropdown-divider">
-                
-                <h6 class="dropdown-header text-dark fw-bold ps-0">Precio máximo: <span id="precio-max-valor">200</span>€</h6>
+
+                <h6 class="dropdown-header text-dark fw-bold ps-0">Precio máximo: <span
+                    id="precio-max-valor">200</span>€</h6>
                 <div class="px-2">
-                  <input type="range" class="form-range" id="filtro-precio" min="0" max="200" step="5" value="200" style="accent-color: #9b59b6;">
-                <button type="button" id="btn-borrar-filtros" class="btn btn-sm w-100 mt-3" 
-                        style="background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; border-radius: 6px; font-weight: 600;">
-                    Borrar Filtros 
-                </button> 
+                  <input type="range" class="form-range" id="filtro-precio" min="0" max="200" step="5" value="200"
+                    style="accent-color: #9b59b6;">
+                  <button type="button" id="btn-borrar-filtros" class="btn btn-sm w-100 mt-3"
+                    style="background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; border-radius: 6px; font-weight: 600;">
+                    Borrar Filtros
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-          
+
         </div>
 
         <div id="lista-productos" class="row g-4 px-3"></div>
 
         <div class="mt-4 text-center">
-            <p id="info-paginacion" class="small text-muted"></p>
-            <nav>
-                <ul id="pagination-container" class="pagination justify-content-center">
-                </ul>
-            </nav>
+          <p id="info-paginacion" class="small text-muted"></p>
+          <nav>
+            <ul id="pagination-container" class="pagination justify-content-center">
+            </ul>
+          </nav>
         </div>
       </main>
     </div>
 
     <!-- FOOTER -->
     <footer>
-      © Dawidawe taldea 
+      © Dawidawe taldea
     </footer>
 
   </div>
@@ -206,7 +205,9 @@
       <div class="carrito-header-custom">
         <button type="button" data-quantity="0" class="btn-cart" id="cart-icon">
           <svg class="icon-cart" viewBox="0 0 24.38 30.52" xmlns="http://www.w3.org/2000/svg">
-            <path transform="translate(-3.62 -0.85)" d="M28,27.3,26.24,7.51a.75.75,0,0,0-.76-.69h-3.7a6,6,0,0,0-12,0H6.13a.76.76,0,0,0-.76.69L3.62,27.3v.07a4.29,4.29,0,0,0,4.52,4H23.48a4.29,4.29,0,0,0,4.52-4ZM15.81,2.37a4.47,4.47,0,0,1,4.46,4.45H11.35a4.47,4.47,0,0,1,4.46-4.45Zm7.67,27.48H8.13a2.79,2.79,0,0,1-3-2.45L6.83,8.34h3V11a.76.76,0,0,0,1.52,0V8.34h8.92V11a.76.76,0,0,0,1.52,0V8.34h3L26.48,27.4a2.79,2.79,0,0,1-3,2.44Z"></path>
+            <path transform="translate(-3.62 -0.85)"
+              d="M28,27.3,26.24,7.51a.75.75,0,0,0-.76-.69h-3.7a6,6,0,0,0-12,0H6.13a.76.76,0,0,0-.76.69L3.62,27.3v.07a4.29,4.29,0,0,0,4.52,4H23.48a4.29,4.29,0,0,0,4.52-4ZM15.81,2.37a4.47,4.47,0,0,1,4.46,4.45H11.35a4.47,4.47,0,0,1,4.46-4.45Zm7.67,27.48H8.13a2.79,2.79,0,0,1-3-2.45L6.83,8.34h3V11a.76.76,0,0,0,1.52,0V8.34h8.92V11a.76.76,0,0,0,1.52,0V8.34h3L26.48,27.4a2.79,2.79,0,0,1-3,2.44Z">
+            </path>
           </svg>
           <span class="quantity"></span>
         </button>
@@ -218,30 +219,29 @@
     </div>
     <div class="offcanvas-body" id="carrito-body"></div>
   </div>
-  
+
   <!-- MODAL DESCRIPCIÓN PRODUCTO -->
-    <div class="modal-content">
+  <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal-titulo"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body d-flex gap-4">
-        <img id="modal-img" src="" alt=""
-             style="width: 40%; object-fit: contain;">
-
-        <div style="max-height: 300px; overflow-y: auto;">
-          <p id="modal-descripcion"></p>
-          <p id="modal-extra" class="fw-bold mt-2"></p>
-          <p id="modal-precio" class="text-muted"></p>
-        </div>
-      </div>
-      
-
+    <div class="modal-header">
+      <h5 class="modal-title" id="modal-titulo"></h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
+
+    <div class="modal-body d-flex gap-4">
+      <img id="modal-img" src="" alt="" style="width: 40%; object-fit: contain;">
+
+      <div style="max-height: 300px; overflow-y: auto;">
+        <p id="modal-descripcion"></p>
+        <p id="modal-extra" class="fw-bold mt-2"></p>
+        <p id="modal-precio" class="text-muted"></p>
+      </div>
+    </div>
+
+
   </div>
-</div>
+  </div>
+  </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -249,4 +249,5 @@
   <!-- JS propio -->
   <script type="module" src="js/main.js"></script>
 </body>
+
 </html>

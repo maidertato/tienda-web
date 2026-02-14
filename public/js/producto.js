@@ -4,7 +4,7 @@ export class Producto {
     precio;
     descripcion;
     imagen;
-    tipo; 
+    tipo;
 
     constructor(nombre, precio, descripcion, imagen, tipo = 'general') {
         // Generamos el ID automáticamente

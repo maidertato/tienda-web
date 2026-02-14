@@ -14,7 +14,7 @@ export class Merchandising extends Producto {
 
     get tipoMascota() { return this.#tipoMascota; }
     set tipoMascota(v) { this.#tipoMascota = v; }
-    
+
     get talla() { return this.#talla; }
     set talla(v) { this.#talla = v; }
 

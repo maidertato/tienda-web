@@ -12,26 +12,26 @@ export class Cabello extends Producto {
         this.#color = color;
     }
 
-    get tamaño() { 
-        return this.#tamaño; 
+    get tamaño() {
+        return this.#tamaño;
     }
-    set tamaño(v) { 
-        this.#tamaño = v; 
-    }
-
-    get tipoMascota() { 
-        return this.#tipoMascota; 
-    
-    }
-    set tipoMascota(v) { 
-        this.#tipoMascota = v; 
+    set tamaño(v) {
+        this.#tamaño = v;
     }
 
-    get color() { 
-        return this.#color; 
+    get tipoMascota() {
+        return this.#tipoMascota;
+
+    }
+    set tipoMascota(v) {
+        this.#tipoMascota = v;
     }
 
-    set color(v) { 
-        this.#color = v; 
+    get color() {
+        return this.#color;
+    }
+
+    set color(v) {
+        this.#color = v;
     }
 }

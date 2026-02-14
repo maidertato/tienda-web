@@ -26,8 +26,8 @@ body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 248, 252, 0.95); 
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  background-color: rgba(255, 248, 252, 0.95);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 1rem;
 }
@@ -41,14 +41,14 @@ header {
   color: white;
   text-align: center;
   border-radius: 15px 15px 0 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Mejora visual opcional (segundo CSS) */
 header {
   padding: 2rem;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
     url("../imagenes/fondo-huellas.png");
   background-size: cover;
   background-position: center;
@@ -77,7 +77,7 @@ nav ul {
   justify-content: center;
   background-color: #fff0f6;
   border-radius: 0 0 15px 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 nav ul li a {
@@ -91,6 +91,7 @@ nav ul li a:hover {
   color: #9a50cc;
   transform: scale(1.1);
 }
+
 .nav-expand {
   display: flex;
   justify-content: center;
@@ -110,15 +111,17 @@ nav ul li a:hover {
     0 10px 25px rgba(156, 102, 212, 0.8);
   transition: all 0.4s ease;
   overflow: hidden;
- }
+}
 
 .button-container li {
-  display: inline-flex; /* Asegura que los elementos de lista no ocupen todo el ancho */
+  display: inline-flex;
+  /* Asegura que los elementos de lista no ocupen todo el ancho */
 }
 
 
 .button-container:hover {
-  width: 260px; /* ancho abierto */
+  width: 260px;
+  /* ancho abierto */
 }
 
 /* Botones */
@@ -136,41 +139,49 @@ nav ul li a:hover {
 /* Boton mas detalles */
 /* Animación para el botón de detalles */
 .btn-detalles {
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto elástico */
-    cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Efecto elástico */
+  cursor: pointer;
 }
 
 .btn-detalles:hover {
-    transform: scale(1.08); /* Se agranda un 8% */
-    filter: brightness(1.1); /* Brilla un poquito más */
-    box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3); /* Sombra morada suave */
+  transform: scale(1.08);
+  /* Se agranda un 8% */
+  filter: brightness(1.1);
+  /* Brilla un poquito más */
+  box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
+  /* Sombra morada suave */
 }
 
 .btn-detalles:active {
-    transform: scale(0.95); /* Al hacer clic se encoge un poco (efecto pulsación) */
+  transform: scale(0.95);
+  /* Al hacer clic se encoge un poco (efecto pulsación) */
 }
 
 /* Estilo del circulito */
 .cart-badge {
   position: absolute;
   /* Estas coordenadas lo sitúan abajo a la derecha del icono */
-  bottom: 14px; 
+  bottom: 14px;
   right: -12px;
-  
-  background-color: #9C66D4; 
+
+  background-color: #9C66D4;
   color: white;
   font-size: 10px;
   font-weight: bold;
-  
+
   width: 14px;
   height: 14px;
-  border-radius: 50%; /* Esto lo hace círculo */
-  
-  display: none; /* Se activa por JS */
+  border-radius: 50%;
+  /* Esto lo hace círculo */
+
+  display: none;
+  /* Se activa por JS */
   align-items: center;
   justify-content: center;
-  
-  border: 2px solid #fffafc; /* Un pequeño borde para que resalte sobre el fondo */
+
+  border: 2px solid #fffafc;
+  /* Un pequeño borde para que resalte sobre el fondo */
   z-index: 5;
 }
 
@@ -195,7 +206,7 @@ nav ul li a:hover {
 .icon {
   width: 20px;
   height: 20px;
-  filter: drop-shadow(0 0 5px rgba(255,255,255,0.6));
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
 }
 
 /* =========================
@@ -217,10 +228,10 @@ aside {
   width: 25%;
   min-width: 300px;
   background-color: #9C66D4;
-  color: white; 
+  color: white;
   padding: 2rem;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   margin-top: 95px;
 }
 
@@ -229,7 +240,7 @@ aside h3 {
   color: white;
   text-align: left;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 aside .form-label {
@@ -237,7 +248,7 @@ aside .form-label {
   margin-bottom: 5px;
 }
 
-aside .form-control, 
+aside .form-control,
 aside .form-select {
   background-color: rgba(255, 255, 255, 0.2) !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
@@ -254,15 +265,15 @@ aside .form-select option {
   color: white;
 }
 
-aside .form-control:focus, 
+aside .form-control:focus,
 aside .form-select:focus {
   background-color: rgba(255, 255, 255, 0.3) !important;
   border-color: white !important;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important; 
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
   outline: none;
 }
 
-aside .btn-custom, 
+aside .btn-custom,
 aside .btn-success {
   background-color: white;
   color: #9C66D4;
@@ -270,13 +281,13 @@ aside .btn-success {
   border: 2px solid transparent;
   border-radius: 10px;
   margin-top: 15px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-aside .btn-custom:hover, 
+aside .btn-custom:hover,
 aside .btn-success:hover {
   background-color: #DBC5F1;
   color: #521F84;
@@ -284,7 +295,7 @@ aside .btn-success:hover {
   box-shadow: 0 0 20px #DBC5F1;
 }
 
-aside .btn-custom:active, 
+aside .btn-custom:active,
 aside .btn-success:active {
   transform: translateY(1px);
   box-shadow: none !important;
@@ -350,7 +361,8 @@ main {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  min-width: 0; /* Evita que el flexbox se desborde */
+  min-width: 0;
+  /* Evita que el flexbox se desborde */
 }
 
 /* Boton Buscador */
@@ -368,58 +380,64 @@ main {
 /*Filtro*/
 /* Estilos para el Rango de Precio */
 .custom-range::-webkit-slider-thumb {
-    background: #DBC5F1 !important; 
-    border: 2px solid white;
+  background: #DBC5F1 !important;
+  border: 2px solid white;
 }
 
 .custom-range::-moz-range-thumb {
-    background: #DBC5F1 !important;
-    border: 2px solid white;
+  background: #DBC5F1 !important;
+  border: 2px solid white;
 }
 
 .custom-range::-ms-thumb {
-    background: #DBC5F1 !important;
-    border: 2px solid white;
+  background: #DBC5F1 !important;
+  border: 2px solid white;
 }
 
 #precio-max-valor {
-    font-weight: 800;
-    color: black;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 2px 8px;
-    border-radius: 5px;
+  font-weight: 800;
+  color: black;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 5px;
 }
+
 /* Animación del botón de filtro */
 #btn-categorias {
-    transition: all 0.3s ease; /* Suaviza el movimiento */
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  /* Suaviza el movimiento */
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 #btn-categorias:hover {
-    transform: scale(1.1); /* Se hace un poco más grande */
-    background-color: #8e44ad !important; /* Un morado un poco más oscuro */
-    box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4); /* Sombra más intensa */
+  transform: scale(1.1);
+  /* Se hace un poco más grande */
+  background-color: #8e44ad !important;
+  /* Un morado un poco más oscuro */
+  box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+  /* Sombra más intensa */
 }
 
 /* Para que el icono dentro también reaccione */
 #btn-categorias:hover svg {
-    stroke-width: 2.5px;
+  stroke-width: 2.5px;
 }
 
 /* Boton borrar filtros */
 #btn-borrar-filtros {
-    transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 #btn-borrar-filtros:hover {
-    background-color: #f1aeb5 !important; /* Un rojo un poco más fuerte */
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #f1aeb5 !important;
+  /* Un rojo un poco más fuerte */
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #btn-borrar-filtros:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 /* Al pasar el ratón */
@@ -443,7 +461,7 @@ main {
 /* Contenedor de la cuadrícula */
 #lista-productos {
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   gap: 20px;
   width: 100%;
   padding: 20px 0;
@@ -451,9 +469,9 @@ main {
   align-content: flex-start;
 }
 
-#lista-productos > div {
-  flex: 0 0  calc(33.333% - 20px); 
-  min-width: 300px; 
+#lista-productos>div {
+  flex: 0 0 calc(33.333% - 20px);
+  min-width: 300px;
   max-width: 250%;
   display: flex;
 }
@@ -464,8 +482,8 @@ main {
   border: none;
   border-radius: 20px !important;
   /* IMPORTANTE: Quitamos overflow: hidden para que el globito de arriba no se corte */
-  overflow: visible !important; 
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow: visible !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #fff7fc;
   display: flex;
@@ -482,7 +500,7 @@ main {
 .card-img-top {
   width: 100%;
   height: 220px;
-  object-fit: contain; 
+  object-fit: contain;
   background-color: #fff;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -490,7 +508,8 @@ main {
 /* Estabilización de Textos (Truncado) */
 .card-title {
   display: -webkit-box;
-  -webkit-line-clamp: 1; /* Corta a 1 línea */
+  -webkit-line-clamp: 1;
+  /* Corta a 1 línea */
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-weight: 700;
@@ -501,12 +520,14 @@ main {
 
 .descripcion-producto {
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Corta a 3 líneas */
+  -webkit-line-clamp: 3;
+  /* Corta a 3 líneas */
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 0.9rem;
   line-height: 1.4;
-  height: 4.2em; /* Altura fija para que todas las cards midan igual */
+  height: 4.2em;
+  /* Altura fija para que todas las cards midan igual */
   margin-bottom: 1rem;
   color: #666;
 }
@@ -519,42 +540,45 @@ main {
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  background-color: #E6E6FA; 
-  border: 2px solid #D8BFD8; 
+  background-color: #E6E6FA;
+  border: 2px solid #D8BFD8;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  z-index: 10; /* Un poco más alto */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  /* Un poco más alto */
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 /* Color del icono del carrito (Morado) */
 .btn-agregar-flotante svg {
-    width: 22px;
-    height: 22px;
-    /* Color morado para el carrito */
-    stroke: #800080; 
+  width: 22px;
+  height: 22px;
+  /* Color morado para el carrito */
+  stroke: #800080;
 }
 
 /* Efecto al pasar el ratón */
 .btn-agregar-flotante:hover:not(:disabled) {
-    transform: scale(1.1);
-    background-color: #B19CD9; /* FONDO */
-    border-color: #9C66D4; 
+  transform: scale(1.1);
+  background-color: #B19CD9;
+  /* FONDO */
+  border-color: #9C66D4;
 }
 
 /* Estilo para cuando el botón está deshabilitado */
 .btn-agregar-flotante:disabled {
-    background-color: #F5F5F5;
-    border-color: #B19CD9;
-    cursor: not-allowed;
+  background-color: #F5F5F5;
+  border-color: #B19CD9;
+  cursor: not-allowed;
 }
 
 .btn-agregar-flotante:disabled svg {
-    stroke: #B0B0B0;
+  stroke: #B0B0B0;
 }
+
 /* Mensaje de éxito flotante */
 .mensaje-exito {
   position: absolute;
@@ -570,12 +594,16 @@ main {
   pointer-events: none;
   animation: fadeInOut 1.5s ease-in-out forwards;
 }
+
 /* Mensaje de éxito flotante (Globito sobre el botón) */
 .mensaje-exito-flotante {
   position: absolute;
-  top: -25px;            /* Se posiciona justo encima del botón circular */
-  right: 5px;           /* Alineado con el botón */
-  background-color: #521F84; /* Morado a producto con tu diseño */
+  top: -25px;
+  /* Se posiciona justo encima del botón circular */
+  right: 5px;
+  /* Alineado con el botón */
+  background-color: #521F84;
+  /* Morado a producto con tu diseño */
   color: white;
   padding: 6px 12px;
   border-radius: 8px;
@@ -584,7 +612,7 @@ main {
   white-space: nowrap;
   z-index: 20;
   pointer-events: none;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   animation: popUp 0.3s ease-out forwards;
 }
 
@@ -601,8 +629,15 @@ main {
 
 /* Animación de entrada */
 @keyframes popUp {
-  0% { opacity: 0; transform: translateY(10px) scale(0.8); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Clase para el desvanecimiento (usada en el JS) */
@@ -613,10 +648,25 @@ main {
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: translate(-50%, 5px); }
-  20% { opacity: 1; transform: translate(-50%, 0); }
-  80% { opacity: 1; transform: translate(-50%, 0); }
-  100% { opacity: 0; transform: translate(-50%, -5px); }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 5px);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -5px);
+  }
 }
 
 /* FLECHAS PRODUCTOS */
@@ -637,7 +687,8 @@ main {
   line-height: 1;
 
 
-  background: #9C66D4; /* morado */
+  background: #9C66D4;
+  /* morado */
   color: white;
 
   display: flex;
@@ -700,10 +751,10 @@ main {
   font-family: 'Quicksand', sans-serif;
   border-radius: 20px 0 0 20px;
   padding: 1.5rem;
-  box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
   border: none;
   /* ANCHO AMPLIADO */
-  width: 500px !important; 
+  width: 500px !important;
   max-width: 95vw;
 }
 
@@ -721,24 +772,24 @@ main {
 }
 
 .carrito-item {
-  background-color: #fdfbff; 
+  background-color: #fdfbff;
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
-  gap: 30px; 
+  gap: 30px;
   border: 1px solid #eee;
   transition: all 0.2s;
 }
 
 .carrito-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
 }
 
 .carrito-item img {
-  width: 90px; 
+  width: 90px;
   height: 90px;
   object-fit: cover;
   border-radius: 10px;
@@ -750,8 +801,8 @@ main {
 }
 
 .carrito-info .d-flex {
-  flex-wrap: nowrap !important; 
-  white-space: nowrap;          
+  flex-wrap: nowrap !important;
+  white-space: nowrap;
 }
 
 .carrito-info h6 {
@@ -768,7 +819,7 @@ main {
   border-radius: 8px;
   padding: 0.3rem;
   background-color: white;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .input-cantidad:focus {
@@ -776,7 +827,9 @@ main {
   outline: none;
 }
 
-.aviso-maximo, .text-danger, .aviso-maximo-texto {
+.aviso-maximo,
+.text-danger,
+.aviso-maximo-texto {
   color: #dc3545;
   font-size: 0.75rem;
   margin-top: 5px;
@@ -823,15 +876,30 @@ main {
   border-radius: 20px;
   font-size: 0.8rem;
   white-space: nowrap;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   animation: fadeInOut 1.5s ease-in-out forwards;
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: translate(-50%, 10px); }
-  20% { opacity: 1; transform: translate(-50%, 0); }
-  80% { opacity: 1; transform: translate(-50%, 0); }
-  100% { opacity: 0; transform: translate(-50%, -10px); }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
 }
 
 /* El botón debe tener posición relativa para que la notificación se ubique bien */
@@ -895,7 +963,7 @@ main {
   width: 130px;
   margin-bottom: 1.5rem;
   opacity: 0.95;
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
 }
 
 .carrito-vacio-vista h4 {
@@ -920,7 +988,7 @@ main {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -928,7 +996,7 @@ main {
 
 .btn-inicio:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
   background-color: white;
 }
 
@@ -957,11 +1025,10 @@ main {
 
 /* ICONO */
 .icon-cart {
-  width: 30px;   
-  height: 36px; 
+  width: 30px;
+  height: 36px;
   transition: 0.2s ease;
-  filter: drop-shadow(0 0 8px #9f3cff)
-          drop-shadow(0 0 14px #9f3cff);
+  filter: drop-shadow(0 0 8px #9f3cff) drop-shadow(0 0 14px #9f3cff);
 }
 
 
@@ -971,13 +1038,12 @@ main {
 }
 
 /* HOVER EFECTOS */
-.btn-cart:hover > .icon-cart {
+.btn-cart:hover>.icon-cart {
   transform: scale(1.15);
-  filter: drop-shadow(0 0 10px #c77dff)
-          drop-shadow(0 0 20px #c77dff);
+  filter: drop-shadow(0 0 10px #c77dff) drop-shadow(0 0 20px #c77dff);
 }
 
-.btn-cart:hover > .icon-cart path {
+.btn-cart:hover>.icon-cart path {
   fill: #c77dff;
 }
 
@@ -994,7 +1060,7 @@ main {
   height: 120px;
   margin-bottom: 1.5rem;
   color: white;
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.6));
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
   opacity: 0.95;
 }
 
@@ -1011,6 +1077,7 @@ main {
   color: #521F84;
   letter-spacing: 0.5px;
 }
+
 .custom-header {
   display: flex;
   justify-content: space-between;
@@ -1039,29 +1106,32 @@ main {
 }
 
 .btn-papelera {
-    background: none;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    color: #a0a0a0; /* Gris suave por defecto */
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #a0a0a0;
+  /* Gris suave por defecto */
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
 .btn-papelera svg {
-    width: 22px;
-    height: 22px;
+  width: 22px;
+  height: 22px;
 }
 
 /*comentario para borrar*/
 .btn-papelera:hover {
-    color: #e63946; /* Rojo elegante al pasar el ratón */
-    background-color: #ffeeee; /* Fondo suave circular */
-    border-radius: 50%;
-    transform: scale(1.1);
+  color: #e63946;
+  /* Rojo elegante al pasar el ratón */
+  background-color: #ffeeee;
+  /* Fondo suave circular */
+  border-radius: 50%;
+  transform: scale(1.1);
 }
 
 /* =========================
@@ -1074,7 +1144,7 @@ footer {
   color: white;
   margin-top: auto;
   border-radius: 0 0 15px 15px;
-  box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
   font-family: 'Quicksand', sans-serif;
 }
 

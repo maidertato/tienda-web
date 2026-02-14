@@ -2,7 +2,7 @@ import { Producto } from './producto.js';
 
 export class Alimentacion extends Producto {
     #tipoMascota;
-    #tipoAlimento; 
+    #tipoAlimento;
 
     constructor(n, p, d, i, tipoMascota, tipoAlimento) {
         super(n, p, d, i);

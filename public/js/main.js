@@ -13,7 +13,7 @@ const normalizarTexto = (texto) => {
 
 // --- SELECTORES ---
 const contenedor = document.getElementById('lista-productos');
-const carritoContenedor = document.getElementById('carrito-body'); 
+const carritoContenedor = document.getElementById('carrito-body');
 const form = document.getElementById('form-producto');
 const selectTipo = document.getElementById('tipo-producto');
 const inputFile = document.getElementById('input-file');
@@ -71,7 +71,7 @@ let categoriaSeleccionada = "all";
 // --- 1. RENDER TIENDA ---
 export function renderizarTienda() {
     if (!contenedor) return;
-    contenedor.innerHTML = ''; 
+    contenedor.innerHTML = '';
 
     const inicio = (paginaActual - 1) * productosPorPagina;
     const fin = inicio + productosPorPagina;
@@ -100,7 +100,7 @@ export function renderizarTienda() {
         const alcanzadoMaximo = itemEnCarrito && itemEnCarrito.cantidad >= 20;
 
         const card = document.createElement('div');
-        card.className = 'col-12 col-md-6 col-lg-4';        
+        card.className = 'col-12 col-md-6 col-lg-4';
         card.innerHTML = `
             <div class="card h-100 position-relative card-producto-tienda m-2">
                 <button class="btn-agregar-flotante ${alcanzadoMaximo ? 'disabled' : ''}" 
@@ -141,7 +141,7 @@ export function renderizarTienda() {
 // ==================================== BOTÓN FLOTANTE ====================================
 contenedor.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-agregar-flotante');
-    
+
     if (btn) {
         const id = btn.dataset.id;
         const producto = inventario.find(j => j.id === id);
@@ -167,7 +167,7 @@ contenedor.addEventListener('click', (e) => {
                 globo.classList.add('fade-out');
                 setTimeout(() => {
                     globo.remove();
-                    renderizarTienda(); 
+                    renderizarTienda();
                 }, 300);
             }, 1500);
 
@@ -176,7 +176,7 @@ contenedor.addEventListener('click', (e) => {
             const claveCarrito = variante
                 ? `${id}_${variante.nombre}`
                 : id;
-                
+
             if (carrito.has(claveCarrito)) {
                 const item = carrito.get(claveCarrito);
                 if (item.cantidad < 20) item.cantidad++;
@@ -189,7 +189,7 @@ contenedor.addEventListener('click', (e) => {
                     cantidad: 1
                 });
             }
-            
+
             renderizarCarrito();
 
             // 3. DESVANECER Y LUEGO ACTUALIZAR TIENDA
@@ -199,13 +199,13 @@ contenedor.addEventListener('click', (e) => {
                     globo.remove();
                     renderizarTienda(); // Actualiza el botón (por si llega a 20)
                 }, 300);
-            }, 1500); 
+            }, 1500);
         }
     }
     //Click sobre la imagen
     if (e.target.classList.contains('imagen-producto')) {
-                const id = e.target.dataset.id;
-                abrirDetalleProducto(id);
+        const id = e.target.dataset.id;
+        abrirDetalleProducto(id);
     }
 });
 
@@ -337,12 +337,12 @@ form.addEventListener('submit', (e) => {
 
     if (agregarProductoAlInventario(tipo, datosContenedor)) {
         // ACTUALIZACIÓN CRUCIAL DEL ESTADO
-        productosFiltrados = [...inventario]; 
-        paginaActual=1;
+        productosFiltrados = [...inventario];
+        paginaActual = 1;
 
         // Forzamos el renderizado
         renderizarTienda();
-        
+
         form.reset();
         extraContainer.innerHTML = '';
         alert("¡Producto sumado con éxito!");
@@ -425,7 +425,7 @@ function renderizarCarrito() {
         btnInicio.addEventListener('click', () => {
             const offcanvasElement = document.getElementById('carrito');
             const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
-            
+
             if (offcanvasInstance) {
                 offcanvasInstance.hide();
             }
@@ -461,7 +461,7 @@ function renderizarCarrito() {
     });
 
     actualizarIconoCarrito(cantidadTotal);
-    
+
     const footer = document.createElement('div');
     footer.className = 'mt-3 p-2 bg-dark text-white rounded';
     footer.innerHTML = `<strong>Total: ${totalCarrito.toFixed(2)}€</strong>`;
@@ -488,7 +488,7 @@ function renderizarCarrito() {
                     nuevaCantidad = 20;
                     e.target.value = 20;
                 }
-                
+
                 // Si no existe el mensaje de aviso, lo creamos
                 if (!aviso) {
                     aviso = document.createElement('div');
@@ -516,7 +516,7 @@ function renderizarCarrito() {
                 // 3. Actualizamos el precio total del carrito (el texto de abajo)
                 let nuevoTotalEuros = 0;
                 carrito.forEach(p => nuevoTotalEuros += p.precio * p.cantidad);
-                
+
                 const totalDisplay = carritoContenedor.querySelector('strong');
                 if (totalDisplay) {
                     totalDisplay.textContent = `Total: ${nuevoTotalEuros.toFixed(2)}€`;
@@ -532,21 +532,21 @@ function renderizarCarrito() {
             }
         });
     });
- };
-    // FUNCION ELIMINAR
+};
+// FUNCION ELIMINAR
 window.eliminarDelCarrito = (id) => {
     // 1. Eliminamos el producto del Map usando su ID
     if (carrito.has(id)) {
         carrito.delete(id);
-        
+
         // 2. Volvemos a dibujar el carrito para que desaparezca visualmente
         renderizarCarrito();
-        
+
         // 3. Opcional: Si quieres que la tienda se actualice (por si cambian estados de botones)
         if (typeof renderizarTienda === 'function') {
             renderizarTienda();
         }
-        
+
         console.log(`Producto ${id} eliminado`);
     }
 };
@@ -641,10 +641,10 @@ function aplicarFiltros() {
     const precioMax = filtroPrecio ? parseFloat(filtroPrecio.value) : Infinity;
 
     productosFiltrados = inventario.filter(p => {
-        const nombreProd = normalizarTexto(p.nombre || "");         
+        const nombreProd = normalizarTexto(p.nombre || "");
         const coincideTexto = nombreProd.includes(termino);
         const coincidePrecio = (p.precio || 0) <= precioMax;
-        
+
         if (categoriaSeleccionada === "all") {
             return coincideTexto && coincidePrecio;
         }
@@ -655,8 +655,8 @@ function aplicarFiltros() {
 
         // Verificamos si coincide el tipo principal (clase) 
         // o si es una instancia de Alimentacion/Merchandising
-        const coincideCategoria = 
-            tipoProdNormalizado === catNormalizada || 
+        const coincideCategoria =
+            tipoProdNormalizado === catNormalizada ||
             (p instanceof Alimentacion && catNormalizada === "alimentacion") ||
             (p instanceof Merchandising && catNormalizada === "merchandising");
 
@@ -678,12 +678,12 @@ listaCategorias.addEventListener('click', (e) => {
     if (!link) return;
 
     categoriaSeleccionada = link.dataset.categoria;
-    
+
     // Opcional: Marcar visualmente la categoría seleccionada
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
     link.classList.add('active');
 
-    aplicarFiltros(); 
+    aplicarFiltros();
 });
 
 
@@ -703,16 +703,16 @@ const btnBorrar = document.getElementById('btn-borrar-filtros');
 btnBorrar?.addEventListener('click', () => {
     // 1. Limpiar Buscador
     if (buscador) buscador.value = "";
-    
+
     // 2. Resetear Precio (Volver al máximo)
     if (filtroPrecio) {
         filtroPrecio.value = 200; // O el valor máximo que tengas
         precioMaxValor.textContent = "200";
     }
-    
+
     // 3. Resetear Categoría
     categoriaSeleccionada = "all";
-    
+
     // 4. Limpiar estilos visuales de categorías
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
 
@@ -725,7 +725,7 @@ btnBorrar?.addEventListener('click', () => {
     paginaActual = 1;
 
     // 6. Aplicar los cambios
-    aplicarFiltros(); 
+    aplicarFiltros();
 });
 
 filtroPrecio.addEventListener('input', () => {
@@ -741,7 +741,7 @@ window.abrirDetalleProducto = (id) => {
     const index = varianteActualPorProducto.get(id) || 0;
     const variante = p.variantes?.[index];
 
-    if(!p)
+    if (!p)
         return;
 
     // Fondo con opacidad menor a 1 (Overlay)
@@ -768,7 +768,7 @@ window.abrirDetalleProducto = (id) => {
     detalle.style.borderRadius = '12px';
     detalle.style.overflow = 'hidden';
     detalle.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
-    
+
     // Columna izquierda con la imagen
     const columnaImagen = document.createElement('div');
     columnaImagen.style.flex = '1';
