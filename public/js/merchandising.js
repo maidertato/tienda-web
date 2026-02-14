@@ -5,8 +5,8 @@ export class Merchandising extends Producto {
     #talla;
     #color;
 
-    constructor(n, p, d, i, tipoMascota, talla, color) {
-        super(n, p, d, i);
+    constructor(n, p, d, i,dL, tipoMascota, talla, color) {
+        super(n, p, d, i,dL);
         this.#tipoMascota = tipoMascota;
         this.#talla = talla;
         this.#color = color;

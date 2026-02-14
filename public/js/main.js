@@ -321,6 +321,7 @@ form.addEventListener('submit', (e) => {
     const nombre = form.querySelector('input[placeholder*="Nombre"]').value.trim();
     const precio = parseFloat(form.querySelector('input[type="number"]').value);
     const descripcion = form.querySelector('textarea').value.trim();
+    const descripcionLarga = document.getElementById('descripcion-larga')?.value.trim() || "";
     const tipo = selectTipo.value;
     const extra = document.getElementById('campo-extra')?.value.trim() || "";
 
@@ -819,7 +820,7 @@ window.abrirDetalleProducto = (id) => {
         <div style=" margin-top:20px; padding-top:20px; border-top:1px solid #eee; margin-right: 40px; margin-left: 10px;">
             <p style=" font-weight:600; margin-bottom:10px; color:#7d3c98; ">Descripción:</p>
             <p style=" line-height:1.6; color:#555;">
-                ${p.descripcion}
+                ${p.descripcionLarga}
             </p>
         </div>
     `;
