@@ -1,4 +1,15 @@
 import { inventario, agregarProductoAlInventario, carrito } from './tienda.js';
+import { Alimentacion } from './alimentacion.js';
+import { Cabello } from './cabello.js';
+import { Juguete } from './juguete.js';
+import { Merchandising } from './merchandising.js';
+import { Mobiliario } from './mobiliario.js';
+
+
+const normalizarTexto = (texto) => {
+    return texto ? texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim() : "";
+};
+
 
 // --- SELECTORES ---
 const contenedor = document.getElementById('lista-productos');
@@ -13,7 +24,7 @@ const extraContainer = document.getElementById('campo-extra-container');
 const varianteActualPorProducto = new Map();
 
 // --- FILTRO POR CATEGORÍA ---
-const categorias = ["mobiliario", "descanso", "cabello", "juguete", "merch", "alimentacion"];
+const categorias = ["Mobiliario", "Cabello", "Juguete", "Merchandising", "Alimentación"];
 const listaCategorias = document.getElementById("lista-categorias");
 const filtroPrecio = document.getElementById('filtro-precio');
 const precioMaxValor = document.getElementById('precio-max-valor');
@@ -66,20 +77,26 @@ export function renderizarTienda() {
     const fin = inicio + productosPorPagina;
     const productosPagina = productosFiltrados.slice(inicio, fin);
 
-    productosPagina.forEach(juego => {
-        const variantes = juego.variantes;
+    if (productosPagina.length === 0) {
+        contenedor.innerHTML = '<p class="text-center">No se encontraron productos.</p>';
+        actualizarInterfazPaginacion()
+        return;
+    }
 
-        let imagenMostrada = juego.imagen;
-        let nombreMostrado = juego.nombre;
+    productosPagina.forEach(producto => {
+        const variantes = producto.variantes;
+
+        let imagenMostrada = producto.imagen || "imagenes/productos/default.png";
+        let nombreMostrado = producto.nombre || "Producto sin nombre";
 
         if (variantes && variantes.length > 0) {
-            const index = varianteActualPorProducto.get(juego.id) || 0;
+            const index = varianteActualPorProducto.get(producto.id) || 0;
             imagenMostrada = variantes[index].imagen;
-            nombreMostrado = `${juego.nombre} – ${variantes[index].nombre}`;
+            nombreMostrado = `${producto.nombre} – ${variantes[index].nombre}`;
         }
 
 
-        const itemEnCarrito = carrito.get(juego.id);
+        const itemEnCarrito = carrito.get(producto.id);
         const alcanzadoMaximo = itemEnCarrito && itemEnCarrito.cantidad >= 20;
 
         const card = document.createElement('div');
@@ -87,7 +104,7 @@ export function renderizarTienda() {
         card.innerHTML = `
             <div class="card h-100 position-relative card-producto-tienda m-2">
                 <button class="btn-agregar-flotante ${alcanzadoMaximo ? 'disabled' : ''}" 
-                        data-id="${juego.id}" 
+                        data-id="${producto.id}" 
                         ${alcanzadoMaximo ? 'disabled' : ''}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -97,21 +114,21 @@ export function renderizarTienda() {
                 </button>
 
                 <div class="imagen-wrapper">
-                    <img src="${imagenMostrada}" class="card-img-top imagen-producto" data-id=${juego.id}>
+                    <img src="${imagenMostrada}" class="card-img-top imagen-producto" data-id=${producto.id}>
 
                     ${variantes && variantes.length > 1 ? `
-                        <div class="flecha flecha-izq" data-id="${juego.id}" data-dir="-1"></div>
-                        <div class="flecha flecha-der" data-id="${juego.id}" data-dir="1"></div>
+                        <div class="flecha flecha-izq" data-id="${producto.id}" data-dir="-1"></div>
+                        <div class="flecha flecha-der" data-id="${producto.id}" data-dir="1"></div>
                     ` : ''}
                 </div>
 
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title line-clamp-2">${nombreMostrado}</h5>
-                    <p class="card-text descripcion-juego line-clamp-3">${juego.descripcion}</p>
+                    <p class="card-text descripcion-producto line-clamp-3">${producto.descripcion}</p>
                     <p class="card-text extra-attr text-muted mt-2">
-                        <small><strong>${obtenerAtributoExtra(juego)}</strong></small>
+                        <small><strong>${obtenerAtributoExtra(producto)}</strong></small>
                     </p>
-                    <p class="card-text mt-auto fw-bold fs-5">${juego.precio}€</p>
+                    <p class="card-text mt-auto fw-bold fs-5">${producto.precio}€</p>
                 </div>
             </div>
         `;
@@ -300,58 +317,37 @@ function mostrarMensajeDrop(texto, tipo) {
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const tipo = selectTipo.value;
-
-    if (!tipo) {
-        alert("Debes escoger un tipo válido");
-        return;
-    }
-
-    const nombre = form.querySelector('input[type="text"]').value.trim();
+    // Captura por ID o por nombre de campo es mucho más segura
+    const nombre = form.querySelector('input[placeholder*="Nombre"]').value.trim();
     const precio = parseFloat(form.querySelector('input[type="number"]').value);
     const descripcion = form.querySelector('textarea').value.trim();
-    const campoExtra = document.getElementById('campo-extra')?.value.trim();
-
-    if (!nombre || isNaN(precio) || precio < 0) {
-        alert("Revisa nombre y precio");
-        return;
-    }
+    const tipo = selectTipo.value;
+    const extra = document.getElementById('campo-extra')?.value.trim() || "";
 
     const file = inputFile.files[0];
+    const imagen = file ? URL.createObjectURL(file) : "imagenes/productos/default.png";
 
-    if (inputFile.files.length > 1) {
-        alert("Solo puedes subir una imagen");
+    if (!nombre || isNaN(precio)) {
+        alert("Rellena nombre y precio");
         return;
     }
 
-    if (file && !["image/jpeg", "image/png"].includes(file.type)) {
-        alert("Solo se permiten JPG o PNG");
-        return;
+    // Enviamos el objeto plano
+    const datosContenedor = { nombre, precio, descripcion, imagen, extra };
+
+    if (agregarProductoAlInventario(tipo, datosContenedor)) {
+        // ACTUALIZACIÓN CRUCIAL DEL ESTADO
+        productosFiltrados = [...inventario]; 
+        paginaActual=1;
+
+        // Forzamos el renderizado
+        renderizarTienda();
+        
+        form.reset();
+        extraContainer.innerHTML = '';
+        alert("¡Producto sumado con éxito!");
     }
-
-    const imagenFinal = file
-        ? URL.createObjectURL(file)
-        : "imagenes/productos/default.png"; 
-
-    agregarProductoAlInventario(
-        tipo,
-        nombre,
-        precio,
-        descripcion,
-        imagenFinal,
-        campoExtra
-    );
-
-    // Actualizar la tienda
-    productosFiltrados = [...inventario];
-    renderizarTienda();
-
-    // Formulario limpio
-    form.reset();
-    extraContainer.innerHTML = '';
-    
 });
-
 selectTipo.addEventListener('change', () => {
     extraContainer.innerHTML = '';
 
@@ -367,12 +363,22 @@ selectTipo.addEventListener('change', () => {
     }
 
     if (selectTipo.value === 'alimentacion') {
-        inputExtra.placeholder = "Tipo de alimentación";
+        inputExtra.placeholder = "Tipo Mascota";
         inputExtra.id = "campo-extra";
     }
 
     if (selectTipo.value === 'cabello') {
         inputExtra.placeholder = "Tamaño";
+        inputExtra.id = "campo-extra";
+    }
+
+    if (selectTipo.value === 'juguete') {
+        inputExtra.placeholder = "Material";
+        inputExtra.id = "campo-extra";
+    }
+
+    if (selectTipo.value === 'merchandising') {
+        inputExtra.placeholder = "Tipo Mascota";
         inputExtra.id = "campo-extra";
     }
 
@@ -563,10 +569,28 @@ function actualizarIconoCarrito(total) {
 }
 
 function obtenerAtributoExtra(p) {
-    if (p.material) return `Material: ${p.material}`;
-    if (p.tipoAlimentacion) return `Alimentación: ${p.tipoAlimentacion}`;
-    if (p.dimensiones) return `Dimensiones: ${p.dimensiones}`;
-    return "Categoría: General";
+
+    if (p instanceof Alimentacion) {
+        return `Tipo mascota: ${p.tipoMascota}`;
+    }
+
+    if (p instanceof Cabello) {
+        return `Tamaño: ${p.tamaño}`;
+    }
+
+    if (p instanceof Juguete) {
+        return `Material: ${p.material}`;
+    }
+
+    if (p instanceof Merchandising) {
+        return `Tipo mascota: ${p.tipoMascota}`;
+    }
+
+    if (p instanceof Mobiliario) {
+        return `Material: ${p.material}`;
+    }
+
+    return '';
 }
 
 function actualizarInterfazPaginacion() {
@@ -613,18 +637,30 @@ window.cambiarPagina = (n) => {
 
 // Función centralizada de filtrado
 function aplicarFiltros() {
-    const termino = buscador.value.toLowerCase();
-    const precioMax = parseFloat(document.getElementById('filtro-precio').value);
+    const termino = buscador ? normalizarTexto(buscador.value) : "";
+    const precioMax = filtroPrecio ? parseFloat(filtroPrecio.value) : Infinity;
 
     productosFiltrados = inventario.filter(p => {
-        const coincideTexto = p.nombre.toLowerCase().includes(termino);
-        const coincidePrecio = p.precio <= precioMax;
+        const nombreProd = normalizarTexto(p.nombre || "");         
+        const coincideTexto = nombreProd.includes(termino);
+        const coincidePrecio = (p.precio || 0) <= precioMax;
         
-        // Comprobamos la categoría (He visto que usas p.tipo en tu producto.js)
-        const coincideCategoria = (categoriaSeleccionada === "all" || p.tipo === categoriaSeleccionada);
+        if (categoriaSeleccionada === "all") {
+            return coincideTexto && coincidePrecio;
+        }
+
+        // Normalizamos ambos para evitar fallos por tildes o mayúsculas
+        const catNormalizada = normalizarTexto(categoriaSeleccionada);
+        const tipoProdNormalizado = normalizarTexto(p.tipo || "");
+
+        // Verificamos si coincide el tipo principal (clase) 
+        // o si es una instancia de Alimentacion/Merchandising
+        const coincideCategoria = 
+            tipoProdNormalizado === catNormalizada || 
+            (p instanceof Alimentacion && catNormalizada === "alimentacion") ||
+            (p instanceof Merchandising && catNormalizada === "merchandising");
 
         return coincideTexto && coincidePrecio && coincideCategoria;
-        
     });
 
     paginaActual = 1;
@@ -662,28 +698,34 @@ listaCategorias.addEventListener('click', (e) => {
 
 buscador?.addEventListener('input', aplicarFiltros)
 
-// Borrar filtro
 const btnBorrar = document.getElementById('btn-borrar-filtros');
 
 btnBorrar?.addEventListener('click', () => {
     // 1. Limpiar Buscador
-    buscador.value = "";
+    if (buscador) buscador.value = "";
     
     // 2. Resetear Precio (Volver al máximo)
-    filtroPrecio.value = 200;
-    precioMaxValor.textContent = 200;
+    if (filtroPrecio) {
+        filtroPrecio.value = 200; // O el valor máximo que tengas
+        precioMaxValor.textContent = "200";
+    }
     
     // 3. Resetear Categoría
     categoriaSeleccionada = "all";
     
-    // Quitar la clase 'active' de los botones de categoría si los tienes
+    // 4. Limpiar estilos visuales de categorías
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
 
-    // Resetear el título
-    tituloTienda.textContent = "Todos los productos"
+    // 5. Resetear el título
+    if (tituloTienda) tituloTienda.textContent = "Todos los productos";
 
-    // 4. Aplicar los cambios (Volverá a mostrar todo)
-    aplicarFiltros();
+    // --- EL PASO CLAVE ---
+    // Reseteamos el array de filtrados al inventario completo
+    productosFiltrados = [...inventario];
+    paginaActual = 1;
+
+    // 6. Aplicar los cambios
+    aplicarFiltros(); 
 });
 
 filtroPrecio.addEventListener('input', () => {

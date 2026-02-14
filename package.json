@@ -1,7 +1,7 @@
 {
   "name": "tienda-web",
   "version": "1.0.0",
-  "description": "Primera iteración de la tienda de juegos - Dawidawe",
+  "description": "Primera iteración de la tienda de productos - Dawidawe",
   "scripts": {
     "start": "http-server public -p 8080 -c-1"
   },

@@ -499,7 +499,7 @@ main {
   color: #521F84;
 }
 
-.descripcion-juego {
+.descripcion-producto {
   display: -webkit-box;
   -webkit-line-clamp: 3; /* Corta a 3 líneas */
   -webkit-box-orient: vertical;
@@ -575,7 +575,7 @@ main {
   position: absolute;
   top: -25px;            /* Se posiciona justo encima del botón circular */
   right: 5px;           /* Alineado con el botón */
-  background-color: #521F84; /* Morado a juego con tu diseño */
+  background-color: #521F84; /* Morado a producto con tu diseño */
   color: white;
   padding: 6px 12px;
   border-radius: 8px;

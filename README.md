@@ -1,4 +1,4 @@
-# Tienda de Juegos - Primera Iteracion
+# Tienda de Productos - Primera Iteracion
 
 Este proyecto es una tienda online desarrollada para la asignatura de Desarollo de Aplicaciones Web Enriquecidas.
 ## Participantes

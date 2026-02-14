@@ -25,11 +25,11 @@ export const inventario = [
     //________________________________________________________________________
     new Alimentacion('Bocaditos para gatos', 14, 'Bocaditos deliciosos para gatos.', 'imagenes/productos/bocaditosGatos.png', 'Gato', 'Snack'),
     // Merchandising (Hechos por IA)
-    new Merchandising('Correa para perro', 12, 'Correa para perro', 'imagenes/productos/correaPerro.png', 'Mediano', 'Perro', 'Rojo'),
-    new Merchandising('Collar para gato', 10, 'Collar para gato', 'imagenes/productos/collarGato.png', 'Pequeño', 'Gato', 'Negro'),
-    new Merchandising('Plato de comida', 8, 'Plato de comida para mascotas', 'imagenes/productos/platoComida.png', 'Mediano', 'Perro', 'Blanco'),
-    new Merchandising('Chubasquero', 45, 'Chubasquero impermeable para perros, ideal para protegerlos de la lluvia y el viento durante paseos al aire libre.', 'imagenes/productos/chubasqueroPerro.png', 'Pequeño', 'Perro', 'Transparente'),
-    new Merchandising('Cepillo para perros', 12, 'Cepillo para perros', 'imagenes/productos/cepillo.png', 'Mediano', 'Perro', 'Negro'),
+    new Merchandising('Correa para perro', 12, 'Correa para perro', 'imagenes/productos/correaPerro.png', 'Perro','Mediano', 'Rojo'),
+    new Merchandising('Collar para gato', 10, 'Collar para gato', 'imagenes/productos/collarGato.png', 'Gato', 'Pequeño', 'Negro'),
+    new Merchandising('Plato de comida', 8, 'Plato de comida para mascotas', 'imagenes/productos/platoComida.png', 'Perro', 'Mediano', 'Blanco'),
+    new Merchandising('Chubasquero', 45, 'Chubasquero impermeable para perros, ideal para protegerlos de la lluvia y el viento durante paseos al aire libre.', 'imagenes/productos/chubasqueroPerro.png', 'Perro', 'Pequeño','Transparente'),
+    new Merchandising('Cepillo para perros', 12, 'Cepillo para perros', 'imagenes/productos/cepillo.png', 'Perro', 'Mediano', 'Negro'),
     //________________________________________________________________________
     // Pelucas 
     new Cabello('Peluca Azul', 30, 'Peluca divertida de color azul brillante para darle un estilo único a tu perrito.', 'imagenes/productos/peluAzul.png', 'Pequeño', 'Perro', 'Azul'),
@@ -44,9 +44,9 @@ export const inventario = [
     new Mobiliario('Mesa para mascotas', 80, 'Mesa resistente para mascotas.', 'imagenes/productos/mesaMascota.png', 'Madera', true),
     new Mobiliario('Silla para mascotas', 60, 'Silla cómoda para mascotas.', 'imagenes/productos/sillaMascota.png', 'Plástico', false),
     new Mobiliario('Caja de almacenamiento', 40, 'Caja para almacenar artículos.', 'imagenes/productos/cajaAlmacenamiento.png', 'Plástico', true),
-    new Mobiliario('Cama perro', 50, 'Cama cómoda para perros.', 'imagenes/productos/camaPerro.png', '80x60 cm', true),
-    new Mobiliario('Cama gato', 40, 'Cama suave para gatos.', 'imagenes/productos/camaGato.png', '60x40 cm', false),
-    new Mobiliario('Alfombra mascotas', 30, 'Alfombra antideslizante.', 'imagenes/productos/alfombrAntideslizante.png', '100x70 cm', true),
+    new Mobiliario('Cama perro', 50, 'Cama cómoda para perros.', 'imagenes/productos/camaPerro.png', 'Textil', true),
+    new Mobiliario('Cama gato', 40, 'Cama suave para gatos.', 'imagenes/productos/camaGato.png', 'Felpa', false),
+    new Mobiliario('Alfombra mascotas', 30, 'Alfombra antideslizante.', 'imagenes/productos/alfombrAntideslizante.png', 'Textil', true),
 
 ];
 inventario.forEach(p => {
@@ -175,7 +175,8 @@ export const buscarProductoPorNombre = (nombre) => {
 // ==================================== Agregar productos al inventario --> Con el formulario! ====================================
 export function agregarProductoAlInventario(tipo, datos) {
     let nuevoProducto;
-
+    const idUnico = Date.now().toString();  
+    
     switch (tipo) {
 
         case 'mobiliario':
@@ -213,7 +214,7 @@ export function agregarProductoAlInventario(tipo, datos) {
             );
             break;
 
-        case 'merch':
+        case 'merchandising':
             nuevoProducto = new Merchandising(
                 datos.nombre,
                 datos.precio,
@@ -240,8 +241,13 @@ export function agregarProductoAlInventario(tipo, datos) {
             return false;
     }
 
-    nuevoProducto.tipo = tipo;
-    inventario.push(nuevoProducto);
-
-    return true;
+   if (nuevoProducto) {
+        // ASIGNACIÓN DEL ID (Vital para que no salga undefined en el carrito)
+        nuevoProducto.id = Date.now().toString(); 
+        nuevoProducto.tipo = tipo;
+        
+        inventario.push(nuevoProducto);
+        return true;
+    }
+    return false;
 }
