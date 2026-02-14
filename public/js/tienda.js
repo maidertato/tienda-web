@@ -68,37 +68,36 @@ inventario.find(p => p.nombre === 'Pelota de Goma').variantes = [
 
 inventario.find(p => p.nombre === 'Ratón de Peluche').variantes = [
   { nombre: 'Rosa', imagen: 'imagenes/productos/ratonPeluche.png' },
-  { nombre: 'Gris', imagen: 'imagenes/productos/ratonPeluche2.png' },
+  { nombre: 'Verde', imagen: 'imagenes/productos/ratonPeluche2.png' },
   { nombre: 'Azul', imagen: 'imagenes/productos/ratonPeluche3.png' }
 ];
 
 inventario.find(p => p.nombre === 'Hueso de Nylon').variantes = [
-  { nombre: 'Clásico', imagen: 'imagenes/productos/huesoNylon.png' },
+  { nombre: 'Clasico', imagen: 'imagenes/productos/huesoNylon.png' },
   { nombre: 'Grande', imagen: 'imagenes/productos/huesoNylon2.png' }
 ];
 
 
 // MERCHANDISING
 inventario.find(p => p.nombre === 'Correa para perro').variantes = [
-  { nombre: 'Roja', imagen: 'imagenes/productos/correaPerro.png' },
-  { nombre: 'Azul', imagen: 'imagenes/productos/correaPerro2.png' }
+  { nombre: 'Marrón', imagen: 'imagenes/productos/correaPerro.png' },
+  { nombre: 'Morado', imagen: 'imagenes/productos/correaPerro2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Collar para gato').variantes = [
-  { nombre: 'Negro', imagen: 'imagenes/productos/collarGato.png' },
-  { nombre: 'Rosa', imagen: 'imagenes/productos/collarGato2.png' }
+  { nombre: 'Marrón', imagen: 'imagenes/productos/collarGato.png' },
+  { nombre: 'Morado', imagen: 'imagenes/productos/collarGato2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Plato de comida').variantes = [
-  { nombre: 'Blanco', imagen: 'imagenes/productos/platoComida.png' },
-  { nombre: 'Verde', imagen: 'imagenes/productos/platoComida2.png' }
+  { nombre: 'Marrón', imagen: 'imagenes/productos/platoComida.png' },
+  { nombre: 'Morado', imagen: 'imagenes/productos/platoComida2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Chubasquero').variantes = [
-  { nombre: 'Transparente', imagen: 'imagenes/productos/chubasqueroPerro.png' },
+  { nombre: 'Gris', imagen: 'imagenes/productos/chubasqueroPerro.png' },
   { nombre: 'Azul', imagen: 'imagenes/productos/chubasqueroPerro2.png' }
 ];
-
 
 
 // CABELLO
@@ -131,7 +130,6 @@ inventario.find(p => p.nombre === 'Peluca Gato').variantes = [
   { nombre: 'Marrón claro', imagen: 'imagenes/productos/pelucaGato.png' },
   { nombre: 'Marrón oscuro', imagen: 'imagenes/productos/pelucaGato2.png' }
 ];
-
 
 // MOBILIARIO
 inventario.find(p => p.nombre === 'Mesa para mascotas').variantes = [
