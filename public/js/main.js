@@ -12,15 +12,19 @@ const normalizarTexto = (texto) => {
 
 
 // --- SELECTORES ---
+const buscador = document.getElementById('buscador');
+const tituloTienda = document.getElementById('titulo-tienda');
+const extraContainer = document.getElementById('campo-extra-container');
 const contenedor = document.getElementById('lista-productos');
 const carritoContenedor = document.getElementById('carrito-body');
 const form = document.getElementById('form-producto');
 const selectTipo = document.getElementById('tipo-producto');
 const inputFile = document.getElementById('input-file');
 const dropZone = document.getElementById('drop-zone');
-const buscador = document.getElementById('buscador');
-const tituloTienda = document.getElementById('titulo-tienda');
-const extraContainer = document.getElementById('campo-extra-container');
+const dropText = document.getElementById('drop-text');
+
+inputFile.accept = "image/jpeg, image/png";
+
 const varianteActualPorProducto = new Map();
 
 // --- FILTRO POR CATEGORÍA ---
@@ -138,7 +142,7 @@ export function renderizarTienda() {
     actualizarInterfazPaginacion();
 }
 
-// ==================================== BOTÓN FLOTANTE ====================================
+// ==================================== BOTÓN FLOTANTE CARRITO ====================================
 contenedor.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-agregar-flotante');
 
@@ -191,15 +195,6 @@ contenedor.addEventListener('click', (e) => {
             }
 
             renderizarCarrito();
-
-            // 3. DESVANECER Y LUEGO ACTUALIZAR TIENDA
-            setTimeout(() => {
-                globo.classList.add('fade-out');
-                setTimeout(() => {
-                    globo.remove();
-                    renderizarTienda(); // Actualiza el botón (por si llega a 20)
-                }, 300);
-            }, 1500);
         }
     }
     //Click sobre la imagen
@@ -228,166 +223,155 @@ contenedor.addEventListener('click', (e) => {
     renderizarTienda();
 });
 
-// ==================================== DRAG & DROP ====================================
-
-inputFile.accept = "image/jpeg, image/png";
-
-inputFile.addEventListener('change', () => {
-    const file = inputFile.files[0];
-    if (!file) return;
-
-    if (!validarArchivo(file)) {
-        inputFile.value = '';
-        return;
-    }
-
-    mostrarMensajeDrop("Imagen añadida correctamente", "success");
-});
-
-dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.classList.add('drop-hover');
-});
-
-dropZone.addEventListener('dragleave', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('drop-hover');
-});
-
-dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('drop-hover');
-
-    const archivos = e.dataTransfer.files;
-
-    if (archivos.length > 1) {
-        mostrarMensajeDrop("Solo puedes subir una imagen", "error");
-        return;
-    }
-
-    const archivo = archivos[0];
-
-    if (!validarArchivo(archivo)) return;
-
-    const dataTransfer = new DataTransfer();
-    dataTransfer.items.add(archivo);
-    inputFile.files = dataTransfer.files;
-
-    mostrarMensajeDrop("Imagen añadida correctamente", "success");
-});
-
-function validarArchivo(file) {
-    const tiposValidos = ["image/jpeg", "image/png"];
-
-    if (!tiposValidos.includes(file.type)) {
-        mostrarMensajeDrop("Solo se permiten archivos JPG o PNG", "error");
-        return false;
-    }
-
-    return true;
-}
-
-function mostrarMensajeDrop(texto, tipo) {
-    const mensaje = document.createElement("div");
-
-    mensaje.textContent = texto;
-    mensaje.style.marginTop = "10px";
-    mensaje.style.padding = "8px";
-    mensaje.style.borderRadius = "6px";
-    mensaje.style.fontSize = "14px";
-    mensaje.style.textAlign = "center";
-
-    if (tipo === "error") {
-        mensaje.style.backgroundColor = "#f8d7da";
-        mensaje.style.color = "#842029";
-    } else {
-        mensaje.style.backgroundColor = "#d1e7dd";
-        mensaje.style.color = "#0f5132";
-    }
-
-    dropZone.appendChild(mensaje);
-
-    setTimeout(() => {
-        mensaje.remove();
-    }, 1500);
-}
-
-
 // ====================================  FORMULARIO  ====================================
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    const nombreInput = document.getElementById('productName') || form.querySelector('input[placeholder*="Nombre"]');
+    const precioInput = document.getElementById('productPrice') || form.querySelector('input[type="number"]');
+    const descInput = document.getElementById('productDescription') || form.querySelector('textarea');
+    const selectTipo = document.getElementById('tipo-producto'); 
+    
     // Captura por ID o por nombre de campo es mucho más segura
-    const nombre = form.querySelector('input[placeholder*="Nombre"]').value.trim();
-    const precio = parseFloat(form.querySelector('input[type="number"]').value);
-    const descripcion = form.querySelector('textarea').value.trim();
-    const descripcionLarga = document.getElementById('descripcion-larga')?.value.trim() || "";
+    const nombre = nombreInput.value.trim();
+    const precio = parseFloat(precioInput.value);
+    const descripcion = descInput.value.trim();
     const tipo = selectTipo.value;
-    const extra = document.getElementById('campo-extra')?.value.trim() || "";
+    const valorExtra = document.getElementById('campo-extra')?.value.trim() || "";
+    
+    const inputReal = document.getElementById('input-file');
 
-    const file = inputFile.files[0];
-    const imagen = file ? URL.createObjectURL(file) : "imagenes/productos/default.png";
-
+    if (!tipo) {
+        mostrarMensaje('error', 'Debes escoger un tipo de producto');
+        return;
+    }
+    
     if (!nombre || isNaN(precio)) {
-        alert("Rellena nombre y precio");
+        mostrarMensaje("error", "Rellena nombre y precio");
         return;
     }
 
-    // Enviamos el objeto plano
-    const datosContenedor = { nombre, precio, descripcion, imagen, extra };
-
-    if (agregarProductoAlInventario(tipo, datosContenedor)) {
-        // ACTUALIZACIÓN CRUCIAL DEL ESTADO
-        productosFiltrados = [...inventario];
-        paginaActual = 1;
-
-        // Forzamos el renderizado
-        renderizarTienda();
-
-        form.reset();
-        extraContainer.innerHTML = '';
-        alert("¡Producto sumado con éxito!");
+    const file = inputReal.files[0];
+    const imagen = inputReal.files.length > 0 
+        ? URL.createObjectURL(inputReal.files[0]) 
+        : 'imagenes/productos/default.png';
+    
+    const datosContenedor = { nombre, precio, descripcion, imagen, extra: valorExtra };
+    switch (tipo) {
+        case 'mobiliario':
+        case 'juguete':
+            datosContenedor.material = valorExtra;
+            datosContenedor.extra = valorExtra;
+            break;
+        case 'alimentacion':
+        case 'merchandising':
+        case 'cabello':
+            datosContenedor.tamano = valorExtra;
+            break;
+        default:
+            datosContenedor.extra = valorExtra;
+    }
+    
+    const exito = agregarProductoAlInventario(tipo, datosContenedor);
+    if (exito) {
+        if (typeof inventario !== 'undefined') {
+             productosFiltrados = [...inventario]; 
+        }
+        
+        if (typeof paginaActual !== 'undefined') paginaActual = 1;
+        
+        renderizarTienda(); 
+        limpiarTodoElFormulario();
+        mostrarMensaje("success", "¡Producto añadido correctamente!");
+    } else {
+        mostrarMensaje("error", "Hubo un problema al guardar el producto");
     }
 });
+
+function limpiarTodoElFormulario() {
+    form.reset();
+    extraContainer.innerHTML = '';
+    inputFile.value = "";
+    dropText.textContent = "Arrastra tu imagen aquí";
+    const imgPreview = dropZone.querySelector('img');
+    if (imgPreview) imgPreview.remove();
+}
+
 selectTipo.addEventListener('change', () => {
     extraContainer.innerHTML = '';
 
-    if (!selectTipo.value) return;
+    const placeholders = {
+        mobiliario: "Material",
+        alimentacion: "Tipo Mascota",
+        cabello: "Tamaño",
+        juguete: "Material",
+        merchandising: "Tipo Mascota"
+    };
 
-    const inputExtra = document.createElement('input');
-    inputExtra.className = 'form-control';
+    const placeholder = placeholders[selectTipo.value];
+
+    if (!placeholder) return;
+
+    const inputExtra = document.createElement("input");
+    inputExtra.className = "form-control";
     inputExtra.required = true;
-
-    if (selectTipo.value === 'mobiliario') {
-        inputExtra.placeholder = "Material";
-        inputExtra.id = "campo-extra";
-    }
-
-    if (selectTipo.value === 'alimentacion') {
-        inputExtra.placeholder = "Tipo Mascota";
-        inputExtra.id = "campo-extra";
-    }
-
-    if (selectTipo.value === 'cabello') {
-        inputExtra.placeholder = "Tamaño";
-        inputExtra.id = "campo-extra";
-    }
-
-    if (selectTipo.value === 'juguete') {
-        inputExtra.placeholder = "Material";
-        inputExtra.id = "campo-extra";
-    }
-
-    if (selectTipo.value === 'merchandising') {
-        inputExtra.placeholder = "Tipo Mascota";
-        inputExtra.id = "campo-extra";
-    }
+    inputExtra.id = "campo-extra";
+    inputExtra.placeholder = placeholder;
 
     extraContainer.appendChild(inputExtra);
+});    
+
+    // ===================== DRAG & DROP =====================
+
+dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dropZone.classList.add("hover");
+    dropText.textContent = "Suelta la imagen";
 });
 
+dropZone.addEventListener("dragleave", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dropZone.classList.remove("hover");
+    dropText.textContent = "Arrastra tu imagen aquí";
+});
 
-// --- 3. RESTO DE FUNCIONES (CARRITO Y AUXILIARES) ---
+dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dropZone.classList.remove("hover");
+
+    const files = e.dataTransfer.files;
+
+    const inputReal = document.getElementById('input-file');
+    
+    if (files.length !== 1) {
+        mostrarMensaje("error", "Solo puedes subir un archivo");
+        return;
+    }
+
+    // Si ya hay imagen --> ERRORRR
+    if (inputFile.files.length > 0) {
+        mostrarMensaje("error", "Ya hay una imagen seleccionada");
+        return;
+    }
+
+    const file = files[0];
+    if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
+        mostrarMensaje("error", "Solo archivos JPG o PNG");
+        return;
+    }
+
+    // Asignar archivo al input
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    inputReal.files = dataTransfer.files;
+    dropText.textContent = "¡Imagen añadida!";
+
+});
+
+// ====================================  CARRITO  ====================================
 
 function renderizarCarrito() {
     if (!carritoContenedor) return;

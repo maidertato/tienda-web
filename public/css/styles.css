@@ -303,14 +303,12 @@ aside .btn-success:active {
 
 /* ZONA DRAG & DROP */
 .drop-zone-style {
-  border: 2px dashed rgba(255, 255, 255, 0.5);
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.8);
-  background-color: rgba(255, 255, 255, 0.05);
-  margin-bottom: 15px;
-  cursor: pointer;
+    border: 2px dashed #aaa;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    color: #fafafa;
 }
 
 .drop-zone-active {
@@ -322,6 +320,14 @@ aside .btn-success:active {
 .success-message {
   color: #fff !important;
   font-weight: bold;
+}
+
+/* Resaltar la zona cuando el usuario tenga la imagen encima */
+.drop-zone-style.hover {
+    border-color: #e0d7ff; 
+    background-color: rgba(224, 215, 255, 0.2); 
+    color: #e0d7ff; 
+    box-shadow: 0 0 12px 3px rgba(224, 215, 255, 0.5);
 }
 
 /* ADICIONAL v2 (no estaba en v1) */

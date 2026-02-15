@@ -173,7 +173,6 @@ export const buscarProductoPorNombre = (nombre) => {
 // ==================================== Agregar productos al inventario --> Con el formulario! ====================================
 export function agregarProductoAlInventario(tipo, datos) {
   let nuevoProducto;
-  const idUnico = Date.now().toString();
 
   switch (tipo) {
 
@@ -239,13 +238,6 @@ export function agregarProductoAlInventario(tipo, datos) {
       return false;
   }
 
-  if (nuevoProducto) {
-    // ASIGNACIÓN DEL ID (Vital para que no salga undefined en el carrito)
-    nuevoProducto.id = Date.now().toString();
-    nuevoProducto.tipo = tipo;
-
-    inventario.push(nuevoProducto);
-    return true;
-  }
-  return false;
+  inventario.push(nuevoProducto);
+  return true;
 }
