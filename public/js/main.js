@@ -223,6 +223,26 @@ contenedor.addEventListener('click', (e) => {
 });
 
 // ====================================  FORMULARIO  ====================================
+function mostrarMensaje(tipo, texto) {
+    const formulario = document.getElementById("form-producto"); // Tu ID real
+    if (!formulario) return;
+
+    const alerta = document.createElement('div');
+    
+    const claseTipo = tipo === 'error' ? 'alert-danger' : 'alert-success';
+    alerta.className = `alert ${claseTipo} mt-3 animate__animated animate__fadeIn`;
+    alerta.style.fontSize = "0.9rem";
+    alerta.textContent = texto;
+
+    formulario.appendChild(alerta);
+
+    setTimeout(() => {
+        alerta.style.opacity = '0';
+        alerta.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => alerta.remove(), 500);
+    }, 2000);
+}
+
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -321,8 +341,14 @@ selectTipo.addEventListener('change', () => {
 
     extraContainer.appendChild(inputExtra);
 });
-
-// ===================== DRAG & DROP =====================
+    
+    // ===================== VALIDAR IMAGEN PARA LE DRAG & DROP =====================
+function validarArchivo(file) {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    
+    return validTypes.includes(file.type);
+}
+    // ===================== DRAG & DROP =====================
 
 dropZone.addEventListener("dragover", (e) => {
     e.preventDefault();
@@ -344,8 +370,8 @@ dropZone.addEventListener("drop", (e) => {
     dropZone.classList.remove("hover");
 
     const files = e.dataTransfer.files;
-
     const inputReal = document.getElementById('input-file');
+    const predefText = "Arrastra tu imagen aquí";
 
     if (files.length !== 1) {
         mostrarMensaje("error", "Solo puedes subir un archivo");
@@ -353,14 +379,19 @@ dropZone.addEventListener("drop", (e) => {
     }
 
     // Si ya hay imagen --> ERRORRR
-    if (inputFile.files.length > 0) {
+    if (inputReal.files.length > 0) {
         mostrarMensaje("error", "Ya hay una imagen seleccionada");
         return;
     }
 
     const file = files[0];
-    if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
-        mostrarMensaje("error", "Solo archivos JPG o PNG");
+    
+    // validacion del tipo de archivo
+    if (!validarArchivo(file)) {
+        inputReal.value = '';
+        dropText.textContent = predefText;
+
+        mostrarMensaje("error", "El formato del archivo no es válido.");
         return;
     }
 
@@ -368,8 +399,8 @@ dropZone.addEventListener("drop", (e) => {
     const dataTransfer = new DataTransfer();
     dataTransfer.items.add(file);
     inputReal.files = dataTransfer.files;
-    dropText.textContent = "¡Imagen añadida!";
 
+    dropText.textContent = "¡Imagen añadida!";
 });
 
 // ====================================  CARRITO  ====================================

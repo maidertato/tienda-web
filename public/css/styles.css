@@ -208,6 +208,10 @@ main .pagination-wrapper {
   border-color: #9C66D4;
 }
 
+
+/* =========================================
+   2.2 FORMULARIO
+   ========================================= */
 aside {
   background-color: #9C66D4;
   padding: 1.5rem;
@@ -237,18 +241,11 @@ aside .form-label {
 }
 
 aside .form-control,
-aside .form-select,
-aside input,
-aside textarea,
-aside select {
+aside .form-select {
   background-color: rgba(255, 255, 255, 0.2) !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   color: white !important;
   border-radius: 10px !important;
-  margin-bottom: 0.8rem;
-  padding: 0.6rem;
-  font-family: 'Quicksand', sans-serif;
-  font-weight: 400;
 }
 
 aside .form-control::file-selector-button {
