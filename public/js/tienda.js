@@ -43,6 +43,8 @@ export const inventario = [
   new Accesorios('Correa para perro', 12, 'Correa para perro', 'Correa de nylon reforzado con agarre ergonómico para un control total y cómodo durante los paseos. Su mosquetón de alta seguridad evita aperturas accidentales, garantizando la tranquilidad de ambos en cada aventura.', 'imagenes/productos/correaPerro.png', 'Perro', 'Mediano', 'Rojo'),
   new Accesorios('Collar para gato', 10, 'Collar para gato', 'Elegante collar ajustable con cierre de seguridad "breakaway" que se libera ante tirones fuertes, evitando accidentes. Incluye un pequeño cascabel para localizar fácilmente a tu gato dentro de casa sin restarle comodidad.', 'imagenes/productos/collarGato.png', 'Gato', 'Pequeño', 'Negro'),
   new Accesorios('Cepillo para perros', 12, 'Cepillo para perros', 'Herramienta esencial para el cuidado del pelaje. Sus cerdas suaves pero efectivas eliminan el pelo muerto y desenredan nudos sin irritar la piel, estimulando la circulación y dejando un acabado brillante y sedoso.', 'imagenes/productos/cepillo.png', 'Perro', 'Mediano', 'Negro'),
+  new Accesorios('Lazo Coquette', 6, 'Lazo elegante para el pelo.', 'El accesorio definitivo para las mascotas más presumidas. Este lazo de seda de alta calidad cuenta con una pinza de sujeción suave que no tira del pelo ni causa molestias. Perfecto para mantener el flequillo fuera de los ojos con un toque de elegancia francesa. Ideal para sesiones de fotos o paseos dominicales.', 'imagenes/productos/lazoCoquette.png', 'Perro', 'Pequeño', 'Rosa'),
+  new Accesorios('Horquillas Cora Power', 8, 'Set de 4 horquillas con motivos florales.', 'Dale un toque primaveral al look de tu mascota con este pack de horquillas resistentes. Diseñadas con puntas redondeadas para garantizar la seguridad total, estas pequeñas flores se mantienen firmes incluso en los mantos más rebeldes. Son ligeras, coloridas y perfectas tanto para perros de pelo largo como para gatos con estilo.', 'imagenes/productos/horquillas.png', 'Gato', 'Pequeño', 'Multicolor'),
   //________________________________________________________________________
   // Pelucas 
   new Cabello('Peluca Azul', 30, 'Peluca divertida de color azul brillante para darle un estilo único a tu perrito.', 'La peluca azul más escandalosamente divertida del planeta perruno. Su color eléctrico convierte a tu mascota en una estrella pop instantánea capaz de robar miradas, aplausos y carcajadas en segundos. Es ligera, cómoda y tan suave que tu perrito olvidará que la lleva puesta… pero nadie más lo hará. Perfecta para fotos épicas, fiestas y paseos donde tu mascota quiera anunciarle al mundo: “sí, soy fabuloso”. No es una peluca… es un espectáculo ambulante', 'imagenes/productos/peluAzul.png', 'Pop', 'Pequeño', 'Perro', 'Azul'),
@@ -137,8 +139,16 @@ inventario.find(p => p.nombre === 'Collar para gato').variantes = [
   { nombre: 'Morado', imagen: 'imagenes/productos/collarGato2.png' }
 ];
 
+inventario.find(p => p.nombre === 'Lazo Coquette').variantes = [
+  { nombre: 'Rojo', imagen: 'imagenes/productos/lazoCoquette.png' },
+  { nombre: 'Azul', imagen: 'imagenes/productos/lazoCoquette2.png' }
+];
 
-
+inventario.find(p => p.nombre === 'Horquillas Cora Power').variantes = [
+  { nombre: 'Morado', imagen: 'imagenes/productos/horquillas.png' },
+  { nombre: 'Azul', imagen: 'imagenes/productos/horquillas2.png' },
+  { nombre: 'Verde', imagen: 'imagenes/productos/horquillas3.png' }
+];
 // CABELLO
 inventario.find(p => p.nombre === 'Peluca Azul').variantes = [
   { nombre: 'Claro', imagen: 'imagenes/productos/peluAzul.png' },
