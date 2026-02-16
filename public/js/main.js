@@ -643,6 +643,30 @@ function actualizarInterfazPaginacion() {
     `;
 }
 
+const btnInicio = document.getElementById("btn-inicio");
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btnInicio = document.getElementById("btn-inicio");
+
+    if (btnInicio) {
+        btnInicio.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            categoriaSeleccionada = "all";
+            productosFiltrados = [...inventario];
+            paginaActual = 1;
+
+            if (tituloTienda) {
+                tituloTienda.textContent = "Todos los productos";
+            }
+
+            renderizarTienda();
+        });
+    }
+});
+
+
 
 window.cambiarPagina = (n) => {
     paginaActual = n;

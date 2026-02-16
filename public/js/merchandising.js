@@ -4,7 +4,7 @@ export class Merchandising extends Producto {
     #tipoMascota;
     #talla;
     #color;
-
+    
     constructor(n, p, d, dL, i, tipoMascota, talla, color) {
         super(n, p, d, dL, i, 'Merchandising');
 

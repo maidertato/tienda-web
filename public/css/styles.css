@@ -72,7 +72,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  color: #9a50cc;
+  color: #fafafa;
   transform: scale(1.1);
 }
 
@@ -86,7 +86,7 @@ nav ul li a:hover {
 .button-container {
   display: flex;
   background-color: #9C66D4;
-  width: 140px;
+  width: 120px;
   height: 50px;
   align-items: center;
   justify-content: space-evenly;
@@ -97,8 +97,7 @@ nav ul li a:hover {
 }
 
 .button-container:hover {
-  width: 260px;
-  /* Ancho abierto */
+  width: 220px;
 }
 
 .button-container li {
