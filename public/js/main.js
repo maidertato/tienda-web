@@ -219,7 +219,18 @@ contenedor.addEventListener('click', (e) => {
     const siguiente = (actual + dir + total) % total;
 
     varianteActualPorProducto.set(id, siguiente);
-    renderizarTienda();
+    // Buscar la card que buscamos para que no se actualice toda la tienda, sino solo esa card
+    const card = flecha.closest('.card-producto-tienda');
+    if (card) {
+        const imgElement = card.querySelector('.imagen-producto');
+        const tituloElement = card.querySelector('.card-title');
+        
+        const nuevaVariante = producto.variantes[siguiente];
+
+        // Cambiamos solo lo necesario
+        imgElement.src = nuevaVariante.imagen;
+        tituloElement.textContent = `${producto.nombre} – ${nuevaVariante.nombre}`;
+    }
 });
 
 // ====================================  FORMULARIO  ====================================
