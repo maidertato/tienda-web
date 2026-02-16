@@ -33,6 +33,11 @@ export const inventario = [
   // Merchandising 
   new Merchandising('Chubasquero', 45, 'Chubasquero impermeable para perros, ideal para protegerlos de la lluvia y el viento durante paseos al aire libre.', 'Protección total contra la lluvia y el viento en un diseño moderno y ligero. Este chubasquero transparente permite lucir el pelaje de tu mascota mientras la mantiene seca, facilitando paseos cómodos en días grises.', 'imagenes/productos/chubasqueroPerro.png', 'Perro', 'Pequeño', 'Transparente'),
   new Merchandising('Sueter', 35, 'Sueter', 'Sueter cálido y cómodo, ideal para mantener a tu mascota abrigada durante los días fríos.', 'Este sueter de punto combina estilo y confort, protegiendo a tu mascota del frío sin restringir sus movimientos. Disponible en varios colores y tallas para adaptarse a cualquier perro.', 'imagenes/productos/sueterPerro.png', 'Perro', 'Mediano', 'Rosa'),
+  new Merchandising('Zapatitos Nada Que Ver', 25, 'Zapatos absurdamente geniales para mascotas con mucha personalidad.', '¿Tienen sentido? No. ¿Se ven increíbles? Absolutamente. Estos zapatitos con colores neón y formas extrañas son el complemento ideal para la peluca "Nada Que Ver". Diseñados para proteger las patas del calor del asfalto mientras tu perro camina con el estilo de una estrella de otra galaxia.', 'imagenes/productos/zapatosNadaQueVer1.png', 'Perro', 'Pequeño', 'Multicolor'),
+  new Merchandising('Calcetines', 10, 'Calcetines suaves con huellas de silicona para evitar resbalones.', 'La solución perfecta para suelos de madera o baldosas. Estos calcetines de algodón elástico mantienen las patas calientes y cuentan con puntos de silicona en la base para que tu mascota no patine por la casa. Cómodos, elásticos y con un diseño de gatitos que enamora.', 'imagenes/productos/calcetinesMascota.png', 'Gato', 'Pequeño', 'Azul'),
+  new Merchandising('Mochila de Paseo', 55, 'Mochila ergonómica para llevar a tu mascota.', 'Diseñada para aventureros urbanos. Esta mochila cuenta con paneles de malla para una ventilación superior y una base reforzada para que tu gato o perro pequeño viaje seguro y cómodo. Incluye correas acolchadas para el dueño y un gancho de seguridad interno para evitar fugas inesperadas.', 'imagenes/productos/mochilaMascota.png', 'Gato', 'Mediano', 'Gris'), 
+  new Merchandising('Gorra Deportiva', 20, 'Gorra con protección solar para perros.', 'Protege los ojos de tu mascota de los rayos UV con esta gorra deportiva de ala rígida. Cuenta con orificios laterales para las orejas y una correa ajustable bajo la barbilla. Es el complemento ideal para días de playa o caminatas bajo el sol.', 'imagenes/productos/gorraPerro.png', 'Perro', 'Mediano', 'Amarillo'),
+  //________________________________________________________________________  
   // Accesorios
   new Accesorios('Plato de comida', 8, 'Plato de comida para mascotas', 'Recipiente de cerámica de alta calidad con base antideslizante para evitar derrames indeseados. Su diseño higiénico y fácil de lavar previene la acumulación de bacterias, siendo ideal para agua o alimento seco.', 'imagenes/productos/platoComida.png', 'Perro', 'Mediano', 'Blanco'),
   new Accesorios('Correa para perro', 12, 'Correa para perro', 'Correa de nylon reforzado con agarre ergonómico para un control total y cómodo durante los paseos. Su mosquetón de alta seguridad evita aperturas accidentales, garantizando la tranquilidad de ambos en cada aventura.', 'imagenes/productos/correaPerro.png', 'Perro', 'Mediano', 'Rojo'),
@@ -54,7 +59,6 @@ export const inventario = [
   new Mobiliario('Cama perro', 50, 'Cama cómoda para perros.', 'Cuna premium con relleno acolchado que se adapta a la forma del cuerpo, aliviando la presión en las articulaciones. Su tejido transpirable garantiza una temperatura agradable durante todo el año para un sueño profundo y reparador.', 'imagenes/productos/camaPerro.png', 'Textil', true),
   new Mobiliario('Cama gato', 40, 'Cama suave para gatos.', 'Refugio ultra suave de felpa que retiene el calor corporal, ideal para los gatos que buscan seguridad y calidez. Sus bordes elevados proporcionan una sensación de protección que reduce el estrés y fomenta el descanso.', 'imagenes/productos/camaGato.png', 'Felpa', false),
   new Mobiliario('Alfombra mascotas', 30, 'Alfombra antideslizante.', 'Superficie textil de alta densidad con base antideslizante de seguridad. Ideal para delimitar la zona de descanso o proteger el suelo de arañazos, ofreciendo un tacto suave y confortable para las patas más sensibles.', 'imagenes/productos/alfombrAntideslizante.png', 'Textil', true),
-
 ];
 
 // ================= IMÁGENES EXTRA POR PRODUCTO =================
@@ -77,7 +81,7 @@ inventario.find(p => p.nombre === 'Hueso de Nylon').variantes = [
   { nombre: 'Grande', imagen: 'imagenes/productos/huesoNylon2.png' }
 ];
 
-
+// MERCHANDISING
 inventario.find(p => p.nombre === 'Plato de comida').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/platoComida.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/platoComida2.png' }
@@ -88,6 +92,39 @@ inventario.find(p => p.nombre === 'Chubasquero').variantes = [
   { nombre: 'Azul', imagen: 'imagenes/productos/chubasqueroPerro2.png' }
 ];
 
+inventario.find(p => p.nombre === 'Chubasquero').variantes = [
+  { nombre: 'Gris', imagen: 'imagenes/productos/chubasqueroPerro.png' },
+  { nombre: 'Azul', imagen: 'imagenes/productos/chubasqueroPerro2.png' }
+];
+
+inventario.find(p => p.nombre === 'Sueter').variantes = [
+  { nombre: 'Corazones', imagen: 'imagenes/productos/sueterCorazón.png' },
+  { nombre: 'Pingüs', imagen: 'imagenes/productos/sueterPingu.png' },
+  { nombre: 'Osos', imagen: 'imagenes/productos/sueterOso.png' },
+  { nombre: 'Osos Polares', imagen: 'imagenes/productos/sueterPolar.png' }
+];
+
+inventario.find(p => p.nombre === 'Zapatitos Nada Que Ver').variantes = [
+  { nombre: 'Leopardo', imagen: 'imagenes/productos/zapatosNadaQueVer1.png' },
+  { nombre: 'Rosa', imagen: 'imagenes/productos/zapatosNadaQueVer.png' },
+  { nombre: 'Verde', imagen: 'imagenes/productos/zapatosNadaQueVer2.png' },
+  { nombre: 'Amarillo', imagen: 'imagenes/productos/zapatosNadaQueVer3.png' }
+];
+
+inventario.find(p => p.nombre === 'Calcetines').variantes = [
+  { nombre: 'Negro', imagen: 'imagenes/productos/calcetinesMascota.png' },
+  { nombre: 'Morado', imagen: 'imagenes/productos/calcetinesMascota2.png' }
+];
+
+inventario.find(p => p.nombre === 'Mochila de Paseo').variantes = [
+  { nombre: 'Negro', imagen: 'imagenes/productos/mochilaMascota.png' },
+  { nombre: 'Azul', imagen: 'imagenes/productos/mochilaMascota1.png' }
+];
+
+inventario.find(p => p.nombre === 'Gorra Deportiva').variantes = [
+  { nombre: 'Negro', imagen: 'imagenes/productos/gorraPerro.png' },
+  { nombre: 'Azul', imagen: 'imagenes/productos/gorraPerro2.png' }
+];
 
 // ACCESORIOS
 inventario.find(p => p.nombre === 'Correa para perro').variantes = [
@@ -100,11 +137,8 @@ inventario.find(p => p.nombre === 'Collar para gato').variantes = [
   { nombre: 'Morado', imagen: 'imagenes/productos/collarGato2.png' }
 ];
 
-inventario.find(p => p.nombre === 'Sueter').variantes = [
-  { nombre: 'Estampado Pingüs', imagen: 'imagenes/productos/sueterPingu.png' },
-  { nombre: 'Estampado Osos', imagen: 'imagenes/productos/sueterOso.png' },
-  { nombre: 'Estampado Polares', imagen: 'imagenes/productos/sueterPolar.png' }
-];
+
+
 // CABELLO
 inventario.find(p => p.nombre === 'Peluca Azul').variantes = [
   { nombre: 'Claro', imagen: 'imagenes/productos/peluAzul.png' },
