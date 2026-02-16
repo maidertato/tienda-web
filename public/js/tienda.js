@@ -12,27 +12,29 @@ export const inventario = [
   new Juguete('Ratón de Peluche', 8, 'Juguete suave con textura realista que estimula el instinto cazador de tu gato.', 'El instinto cazador de tu gato se despertará con este suave ratón de peluche. Con una textura irresistible y un tamaño perfecto para ser capturado entre las patas, este juguete fomenta el ejercicio físico y mental, proporcionando horas de entretenimiento seguro y reconfortante para felinos de todas las edades.', 'imagenes/productos/ratonPeluche.png', 'Tela', 'Pequeño', false),
   new Juguete('Hueso de Nylon', 12, 'Hueso ultra duradero diseñado para masticadores potentes.', 'La solución definitiva para los masticadores potentes. Este hueso de nylon macizo está fabricado para durar semanas de uso constante. A diferencia de los huesos naturales, no se astilla, lo que lo convierte en una opción segura para reducir la ansiedad y el aburrimiento en perros grandes que necesitan descargar energía.', 'imagenes/productos/huesoNylon.png', 'Nylon', 'Grande', true),
   new Juguete('Peluche con sonido', 15, 'Peluche que emite sonido al apretarlo.', '¡Diversión interactiva en cada apretón! Este peluche combina la suavidad de la tela de alta calidad con un emisor de sonido interno que mantiene la atención de tu mascota por más tiempo. Es el compañero ideal tanto para el juego activo como para los momentos de descanso y apego.', 'imagenes/productos/pelucheSonido.png', 'Tela', 'Mediano', true),
+  new Juguete('Cuerda de Algodón', 14, 'Cuerda trenzada ideal para juegos de tirar y aflojar.', 'Fabricada con fibras de algodón natural de alta densidad, esta cuerda es el juguete perfecto para fortalecer el vínculo con tu perro mediante el juego de fuerza. Además, mientras tu mascota muerde las fibras, estas actúan como un hilo dental natural, ayudando a limpiar los depósitos de sarro y manteniendo sus encías fuertes.', 'imagenes/productos/cuerdaAlgodon.png', 'Algodón', 'Grande', true),
+  new Juguete('Láser Interactivo', 18, 'Puntero láser para estimular el ejercicio en gatos.', 'El juguete definitivo para los gatos de interior. Este dispositivo emite un haz de luz seguro que despierta instantáneamente el instinto de persecución de tu felino. Ideal para mantener a tu gato en un peso saludable y mejorar su agilidad, proporcionando una fuente de ejercicio aeróbico que lo mantendrá entretenido y alerta.', 'imagenes/productos/laserGato.png', 'Plástico', 'Pequeño', false),
+  //________________________________________________________________________
   //Alimentacion 
   new Alimentacion('Croquetas para Perros', 30, 'Alimento balanceado para perros adultos.', 'Alimento balanceado de alta digestibilidad para perros adultos. Su fórmula reforzada con Omega 3 y 6 garantiza una piel sana y un pelaje brillante, proporcionando la energía necesaria para su rutina diaria.', 'imagenes/productos/croquetasPerro.png', 'Perro', 'Seco'),
   new Alimentacion('Comida Húmeda para Gatos', 20, 'Deliciosa comida húmeda para gatos.', 'Exquisita receta de textura suave y jugosa que deleita hasta a los paladares más exigentes. Su alto contenido de humedad ayuda a mantener una hidratación óptima, previniendo problemas del tracto urinario.', 'imagenes/productos/comidaHumeda.png', 'Gato', 'Húmedo'),
-  //________________________________________________________________________
   new Alimentacion('Snacks para Aves', 15, 'Snacks nutritivos para aves pequeñas.', 'Deliciosos bocados enriquecidos con semillas seleccionadas y vitaminas esenciales. Ideales para fomentar el comportamiento natural de búsqueda de alimento y fortalecer el vínculo entre tú y tu pequeña ave.', 'imagenes/productos/snackAves.png', 'Ave', 'Snack'),
   new Alimentacion('Alimento para Peces', 25, 'Alimento completo para peces de acuario.', 'Mezcla premium en escamas que aporta una nutrición completa para peces tropicales y de agua fría. Gracias a su fórmula de alta absorción, ayuda a resaltar los colores naturales y mantiene el agua del acuario limpia por más tiempo.', 'imagenes/productos/alimentoPeces.png', 'Pez', 'Seco'),
   new Alimentacion('Pienso hipoalergico para perros', 35, 'Pienso especial para perros con alergias.', 'Fórmula especializada para mascotas con sensibilidad digestiva o cutánea. Elaborado con fuentes de proteína seleccionadas para reducir el riesgo de alergias, mejorando notablemente la calidad de vida de tu perro.', 'imagenes/productos/piensoHipoalergenico.png', 'Perro', 'Seco'),
   new Alimentacion('Comida orgánica para gatos', 28, 'Comida orgánica y saludable para gatos.', 'Nutrición natural de grado humano, libre de granos, conservantes artificiales y pesticidas. Elaborada con ingredientes frescos y sostenibles que respetan el instinto carnívoro y la salud a largo plazo de tu gato.', 'imagenes/productos/comidaOrganica.png', 'Gato', 'Húmedo'),
-  //Premios y chuches
+  //________________________________________________________________________
   new Alimentacion('Snacks dentales para perros', 18, 'Snacks que ayudan a la salud dental.', 'La solución perfecta para mantener el aliento fresco de tu mascota. Estos snacks de textura firme ayudan a reducir la acumulación de sarro y placa bacteriana mediante la masticación mecánica, fortaleciendo las encías y convirtiendo la higiene dental en un momento de placer.', 'imagenes/productos/snackDental.png', 'Perro', 'Snack'),
   new Alimentacion('Galletas para perros', 12, 'Galletas sabrosas para perros.', 'Crujientes galletas horneadas artesanalmente con ingredientes seleccionados. Son la recompensa ideal para el entrenamiento o simplemente para consentir a tu perro entre comidas, ofreciendo un sabor casero irresistible sin descuidar su equilibrio nutricional.', 'imagenes/productos/galletasPerro.png', 'Perro', 'Snack'),
-  //________________________________________________________________________
   new Alimentacion('Bocaditos para gatos', 14, 'Bocaditos deliciosos para gatos.', 'Pequeños bocados de sabor intenso diseñados para los felinos más caprichosos. Su centro tierno y su aroma natural estimulan el apetito de tu gato, proporcionándole una experiencia sensorial única y un aporte extra de energía en cada porción.', 'imagenes/productos/bocaditosGatos.png', 'Gato', 'Snack'),
+  new Alimentacion('Mezcla para Hámster', 10, 'Alimento variado para pequeños roedores.', 'Una combinación equilibrada de semillas, cereales y frutos secos que aporta la fibra y energía necesarias para el metabolismo rápido de los hámsters. Incluye extrusionados que ayudan al desgaste natural de sus dientes en crecimiento.', 'imagenes/productos/alimentoHamster.png', 'Roedor', 'Seco'),
+  new Alimentacion('Heno de Alfalfa', 12, 'Heno premium para conejos y cobayas.', 'Heno natural secado al sol, rico en fibra y calcio. Es fundamental para la salud digestiva de los lagomorfos y favorece el correcto desgaste dental, además de funcionar como un excelente entretenimiento para su comportamiento de forrajeo.', 'imagenes/productos/henoAlfalfa.png', 'Roedor', 'Seco'),
+  new Alimentacion('Paté de Salmón para Gatos', 18, 'Alimento gourmet de alta palatabilidad.', 'Una receta de textura sedosa elaborada con salmón fresco. Rica en ácidos grasos esenciales, esta tarrina es ideal para gatos exigentes o con piel sensible, proporcionando una hidratación extra y un sabor irresistible.', 'imagenes/productos/pateGato.png', 'Gato', 'Húmedo'),
+  //________________________________________________________________________  
   // Merchandising 
-  //new Merchandising('Correa para perro', 12, 'Correa para perro', 'Correa de nylon reforzado con agarre ergonómico para un control total y cómodo durante los paseos. Su mosquetón de alta seguridad evita aperturas accidentales, garantizando la tranquilidad de ambos en cada aventura.', 'imagenes/productos/correaPerro.png', 'Perro', 'Mediano', 'Rojo'),
-  //new Merchandising('Collar para gato', 10, 'Collar para gato', 'Elegante collar ajustable con cierre de seguridad "breakaway" que se libera ante tirones fuertes, evitando accidentes. Incluye un pequeño cascabel para localizar fácilmente a tu gato dentro de casa sin restarle comodidad.', 'imagenes/productos/collarGato.png', 'Gato', 'Pequeño', 'Negro'),
-  new Merchandising('Plato de comida', 8, 'Plato de comida para mascotas', 'Recipiente de cerámica de alta calidad con base antideslizante para evitar derrames indeseados. Su diseño higiénico y fácil de lavar previene la acumulación de bacterias, siendo ideal para agua o alimento seco.', 'imagenes/productos/platoComida.png', 'Perro', 'Mediano', 'Blanco'),
   new Merchandising('Chubasquero', 45, 'Chubasquero impermeable para perros, ideal para protegerlos de la lluvia y el viento durante paseos al aire libre.', 'Protección total contra la lluvia y el viento en un diseño moderno y ligero. Este chubasquero transparente permite lucir el pelaje de tu mascota mientras la mantiene seca, facilitando paseos cómodos en días grises.', 'imagenes/productos/chubasqueroPerro.png', 'Perro', 'Pequeño', 'Transparente'),
-  //new Merchandising('Cepillo para perros', 12, 'Cepillo para perros', 'Herramienta esencial para el cuidado del pelaje. Sus cerdas suaves pero efectivas eliminan el pelo muerto y desenredan nudos sin irritar la piel, estimulando la circulación y dejando un acabado brillante y sedoso.', 'imagenes/productos/cepillo.png', 'Perro', 'Mediano', 'Negro'),
-  //________________________________________________________________________
+  new Merchandising('Sueter', 35, 'Sueter', 'Sueter cálido y cómodo, ideal para mantener a tu mascota abrigada durante los días fríos.', 'Este sueter de punto combina estilo y confort, protegiendo a tu mascota del frío sin restringir sus movimientos. Disponible en varios colores y tallas para adaptarse a cualquier perro.', 'imagenes/productos/sueterPerro.png', 'Perro', 'Mediano', 'Rosa'),
   // Accesorios
+  new Accesorios('Plato de comida', 8, 'Plato de comida para mascotas', 'Recipiente de cerámica de alta calidad con base antideslizante para evitar derrames indeseados. Su diseño higiénico y fácil de lavar previene la acumulación de bacterias, siendo ideal para agua o alimento seco.', 'imagenes/productos/platoComida.png', 'Perro', 'Mediano', 'Blanco'),
   new Accesorios('Correa para perro', 12, 'Correa para perro', 'Correa de nylon reforzado con agarre ergonómico para un control total y cómodo durante los paseos. Su mosquetón de alta seguridad evita aperturas accidentales, garantizando la tranquilidad de ambos en cada aventura.', 'imagenes/productos/correaPerro.png', 'Perro', 'Mediano', 'Rojo'),
   new Accesorios('Collar para gato', 10, 'Collar para gato', 'Elegante collar ajustable con cierre de seguridad "breakaway" que se libera ante tirones fuertes, evitando accidentes. Incluye un pequeño cascabel para localizar fácilmente a tu gato dentro de casa sin restarle comodidad.', 'imagenes/productos/collarGato.png', 'Gato', 'Pequeño', 'Negro'),
   new Accesorios('Cepillo para perros', 12, 'Cepillo para perros', 'Herramienta esencial para el cuidado del pelaje. Sus cerdas suaves pero efectivas eliminan el pelo muerto y desenredan nudos sin irritar la piel, estimulando la circulación y dejando un acabado brillante y sedoso.', 'imagenes/productos/cepillo.png', 'Perro', 'Mediano', 'Negro'),
@@ -44,7 +46,6 @@ export const inventario = [
   new Cabello('Peluca Coqueta', 32, 'Peluca blanca con moñito ideal para perritos tiernos y coquetos.', 'Elegancia, ternura y drama romántico en versión miniatura. Esta peluca blanca con moñito convierte a tu perrito en la definición de “demasiado adorable para este mundo”. Es suave, ligera y diseñada para desatar suspiros colectivos donde sea que aparezca. Ideal para cumpleaños, citas importantes en el parque o sesiones de fotos donde tu mascota quiera demostrar que el glamour también puede ser esponjoso.', 'imagenes/productos/peluCoqueta.png', 'Kawaii', 'Pequeño', 'Perro', 'Blanco'),
   new Cabello('Peluca Rasta', 40, 'Peluca estilo rasta para un look salvaje, divertido y lleno de actitud.', 'Espíritu libre, vibra relajada y energía de fiesta eterna. Esta peluca rasta convierte a tu perrito en el alma del carnaval perruno. Su estilo despreocupado transmite diversión pura, como si cada día fuera vacaciones. Cómoda, ligera y resistente a movimientos salvajes, es perfecta para mascotas con actitud rebelde y dueños que saben que la vida es mejor cuando se toma con humor.', 'imagenes/productos/peluRast.png', 'Reagge', 'Pequeño', 'Perro', 'Marrón'),
   new Cabello('Peluca Gato', 40, 'Peluca para gatos.', 'Tu gato no pidió esto. Tu gato no lo aprueba. Tu gato te juzga… pero se ve increíble. Esta peluca convierte a cualquier felino en una mezcla de diva dramática y meme histórico. Diseñada para ser ligera y cómoda, aunque emocionalmente el gato jamás te perdonará. Ideal para dueños valientes que aceptan vivir bajo amenaza felina por una foto legendaria.', 'imagenes/productos/pelucaGato.png', 'Casual', 'Pequeño', 'Gato', 'Marrón'),
-
   //________________________________________________________________________
   // Mobiliario 
   new Mobiliario('Mesa para mascotas', 80, 'Mesa resistente para mascotas.', 'Elegante mesa de madera maciza diseñada para crear un espacio propio para tu mascota. Su superficie resistente es ideal para colocar cuencos o juguetes, aportando un toque decorativo y funcional a cualquier rincón de tu casa.', 'imagenes/productos/mesaMascota.png', 'Madera', true),
@@ -77,17 +78,6 @@ inventario.find(p => p.nombre === 'Hueso de Nylon').variantes = [
 ];
 
 
-// MERCHANDISING
-/*inventario.find(p => p.nombre === 'Correa para perro').variantes = [
-  { nombre: 'Marrón', imagen: 'imagenes/productos/correaPerro.png' },
-  { nombre: 'Morado', imagen: 'imagenes/productos/correaPerro2.png' }
-];
-
-inventario.find(p => p.nombre === 'Collar para gato').variantes = [
-  { nombre: 'Marrón', imagen: 'imagenes/productos/collarGato.png' },
-  { nombre: 'Morado', imagen: 'imagenes/productos/collarGato2.png' }
-];*/
-
 inventario.find(p => p.nombre === 'Plato de comida').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/platoComida.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/platoComida2.png' }
@@ -110,6 +100,11 @@ inventario.find(p => p.nombre === 'Collar para gato').variantes = [
   { nombre: 'Morado', imagen: 'imagenes/productos/collarGato2.png' }
 ];
 
+inventario.find(p => p.nombre === 'Sueter').variantes = [
+  { nombre: 'Estampado Pingüs', imagen: 'imagenes/productos/sueterPingu.png' },
+  { nombre: 'Estampado Osos', imagen: 'imagenes/productos/sueterOso.png' },
+  { nombre: 'Estampado Polares', imagen: 'imagenes/productos/sueterPolar.png' }
+];
 // CABELLO
 inventario.find(p => p.nombre === 'Peluca Azul').variantes = [
   { nombre: 'Claro', imagen: 'imagenes/productos/peluAzul.png' },
@@ -138,7 +133,7 @@ inventario.find(p => p.nombre === 'Peluca Rasta').variantes = [
 ];
 
 inventario.find(p => p.nombre === 'Peluca Gato').variantes = [
-  { nombre: 'Marrón', imagen: 'imagenes/productos/pelucaGato.png' },
+  { nombre: 'Gris', imagen: 'imagenes/productos/pelucaGato.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/pelucaGato2.png' }
 ];
 
