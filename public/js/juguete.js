@@ -5,8 +5,9 @@ export class Juguete extends Producto {
     #tamano;
     #esInteractivo;
 
-    constructor(n, p, d, i,dL, material, tamano, interactivo) {
-        super(n, p, d, i,dL);
+    constructor(n, p, d, dL, i, material, tamano, interactivo) {
+        super(n, p, d, dL, i, 'Juguete');
+
         this.#material = material;
         this.#tamano = tamano;
         this.#esInteractivo = interactivo;

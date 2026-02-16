@@ -4,13 +4,11 @@ export class Alimentacion extends Producto {
     #tipoMascota;
     #tipoAlimento;
 
-    constructor(n, p, d,dL,i, tipoMascota, tipoAlimento) {
-        super(n, p, d,dL,i);
+    constructor(n, p, d, dL, i, tipoMascota, tipoAlimento) {
+        super(n, p, d, dL, i, 'Alimentación'); 
+        
         this.#tipoMascota = tipoMascota;
         this.#tipoAlimento = tipoAlimento;
-
-        this.tipo = 'alimentacion';
-
     }
 
     get tipoMascota() { return this.#tipoMascota; }

@@ -34,7 +34,6 @@ const filtroPrecio = document.getElementById('filtro-precio');
 const precioMaxValor = document.getElementById('precio-max-valor');
 
 
-
 // Llenamos el dropdown con las categorías
 categorias.forEach(cat => {
     const li = document.createElement('li');
@@ -230,33 +229,35 @@ form.addEventListener('submit', (e) => {
     const nombreInput = document.getElementById('productName') || form.querySelector('input[placeholder*="Nombre"]');
     const precioInput = document.getElementById('productPrice') || form.querySelector('input[type="number"]');
     const descInput = document.getElementById('productDescription') || form.querySelector('textarea');
-    const selectTipo = document.getElementById('tipo-producto'); 
-    
+    const selectTipo = document.getElementById('tipo-producto');
+
     // Captura por ID o por nombre de campo es mucho más segura
     const nombre = nombreInput.value.trim();
     const precio = parseFloat(precioInput.value);
     const descripcion = descInput.value.trim();
+    const descLargaInput = document.getElementById('productDescriptionLong');
+    const descripcionLarga = descLargaInput ? descLargaInput.value.trim() : descripcion;
     const tipo = selectTipo.value;
     const valorExtra = document.getElementById('campo-extra')?.value.trim() || "";
-    
+
     const inputReal = document.getElementById('input-file');
 
     if (!tipo) {
         mostrarMensaje('error', 'Debes escoger un tipo de producto');
         return;
     }
-    
+
     if (!nombre || isNaN(precio)) {
         mostrarMensaje("error", "Rellena nombre y precio");
         return;
     }
 
     const file = inputReal.files[0];
-    const imagen = inputReal.files.length > 0 
-        ? URL.createObjectURL(inputReal.files[0]) 
+    const imagen = inputReal.files.length > 0
+        ? URL.createObjectURL(inputReal.files[0])
         : 'imagenes/productos/default.png';
-    
-    const datosContenedor = { nombre, precio, descripcion, imagen, extra: valorExtra };
+
+    const datosContenedor = { nombre, precio, descripcion, descripcionLarga, imagen, extra: valorExtra };
     switch (tipo) {
         case 'mobiliario':
         case 'juguete':
@@ -266,21 +267,21 @@ form.addEventListener('submit', (e) => {
         case 'alimentacion':
         case 'merchandising':
         case 'cabello':
-            datosContenedor.tamano = valorExtra;
+            datosContenedor.estilo = valorExtra;
             break;
         default:
             datosContenedor.extra = valorExtra;
     }
-    
+
     const exito = agregarProductoAlInventario(tipo, datosContenedor);
     if (exito) {
         if (typeof inventario !== 'undefined') {
-             productosFiltrados = [...inventario]; 
+            productosFiltrados = [...inventario];
         }
-        
+
         if (typeof paginaActual !== 'undefined') paginaActual = 1;
-        
-        renderizarTienda(); 
+
+        renderizarTienda();
         limpiarTodoElFormulario();
         mostrarMensaje("success", "¡Producto añadido correctamente!");
     } else {
@@ -303,7 +304,7 @@ selectTipo.addEventListener('change', () => {
     const placeholders = {
         mobiliario: "Material",
         alimentacion: "Tipo Mascota",
-        cabello: "Tamaño",
+        cabello: "Estilo",
         juguete: "Material",
         merchandising: "Tipo Mascota"
     };
@@ -319,9 +320,9 @@ selectTipo.addEventListener('change', () => {
     inputExtra.placeholder = placeholder;
 
     extraContainer.appendChild(inputExtra);
-});    
+});
 
-    // ===================== DRAG & DROP =====================
+// ===================== DRAG & DROP =====================
 
 dropZone.addEventListener("dragover", (e) => {
     e.preventDefault();
@@ -345,7 +346,7 @@ dropZone.addEventListener("drop", (e) => {
     const files = e.dataTransfer.files;
 
     const inputReal = document.getElementById('input-file');
-    
+
     if (files.length !== 1) {
         mostrarMensaje("error", "Solo puedes subir un archivo");
         return;
@@ -537,8 +538,6 @@ window.eliminarDelCarrito = (id) => {
 };
 
 
-
-
 function actualizarIconoCarrito(total) {
     const counter = document.getElementById("cart-counter");
     const cartIcon = document.getElementById("cart-icon");
@@ -560,7 +559,7 @@ function obtenerAtributoExtra(p) {
     }
 
     if (p instanceof Cabello) {
-        return `Tamaño: ${p.tamaño}`;
+        return `Estilo: ${p.estilo}`;
     }
 
     if (p instanceof Juguete) {
@@ -640,14 +639,22 @@ function aplicarFiltros() {
 
         // Verificamos si coincide el tipo principal (clase) 
         // o si es una instancia de Alimentacion/Merchandising
-        const coincideCategoria =
-            tipoProdNormalizado === catNormalizada ||
-            (p instanceof Alimentacion && catNormalizada === "alimentacion") ||
-            (p instanceof Merchandising && catNormalizada === "merchandising");
-
+        const coincideCategoria = tipoProdNormalizado === catNormalizada;
         return coincideTexto && coincidePrecio && coincideCategoria;
     });
+    if (tituloTienda) {
+        if (termino !== "") {
+            tituloTienda.textContent = `Resultados para: "${buscador.value}"`;
+        } else if (categoriaSeleccionada !== "all") {
+            tituloTienda.textContent = `Categoría: ${categoriaSeleccionada}`;
+        } else if (precioMax < 100) {
+            tituloTienda.textContent = `Productos hasta ${precioMax}€`;
+        } else {
+            tituloTienda.textContent = "Todos los productos";
+        }
+    }
 
+    // 3. RESET DE PAGINACIÓN Y RENDER
     paginaActual = 1;
     renderizarTienda();
 }
@@ -671,18 +678,6 @@ listaCategorias.addEventListener('click', (e) => {
     aplicarFiltros();
 });
 
-
-
-// Buscador
-/* buscador?.addEventListener('input', (e) => {
-    const termino = e.target.value.toLowerCase();
-    productosFiltrados = inventario.filter(p => p.nombre.toLowerCase().includes(termino));
-    paginaActual = 1; 
-    renderizarTienda();
-}); */
-
-buscador?.addEventListener('input', aplicarFiltros)
-
 const btnBorrar = document.getElementById('btn-borrar-filtros');
 
 btnBorrar?.addEventListener('click', () => {
@@ -691,8 +686,8 @@ btnBorrar?.addEventListener('click', () => {
 
     // 2. Resetear Precio (Volver al máximo)
     if (filtroPrecio) {
-        filtroPrecio.value = 200; // O el valor máximo que tengas
-        precioMaxValor.textContent = "200";
+        filtroPrecio.value = 100;
+        precioMaxValor.textContent = "100";
     }
 
     // 3. Resetear Categoría
