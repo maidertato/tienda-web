@@ -95,8 +95,8 @@ inventario.find(p => p.nombre === 'Chubasquero').variantes = [
 
 // CABELLO
 inventario.find(p => p.nombre === 'Peluca Azul').variantes = [
-  { nombre: 'Azul claro', imagen: 'imagenes/productos/peluAzul.png' },
-  { nombre: 'Azul oscuro', imagen: 'imagenes/productos/peluAzul2.png' }
+  { nombre: 'Claro', imagen: 'imagenes/productos/peluAzul.png' },
+  { nombre: 'Oscuro', imagen: 'imagenes/productos/peluAzul2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Peluca Pelocho').variantes = [
