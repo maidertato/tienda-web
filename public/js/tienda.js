@@ -66,7 +66,7 @@ inventario.find(p => p.nombre === 'Ratón de Peluche').variantes = [
 ];
 
 inventario.find(p => p.nombre === 'Hueso de Nylon').variantes = [
-  { nombre: 'Clasico', imagen: 'imagenes/productos/huesoNylon.png' },
+  { nombre: 'Clásico', imagen: 'imagenes/productos/huesoNylon.png' },
   { nombre: 'Grande', imagen: 'imagenes/productos/huesoNylon2.png' }
 ];
 
@@ -101,38 +101,39 @@ inventario.find(p => p.nombre === 'Peluca Azul').variantes = [
 
 inventario.find(p => p.nombre === 'Peluca Pelocho').variantes = [
   { nombre: 'Negra', imagen: 'imagenes/productos/pelucaPelocho.png' },
-  { nombre: 'Negra afro', imagen: 'imagenes/productos/pelucaPelocho2.png' }
+  { nombre: 'Azul', imagen: 'imagenes/productos/pelucaPelocho2.png' },
+  { nombre: 'Payaso', imagen: 'imagenes/productos/pelucaPayaso.png' }
 ];
 
 inventario.find(p => p.nombre === 'Peluca Nada Que Ver').variantes = [
-  { nombre: 'Azul claro', imagen: 'imagenes/productos/pelucaNadaQueVer.png' },
-  { nombre: 'Azul oscuro', imagen: 'imagenes/productos/pelucaNadaQueVer2.png' }
+  { nombre: 'Marrón', imagen: 'imagenes/productos/pelucaNadaQueVer.png' },
+  { nombre: 'Rubia', imagen: 'imagenes/productos/pelucaNadaQueVer2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Peluca Coqueta').variantes = [
-  { nombre: 'Negra lisa', imagen: 'imagenes/productos/peluCoqueta.png' },
-  { nombre: 'Negra afro', imagen: 'imagenes/productos/peluCoqueta2.png' }
+  { nombre: 'Castaña', imagen: 'imagenes/productos/peluCoqueta.png' },
+  { nombre: 'Rosa', imagen: 'imagenes/productos/peluCoqueta2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Peluca Rasta').variantes = [
-  { nombre: 'Modelo 1', imagen: 'imagenes/productos/peluRast.png' },
-  { nombre: 'Modelo 2', imagen: 'imagenes/productos/peluRast2.png' }
+  { nombre: 'Marrón', imagen: 'imagenes/productos/peluRast.png' },
+  { nombre: 'Amarillo', imagen: 'imagenes/productos/peluRast2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Peluca Gato').variantes = [
-  { nombre: 'Marrón claro', imagen: 'imagenes/productos/pelucaGato.png' },
-  { nombre: 'Marrón oscuro', imagen: 'imagenes/productos/pelucaGato2.png' }
+  { nombre: 'Marrón', imagen: 'imagenes/productos/pelucaGato.png' },
+  { nombre: 'Morado', imagen: 'imagenes/productos/pelucaGato2.png' }
 ];
 
 // MOBILIARIO
 inventario.find(p => p.nombre === 'Mesa para mascotas').variantes = [
-  { nombre: 'Modelo pequeño', imagen: 'imagenes/productos/mesaMascota.png' },
-  { nombre: 'Modelo grande', imagen: 'imagenes/productos/mesaMascota2.png' }
+  { nombre: 'Negro', imagen: 'imagenes/productos/mesaMascota.png' },
+  { nombre: 'Naranja', imagen: 'imagenes/productos/mesaMascota2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Silla para mascotas').variantes = [
-  { nombre: 'Plástico', imagen: 'imagenes/productos/sillaMascota.png' },
-  { nombre: 'Acolchada', imagen: 'imagenes/productos/sillaMascota2.png' }
+  { nombre: 'Marrón', imagen: 'imagenes/productos/sillaMascota.png' },
+  { nombre: 'Gris', imagen: 'imagenes/productos/sillaMascota2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Caja de almacenamiento').variantes = [
@@ -141,18 +142,18 @@ inventario.find(p => p.nombre === 'Caja de almacenamiento').variantes = [
 ];
 
 inventario.find(p => p.nombre === 'Cama perro').variantes = [
-  { nombre: '80x60 cm', imagen: 'imagenes/productos/camaPerro.png' },
-  { nombre: '100x70 cm', imagen: 'imagenes/productos/camaPerro2.png' }
+  { nombre: 'Gris oscuro', imagen: 'imagenes/productos/camaPerro.png' },
+  { nombre: 'Rosa', imagen: 'imagenes/productos/camaPerro2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Cama gato').variantes = [
-  { nombre: '60x40 cm', imagen: 'imagenes/productos/camaGato.png' },
-  { nombre: '70x50 cm', imagen: 'imagenes/productos/camaGato2.png' }
+  { nombre: 'Rosa', imagen: 'imagenes/productos/camaGato.png' },
+  { nombre: 'Morado', imagen: 'imagenes/productos/camaGato2.png' }
 ];
 
 inventario.find(p => p.nombre === 'Alfombra mascotas').variantes = [
-  { nombre: '100x70 cm', imagen: 'imagenes/productos/alfombrAntideslizante.png' },
-  { nombre: '120x90 cm', imagen: 'imagenes/productos/alfombrAntideslizante2.png' }
+  { nombre: 'Beary Soft Nap', imagen: 'imagenes/productos/alfombrAntideslizante.png' },
+  { nombre: 'Pawty Time', imagen: 'imagenes/productos/alfombrAntideslizante2.png' }
 ];
 
 // LISTA VACÍA PARA EL CARRITO (Requisito 4.3)
