@@ -32,7 +32,7 @@ export const inventario = [
   //________________________________________________________________________  
   // Merchandising 
   new Merchandising('Chubasquero', 45, 'Chubasquero impermeable para perros, ideal para protegerlos de la lluvia y el viento durante paseos al aire libre.', 'Protección total contra la lluvia y el viento en un diseño moderno y ligero. Este chubasquero transparente permite lucir el pelaje de tu mascota mientras la mantiene seca, facilitando paseos cómodos en días grises.', 'imagenes/productos/chubasqueroPerro.png', 'Perro', 'Pequeño', 'Transparente'),
-  new Merchandising('Sueter', 35, 'Sueter', 'Sueter cálido y cómodo, ideal para mantener a tu mascota abrigada durante los días fríos.', 'Este sueter de punto combina estilo y confort, protegiendo a tu mascota del frío sin restringir sus movimientos. Disponible en varios colores y tallas para adaptarse a cualquier perro.', 'imagenes/productos/sueterPerro.png', 'Perro', 'Mediano', 'Rosa'),
+  new Merchandising('Sueter',  35, 'Sueter', 'Sueter cálido y cómodo, ideal para mantener a tu mascota abrigada durante los días fríos.', 'Este sueter de punto combina estilo y confort, protegiendo a tu mascota del frío sin restringir sus movimientos. Disponible en varios colores y tallas para adaptarse a cualquier perro.', 'imagenes/productos/sueterPerro.png', 'Perro', 'Mediano', 'Rosa'),
   new Merchandising('Zapatitos Nada Que Ver', 25, 'Zapatos absurdamente geniales para mascotas con mucha personalidad.', '¿Tienen sentido? No. ¿Se ven increíbles? Absolutamente. Estos zapatitos con colores neón y formas extrañas son el complemento ideal para la peluca "Nada Que Ver". Diseñados para proteger las patas del calor del asfalto mientras tu perro camina con el estilo de una estrella de otra galaxia.', 'imagenes/productos/zapatosNadaQueVer1.png', 'Perro', 'Pequeño', 'Multicolor'),
   new Merchandising('Calcetines', 10, 'Calcetines suaves con huellas de silicona para evitar resbalones.', 'La solución perfecta para suelos de madera o baldosas. Estos calcetines de algodón elástico mantienen las patas calientes y cuentan con puntos de silicona en la base para que tu mascota no patine por la casa. Cómodos, elásticos y con un diseño de gatitos que enamora.', 'imagenes/productos/calcetinesMascota.png', 'Gato', 'Pequeño', 'Azul'),
   new Merchandising('Mochila de Paseo', 55, 'Mochila ergonómica para llevar a tu mascota.', 'Diseñada para aventureros urbanos. Esta mochila cuenta con paneles de malla para una ventilación superior y una base reforzada para que tu gato o perro pequeño viaje seguro y cómodo. Incluye correas acolchadas para el dueño y un gancho de seguridad interno para evitar fugas inesperadas.', 'imagenes/productos/mochilaMascota.png', 'Gato', 'Mediano', 'Gris'), 
@@ -71,13 +71,11 @@ inventario.find(p => p.nombre === 'Pelota de Goma').variantes = [
   { nombre: 'Modelo 2', imagen: 'imagenes/productos/pelotaGoma2.png' },
   { nombre: 'Modelo 3', imagen: 'imagenes/productos/pelotaGoma3.png' }
 ];
-
 inventario.find(p => p.nombre === 'Ratón de Peluche').variantes = [
   { nombre: 'Rosa', imagen: 'imagenes/productos/ratonPeluche.png' },
   { nombre: 'Verde', imagen: 'imagenes/productos/ratonPeluche2.png' },
   { nombre: 'Azul', imagen: 'imagenes/productos/ratonPeluche3.png' }
 ];
-
 inventario.find(p => p.nombre === 'Hueso de Nylon').variantes = [
   { nombre: 'Clásico', imagen: 'imagenes/productos/huesoNylon.png' },
   { nombre: 'Grande', imagen: 'imagenes/productos/huesoNylon2.png' }
@@ -88,44 +86,33 @@ inventario.find(p => p.nombre === 'Plato de comida').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/platoComida.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/platoComida2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Chubasquero').variantes = [
   { nombre: 'Gris', imagen: 'imagenes/productos/chubasqueroPerro.png' },
   { nombre: 'Azul', imagen: 'imagenes/productos/chubasqueroPerro2.png' }
 ];
-
-inventario.find(p => p.nombre === 'Chubasquero').variantes = [
-  { nombre: 'Gris', imagen: 'imagenes/productos/chubasqueroPerro.png' },
-  { nombre: 'Azul', imagen: 'imagenes/productos/chubasqueroPerro2.png' }
-];
-
 inventario.find(p => p.nombre === 'Sueter').variantes = [
   { nombre: 'Corazones', imagen: 'imagenes/productos/sueterCorazón.png' },
   { nombre: 'Pingüs', imagen: 'imagenes/productos/sueterPingu.png' },
   { nombre: 'Osos', imagen: 'imagenes/productos/sueterOso.png' },
   { nombre: 'Osos Polares', imagen: 'imagenes/productos/sueterPolar.png' }
 ];
-
 inventario.find(p => p.nombre === 'Zapatitos Nada Que Ver').variantes = [
   { nombre: 'Leopardo', imagen: 'imagenes/productos/zapatosNadaQueVer1.png' },
   { nombre: 'Rosa', imagen: 'imagenes/productos/zapatosNadaQueVer.png' },
   { nombre: 'Verde', imagen: 'imagenes/productos/zapatosNadaQueVer2.png' },
   { nombre: 'Amarillo', imagen: 'imagenes/productos/zapatosNadaQueVer3.png' }
 ];
-
 inventario.find(p => p.nombre === 'Calcetines').variantes = [
   { nombre: 'Negro', imagen: 'imagenes/productos/calcetinesMascota.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/calcetinesMascota2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Mochila de Paseo').variantes = [
   { nombre: 'Negro', imagen: 'imagenes/productos/mochilaMascota.png' },
   { nombre: 'Azul', imagen: 'imagenes/productos/mochilaMascota1.png' }
 ];
-
 inventario.find(p => p.nombre === 'Gorra Deportiva').variantes = [
-  { nombre: 'Negro', imagen: 'imagenes/productos/gorraPerro.png' },
-  { nombre: 'Azul', imagen: 'imagenes/productos/gorraPerro2.png' }
+  { nombre: 'Azul', imagen: 'imagenes/productos/gorraPerro.png' },
+  { nombre: 'Leopardo', imagen: 'imagenes/productos/gorraPerro2.png' }
 ];
 
 // ACCESORIOS
@@ -133,49 +120,42 @@ inventario.find(p => p.nombre === 'Correa para perro').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/correaPerro.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/correaPerro2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Collar para gato').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/collarGato.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/collarGato2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Lazo Coquette').variantes = [
   { nombre: 'Rojo', imagen: 'imagenes/productos/lazoCoquette.png' },
   { nombre: 'Azul', imagen: 'imagenes/productos/lazoCoquette2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Horquillas Cora Power').variantes = [
   { nombre: 'Morado', imagen: 'imagenes/productos/horquillas.png' },
   { nombre: 'Azul', imagen: 'imagenes/productos/horquillas2.png' },
   { nombre: 'Verde', imagen: 'imagenes/productos/horquillas3.png' }
 ];
+
 // CABELLO
 inventario.find(p => p.nombre === 'Peluca Azul').variantes = [
   { nombre: 'Claro', imagen: 'imagenes/productos/peluAzul.png' },
   { nombre: 'Oscuro', imagen: 'imagenes/productos/peluAzul2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Peluca Pelocho').variantes = [
   { nombre: 'Negra', imagen: 'imagenes/productos/pelucaPelocho.png' },
   { nombre: 'Azul', imagen: 'imagenes/productos/pelucaPelocho2.png' },
   { nombre: 'Payaso', imagen: 'imagenes/productos/pelucaPayaso.png' }
 ];
-
 inventario.find(p => p.nombre === 'Peluca Nada Que Ver').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/pelucaNadaQueVer.png' },
   { nombre: 'Rubia', imagen: 'imagenes/productos/pelucaNadaQueVer2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Peluca Coqueta').variantes = [
   { nombre: 'Castaña', imagen: 'imagenes/productos/peluCoqueta.png' },
   { nombre: 'Rosa', imagen: 'imagenes/productos/peluCoqueta2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Peluca Rasta').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/peluRast.png' },
   { nombre: 'Amarillo', imagen: 'imagenes/productos/peluRast2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Peluca Gato').variantes = [
   { nombre: 'Gris', imagen: 'imagenes/productos/pelucaGato.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/pelucaGato2.png' }
@@ -186,36 +166,31 @@ inventario.find(p => p.nombre === 'Mesa para mascotas').variantes = [
   { nombre: 'Negro', imagen: 'imagenes/productos/mesaMascota.png' },
   { nombre: 'Naranja', imagen: 'imagenes/productos/mesaMascota2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Silla para mascotas').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/sillaMascota.png' },
   { nombre: 'Gris', imagen: 'imagenes/productos/sillaMascota2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Caja de almacenamiento').variantes = [
   { nombre: 'Pequeña', imagen: 'imagenes/productos/cajaAlmacenamiento.png' },
   { nombre: 'Grande', imagen: 'imagenes/productos/cajaAlmacenamiento2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Cama perro').variantes = [
   { nombre: 'Gris oscuro', imagen: 'imagenes/productos/camaPerro.png' },
   { nombre: 'Rosa', imagen: 'imagenes/productos/camaPerro2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Cama gato').variantes = [
   { nombre: 'Rosa', imagen: 'imagenes/productos/camaGato.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/camaGato2.png' }
 ];
-
 inventario.find(p => p.nombre === 'Alfombra mascotas').variantes = [
   { nombre: 'Beary Soft Nap', imagen: 'imagenes/productos/alfombrAntideslizante.png' },
   { nombre: 'Pawty Time', imagen: 'imagenes/productos/alfombrAntideslizante2.png' }
 ];
 
-// LISTA VACÍA PARA EL CARRITO (Requisito 4.3)
+// LISTA VACÍA PARA EL CARRITO 
 export const carrito = new Map();
 
-// FUNCIONES RELATIVAS A PRODUCTOS (Ejemplo: buscar por nombre)
+// FUNCIONES RELATIVAS A PRODUCTOS 
 export const buscarProductoPorNombre = (nombre) => {
   return inventario.filter(p => p.nombre.toLowerCase().includes(nombre.toLowerCase()));
 };
