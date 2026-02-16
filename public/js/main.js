@@ -402,7 +402,6 @@ dropZone.addEventListener("drop", (e) => {
 
     dropText.textContent = "¡Imagen añadida!";
 });
-
 // ====================================  CARRITO  ====================================
 
 function renderizarCarrito() {
