@@ -28,7 +28,7 @@ inputFile.accept = "image/jpeg, image/png";
 const varianteActualPorProducto = new Map();
 
 // --- FILTRO POR CATEGORÍA ---
-const categorias = ["Mobiliario", "Cabello", "Juguete", "Merchandising", "Alimentación"];
+const categorias = ["Mobiliario", "Cabello", "Juguete", "Merchandising", "Alimentación", "Accesorios"];
 const listaCategorias = document.getElementById("lista-categorias");
 const filtroPrecio = document.getElementById('filtro-precio');
 const precioMaxValor = document.getElementById('precio-max-valor');

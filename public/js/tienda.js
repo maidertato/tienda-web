@@ -3,6 +3,7 @@ import { Alimentacion } from './alimentacion.js';
 import { Merchandising } from './merchandising.js';
 import { Cabello } from './cabello.js';
 import { Mobiliario } from './mobiliario.js';
+import { Accesorios } from './accesorios.js';
 
 // INVENTARIO INICIAL
 export const inventario = [
@@ -25,11 +26,16 @@ export const inventario = [
   //________________________________________________________________________
   new Alimentacion('Bocaditos para gatos', 14, 'Bocaditos deliciosos para gatos.', 'Pequeños bocados de sabor intenso diseñados para los felinos más caprichosos. Su centro tierno y su aroma natural estimulan el apetito de tu gato, proporcionándole una experiencia sensorial única y un aporte extra de energía en cada porción.', 'imagenes/productos/bocaditosGatos.png', 'Gato', 'Snack'),
   // Merchandising 
-  new Merchandising('Correa para perro', 12, 'Correa para perro', 'Correa de nylon reforzado con agarre ergonómico para un control total y cómodo durante los paseos. Su mosquetón de alta seguridad evita aperturas accidentales, garantizando la tranquilidad de ambos en cada aventura.', 'imagenes/productos/correaPerro.png', 'Perro', 'Mediano', 'Rojo'),
-  new Merchandising('Collar para gato', 10, 'Collar para gato', 'Elegante collar ajustable con cierre de seguridad "breakaway" que se libera ante tirones fuertes, evitando accidentes. Incluye un pequeño cascabel para localizar fácilmente a tu gato dentro de casa sin restarle comodidad.', 'imagenes/productos/collarGato.png', 'Gato', 'Pequeño', 'Negro'),
+  //new Merchandising('Correa para perro', 12, 'Correa para perro', 'Correa de nylon reforzado con agarre ergonómico para un control total y cómodo durante los paseos. Su mosquetón de alta seguridad evita aperturas accidentales, garantizando la tranquilidad de ambos en cada aventura.', 'imagenes/productos/correaPerro.png', 'Perro', 'Mediano', 'Rojo'),
+  //new Merchandising('Collar para gato', 10, 'Collar para gato', 'Elegante collar ajustable con cierre de seguridad "breakaway" que se libera ante tirones fuertes, evitando accidentes. Incluye un pequeño cascabel para localizar fácilmente a tu gato dentro de casa sin restarle comodidad.', 'imagenes/productos/collarGato.png', 'Gato', 'Pequeño', 'Negro'),
   new Merchandising('Plato de comida', 8, 'Plato de comida para mascotas', 'Recipiente de cerámica de alta calidad con base antideslizante para evitar derrames indeseados. Su diseño higiénico y fácil de lavar previene la acumulación de bacterias, siendo ideal para agua o alimento seco.', 'imagenes/productos/platoComida.png', 'Perro', 'Mediano', 'Blanco'),
   new Merchandising('Chubasquero', 45, 'Chubasquero impermeable para perros, ideal para protegerlos de la lluvia y el viento durante paseos al aire libre.', 'Protección total contra la lluvia y el viento en un diseño moderno y ligero. Este chubasquero transparente permite lucir el pelaje de tu mascota mientras la mantiene seca, facilitando paseos cómodos en días grises.', 'imagenes/productos/chubasqueroPerro.png', 'Perro', 'Pequeño', 'Transparente'),
-  new Merchandising('Cepillo para perros', 12, 'Cepillo para perros', 'Herramienta esencial para el cuidado del pelaje. Sus cerdas suaves pero efectivas eliminan el pelo muerto y desenredan nudos sin irritar la piel, estimulando la circulación y dejando un acabado brillante y sedoso.', 'imagenes/productos/cepillo.png', 'Perro', 'Mediano', 'Negro'),
+  //new Merchandising('Cepillo para perros', 12, 'Cepillo para perros', 'Herramienta esencial para el cuidado del pelaje. Sus cerdas suaves pero efectivas eliminan el pelo muerto y desenredan nudos sin irritar la piel, estimulando la circulación y dejando un acabado brillante y sedoso.', 'imagenes/productos/cepillo.png', 'Perro', 'Mediano', 'Negro'),
+  //________________________________________________________________________
+  // Accesorios
+  new Accesorios('Correa para perro', 12, 'Correa para perro', 'Correa de nylon reforzado con agarre ergonómico para un control total y cómodo durante los paseos. Su mosquetón de alta seguridad evita aperturas accidentales, garantizando la tranquilidad de ambos en cada aventura.', 'imagenes/productos/correaPerro.png', 'Perro', 'Mediano', 'Rojo'),
+  new Accesorios('Collar para gato', 10, 'Collar para gato', 'Elegante collar ajustable con cierre de seguridad "breakaway" que se libera ante tirones fuertes, evitando accidentes. Incluye un pequeño cascabel para localizar fácilmente a tu gato dentro de casa sin restarle comodidad.', 'imagenes/productos/collarGato.png', 'Gato', 'Pequeño', 'Negro'),
+  new Accesorios('Cepillo para perros', 12, 'Cepillo para perros', 'Herramienta esencial para el cuidado del pelaje. Sus cerdas suaves pero efectivas eliminan el pelo muerto y desenredan nudos sin irritar la piel, estimulando la circulación y dejando un acabado brillante y sedoso.', 'imagenes/productos/cepillo.png', 'Perro', 'Mediano', 'Negro'),
   //________________________________________________________________________
   // Pelucas 
   new Cabello('Peluca Azul', 30, 'Peluca divertida de color azul brillante para darle un estilo único a tu perrito.', 'La peluca azul más escandalosamente divertida del planeta perruno. Su color eléctrico convierte a tu mascota en una estrella pop instantánea capaz de robar miradas, aplausos y carcajadas en segundos. Es ligera, cómoda y tan suave que tu perrito olvidará que la lleva puesta… pero nadie más lo hará. Perfecta para fotos épicas, fiestas y paseos donde tu mascota quiera anunciarle al mundo: “sí, soy fabuloso”. No es una peluca… es un espectáculo ambulante', 'imagenes/productos/peluAzul.png', 'Pop', 'Pequeño', 'Perro', 'Azul'),
@@ -72,7 +78,7 @@ inventario.find(p => p.nombre === 'Hueso de Nylon').variantes = [
 
 
 // MERCHANDISING
-inventario.find(p => p.nombre === 'Correa para perro').variantes = [
+/*inventario.find(p => p.nombre === 'Correa para perro').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/correaPerro.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/correaPerro2.png' }
 ];
@@ -80,7 +86,7 @@ inventario.find(p => p.nombre === 'Correa para perro').variantes = [
 inventario.find(p => p.nombre === 'Collar para gato').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/collarGato.png' },
   { nombre: 'Morado', imagen: 'imagenes/productos/collarGato2.png' }
-];
+];*/
 
 inventario.find(p => p.nombre === 'Plato de comida').variantes = [
   { nombre: 'Marrón', imagen: 'imagenes/productos/platoComida.png' },
@@ -92,6 +98,17 @@ inventario.find(p => p.nombre === 'Chubasquero').variantes = [
   { nombre: 'Azul', imagen: 'imagenes/productos/chubasqueroPerro2.png' }
 ];
 
+
+// ACCESORIOS
+inventario.find(p => p.nombre === 'Correa para perro').variantes = [
+  { nombre: 'Marrón', imagen: 'imagenes/productos/correaPerro.png' },
+  { nombre: 'Morado', imagen: 'imagenes/productos/correaPerro2.png' }
+];
+
+inventario.find(p => p.nombre === 'Collar para gato').variantes = [
+  { nombre: 'Marrón', imagen: 'imagenes/productos/collarGato.png' },
+  { nombre: 'Morado', imagen: 'imagenes/productos/collarGato2.png' }
+];
 
 // CABELLO
 inventario.find(p => p.nombre === 'Peluca Azul').variantes = [
@@ -231,6 +248,20 @@ export function agregarProductoAlInventario(tipo, datos) {
         datos.imagen,
         "General",
         datos.extra || "Seco"
+      );
+      break;
+
+    case 'accesorios':
+      nuevoProducto = new Accesorios(
+        datos.nombre,
+        datos.precio,
+        datos.descripcion,
+        datos.descripcionLarga || datos.descripcion,
+        datos.imagen,
+        datos.extra || "Estándar",
+        "General",
+        "Negro"
+
       );
       break;
 
