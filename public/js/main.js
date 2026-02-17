@@ -4,7 +4,7 @@ import { Cabello } from './cabello.js';
 import { Juguete } from './juguete.js';
 import { Merchandising } from './merchandising.js';
 import { Mobiliario } from './mobiliario.js';
-
+import { Accesorios } from './accesorios.js';
 
 const normalizarTexto = (texto) => {
     return texto ? texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim() : "";
@@ -594,6 +594,10 @@ function actualizarIconoCarrito(total) {
 }
 
 function obtenerAtributoExtra(p) {
+
+    if (p instanceof Accesorios) {
+        return `Tipo mascota: ${p.tipoMascota}`;
+    }
 
     if (p instanceof Alimentacion) {
         return `Tipo mascota: ${p.tipoMascota}`;
