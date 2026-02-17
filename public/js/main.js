@@ -127,11 +127,9 @@ export function renderizarTienda() {
 
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title line-clamp-2">${nombreMostrado}</h5>
+                    <p class="card-text fw-bold fs-5 mb-2">${producto.precio}€</p>
+                    <p class="card-text extra-attr text-muted mt-2"><small><strong>${obtenerAtributoExtra(producto)}</strong></small></p>
                     <p class="card-text descripcion-producto line-clamp-3">${producto.descripcion}</p>
-                    <p class="card-text extra-attr text-muted mt-2">
-                        <small><strong>${obtenerAtributoExtra(producto)}</strong></small>
-                    </p>
-                    <p class="card-text mt-auto fw-bold fs-5">${producto.precio}€</p>
                 </div>
             </div>
         `;
@@ -411,10 +409,18 @@ dropZone.addEventListener("drop", (e) => {
     dataTransfer.items.add(file);
     inputReal.files = dataTransfer.files;
 
+    const mensajeAnterior = dropText.textContent;
+
+    
     dropText.textContent = "¡Imagen añadida!";
+
+    // Tiempo del mensaje definido
+    setTimeout(() => {
+        dropText.textContent = mensajeAnterior;
+    }, 1500);
+
 });
 // ====================================  CARRITO  ====================================
-
 function renderizarCarrito() {
     if (!carritoContenedor) return;
     carritoContenedor.innerHTML = '';
@@ -423,17 +429,15 @@ function renderizarCarrito() {
     if (carrito.size === 0) {
         carritoContenedor.innerHTML = `
             <div class="carrito-vacio-vista animate__animated animate__fadeIn">
-
             <svg class="vacio-icono-cart" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor"
                 d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                 <circle cx="9" cy="21" r="1"/>
                 <circle cx="20" cy="21" r="1"/>
             </svg>
-
             <h4>No hay productos en tu carrito</h4>
             <p>¡Vuelve al inicio y empieza a comprar!</p>
-
+            
             <button class="btn-inicio">
                 <svg class="vacio-icono-home" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor"
@@ -468,25 +472,53 @@ function renderizarCarrito() {
         cantidadTotal += item.cantidad;
         totalCarrito += item.precio * item.cantidad;
         const div = document.createElement('div');
-        div.className = 'carrito-item d-flex align-items-center justify-content-between p-2 mb-2 border-bottom';
-        div.innerHTML = `
-            <div class="d-flex align-items-center gap-2">
-                <img src="${item.imagen}" style="width: 40px; height: 40px; object-fit: cover;" class="rounded">
-                <div>
-                    <div class="fw-bold small">${item.nombre}</div>
-                    <input type="number" class="input-cantidad form-control form-control-sm" data-id="${id}" value="${item.cantidad}" style="width: 50px;">
+        div.className = 'carrito-item p-2 mb-2 border-bottom';
+        div.innerHTML = ` 
+            <div class="carrito-item-flex d-flex align-items-start gap-3 w-100">
+                <img src="${item.imagen}"style="width: 60px; height: 60px; object-fit: cover;" class="rounded">
+                <div class="flex-grow-1">
+                    <div class="fw-bold small text-truncate" title="${item.nombre}">
+                        ${item.nombre}
+                    </div>
+            
+                    <div class="d-flex align-items-center gap-1 mt-1">
+                        <span class="precio-unitario text-muted">${item.precio.toFixed(2)}€</span>
+                        <span>x</span>
+                        <input type="number" class="input-cantidad form-control form-control-sm text-center" data-id="${id}" value="${item.cantidad}" style="width: 50px;"> 
+                        <span>=</span>
+                        <span class="precio-total-producto fw-bold">${(item.precio * item.cantidad).toFixed(2)}€</span>
+                    </div>
                 </div>
+                <button class="btn-papelera text-danger btn btn-sm" onclick="eliminarDelCarrito('${id}')" title="Eliminar producto">
+                    <svg style="width: 18px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 6h18M9 6v-2a1 1 0 011-1h4a1 1 0 011 1v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" 
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
             </div>
-            <button class="btn-papelera" onclick="eliminarDelCarrito('${id}')" title="Eliminar producto">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 6h18M9 6v-2a1 1 0 011-1h4a1 1 0 011 1v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" 
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
         `;
-        carritoContenedor.appendChild(div);
-    });
 
+        carritoContenedor.appendChild(div);
+        
+        // ===================== Actualizar total del producto individual =====================
+        const inputCantidad = div.querySelector('.input-cantidad');
+        const precioTotalProducto = div.querySelector('.precio-total-producto');
+
+        inputCantidad.addEventListener('input', (e) => {
+            let nuevaCantidad = parseInt(e.target.value) || 1;
+
+            // Forzamos mínimo 1
+            if (nuevaCantidad < 1) nuevaCantidad = 1;
+            e.target.value = nuevaCantidad;
+
+            // Actualizamos la cantidad del producto
+            item.cantidad = nuevaCantidad;
+
+            // --- LÍNEA CLAVE: actualiza solo el total de este producto ---
+            precioTotalProducto.textContent = `${(item.precio * nuevaCantidad).toFixed(2)}€`;
+        });
+    });
+    
     actualizarIconoCarrito(cantidadTotal);
 
     const footer = document.createElement('div');
@@ -503,7 +535,9 @@ function renderizarCarrito() {
             const id = e.target.getAttribute('data-id');
             let nuevaCantidad = parseInt(e.target.value);
 
-            let aviso = e.target.parentElement.querySelector('.aviso-maximo-texto');
+            const carritoItem = e.target.closest('.carrito-item');
+            let aviso = carritoItem.querySelector('.aviso-maximo');            
+            
             if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
                 nuevaCantidad = 1; // Forzamos que el valor interno sea 1
                 e.target.value = 1; // Forzamos que el dibujo del input muestre 1
@@ -511,24 +545,23 @@ function renderizarCarrito() {
 
             // 2. Si quieres poner un límite máximo (ejemplo 20)
             if (nuevaCantidad > 20) {
-                if (nuevaCantidad > 20) {
                     nuevaCantidad = 20;
                     e.target.value = 20;
-                }
+                
 
                 // Si no existe el mensaje de aviso, lo creamos
                 if (!aviso) {
                     aviso = document.createElement('div');
-                    aviso.className = 'aviso-maximo-texto text-danger fw-bold';
-                    aviso.style.fontSize = '11px';
-                    aviso.textContent = '¡Solo se permiten 20 copias!';
-                    e.target.parentElement.appendChild(aviso);
+                    aviso.className = 'aviso-maximo';
+                    aviso.textContent = 'No se permiten más de 20 copias.';
+                    carritoItem.appendChild(aviso);
                 }
-            } else {
-                // Si baja de 20, borramos el aviso si existe
-                if (aviso) aviso.remove();
+                    e.target.classList.add('is-invalid');
+            }else {
+                    // Si baja de 20, borramos el aviso si existe
+                    if (aviso) aviso.remove();
+                    e.target.classList.remove('is-invalid');
             }
-
 
             // 1. Actualizamos el producto en el Map
             if (carrito.has(id)) {
@@ -626,36 +659,63 @@ function actualizarInterfazPaginacion() {
     const total = productosFiltrados.length;
     const numPaginas = Math.ceil(total / productosPorPagina);
     const nav = document.getElementById('pagination-container');
+    const info = document.getElementById('info-paginacion');
+    
     if (!nav) return;
 
     nav.innerHTML = '';
+    // =============================================================================================
+    // TEXTO: Mostrando (numero de productos) de (numero de productos totales) productos
+    // =============================================================================================
+    if (total === 0) {
+        info.textContent = 'Mostrando 0 de 0 productos';
+        return;
+    }
 
-    // ANTERIOR
-    nav.innerHTML += `
-        <li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
-            <button class="page-link" onclick="cambiarPagina(${paginaActual - 1})">
-                Anterior
-            </button>
-        </li>
-    `;
+    const inicio = (paginaActual - 1) * productosPorPagina ;
+    const fin = Math.min(inicio + productosPorPagina, total);
+    const mostrado = total === 0 ? 0 : fin - inicio;
 
-    // NÚMEROS
+    info.textContent = `Mostrando ${mostrado} de ${total} productos`;
+
+
+    // ===============================
+    // BOTÓN ANTERIOR (si NO es la primera)
+    // ===============================
+    if (paginaActual > 1) {
+        nav.innerHTML += `
+            <li class="page-item ">
+                <button class="page-link" onclick="cambiarPagina(${paginaActual - 1})">
+                    Anterior
+                </button>
+            </li>
+        `;
+    }
+    // ===============================
+    // BOTONES NUMÉRICOS
+    // ===============================
     for (let i = 1; i <= numPaginas; i++) {
         nav.innerHTML += `
             <li class="page-item ${i === paginaActual ? 'active' : ''}">
-                <button class="page-link" onclick="cambiarPagina(${i})">${i}</button>
+                <button class="page-link" onclick="cambiarPagina(${i})">
+                    ${i}
+                </button>
             </li>
         `;
     }
 
-    // SIGUIENTE
-    nav.innerHTML += `
-        <li class="page-item ${paginaActual === numPaginas ? 'disabled' : ''}">
-            <button class="page-link" onclick="cambiarPagina(${paginaActual + 1})">
-                Siguiente
-            </button>
-        </li>
-    `;
+    // ===============================
+    // BOTÓN SIGUIENTE (si NO es la última)
+    // ===============================
+    if (paginaActual < numPaginas) {
+        nav.innerHTML += `
+            <li class="page-item ${paginaActual === numPaginas ? 'disabled' : ''}">
+                <button class="page-link" onclick="cambiarPagina(${paginaActual + 1})">
+                    Siguiente
+                </button>
+            </li>
+        `;
+    }
 }
 
 const btnInicio = document.getElementById("btn-inicio");
@@ -713,7 +773,7 @@ function aplicarFiltros() {
     });
     if (tituloTienda) {
         if (termino !== "") {
-            tituloTienda.textContent = `Resultados para: "${buscador.value}"`;
+            tituloTienda.textContent = `Buscando por: "${buscador.value}"`;
         } else if (categoriaSeleccionada !== "all") {
             tituloTienda.textContent = `Categoría: ${categoriaSeleccionada}`;
         } else if (precioMax < 100) {

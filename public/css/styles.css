@@ -5,7 +5,7 @@
 
 
 body {
-  background-image: url("../imagenes/fondo.png");
+  background-image: url("../imagenes/fondos/fondo.png");
   background-repeat: repeat;
   background-color: #F2EAFA;
   margin: 0;
@@ -20,6 +20,7 @@ body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  min-height:100vh; /* Para que se quede pegado abajo */
   background-color: rgba(255, 248, 252, 0.95);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
@@ -35,7 +36,7 @@ header {
   padding: 2rem;
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
-    url("../imagenes/fondo-huellas.png");
+    url("../imagenes/fondos/fondo-huellas.png");
   background-size: cover;
   background-position: center;
   color: #4b2e83;
@@ -763,6 +764,7 @@ main {
   padding: 1rem;
   margin-bottom: 1rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 30px;
   border: 1px solid #eee;
@@ -813,14 +815,16 @@ main {
   outline: none;
 }
 
-.aviso-maximo,
-.text-danger,
-.aviso-maximo-texto {
-  color: #dc3545;
-  font-size: 0.75rem;
-  margin-top: 5px;
-  height: 15px;
-  display: block;
+.aviso-maximo {
+  width: 100%; 
+  background-color: #f8d7da;        
+  color: #842029;                   
+  border: 1px solid #f5c2c7;
+  padding: 10px 12px;
+  margin-top: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .btn-papelera {
