@@ -284,22 +284,34 @@ form.addEventListener('submit', (e) => {
         ? URL.createObjectURL(inputReal.files[0])
         : 'imagenes/productos/default.png';
 
-    const datosContenedor = { nombre, precio, descripcion, imagen, extra: valorExtra };
+    const datosContenedor = { nombre, precio, descripcion, imagen };
     switch (tipo) {
         case 'mobiliario':
+            datosContenedor.material = valorExtra;
+            break;
+
         case 'juguete':
-            datosContenedor.tipo = valorExtra;
-            datosContenedor.extra = valorExtra;
+            datosContenedor.tipoJuguete = valorExtra;
             break;
 
         case 'alimentacion':
+            datosContenedor.tipoAlimento = valorExtra;
+            break;
+
         case 'accesorios':
+            datosContenedor.tipoAccesorio = valorExtra;
+            break;
+
         case 'merchandising':
+            datosContenedor.categoria = valorExtra;
+            break;
+
         case 'cabello':
             datosContenedor.estilo = valorExtra;
             break;
+
         default:
-            datosContenedor.extra = valorExtra;
+            console.warn("Tipo no reconocido");
     }
 
     const exito = agregarProductoAlInventario(tipo, datosContenedor);
@@ -336,7 +348,7 @@ selectTipo.addEventListener('change', () => {
         cabello: "Estilo",
         juguete: "Tipo",
         merchandising: "Parte del cuerpo",
-        accesosios: "Tipo mascota"    };
+        accesorios: "Tipo mascota"    };
 
     const placeholder = placeholders[selectTipo.value];
 
@@ -556,11 +568,9 @@ function renderizarCarrito() {
                     aviso.textContent = 'No se permiten más de 20 copias.';
                     carritoItem.appendChild(aviso);
                 }
-                    e.target.classList.add('is-invalid');
             }else {
                     // Si baja de 20, borramos el aviso si existe
                     if (aviso) aviso.remove();
-                    e.target.classList.remove('is-invalid');
             }
 
             // 1. Actualizamos el producto en el Map
