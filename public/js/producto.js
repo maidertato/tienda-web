@@ -3,17 +3,15 @@ export class Producto {
     #nombre;
     #precio;
     #descripcion;
-    #descripcionLarga;
     #imagen;
     #tipo;
 
-    constructor(nombre, precio, descripcion, descripcionLarga, imagen, tipo = 'general') {
+    constructor(nombre, precio, descripcion, imagen, tipo = 'general') {
         this.#id = btoa(nombre + Date.now() + Math.random()).substring(0, 12);
 
         this.#nombre = nombre;
         this.#precio = precio;
         this.#descripcion = descripcion;
-        this.#descripcionLarga = descripcionLarga;
         this.#imagen = imagen || 'imagenes/productos/default.png';
         this.#tipo = tipo;
     }
@@ -28,9 +26,6 @@ export class Producto {
 
     get descripcion() { return this.#descripcion; }
     set descripcion(v) { this.#descripcion = v; }
-
-    get descripcionLarga() { return this.#descripcionLarga; }
-    set descripcionLarga(v) { this.#descripcionLarga = v; }
 
     get imagen() { return this.#imagen; }
     set imagen(v) { this.#imagen = v; }

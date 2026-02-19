@@ -1,20 +1,20 @@
 import { Producto } from './producto.js';
 
 export class Juguete extends Producto {
-    #material;
+    #tipo;
     #tamano;
     #esInteractivo;
 
-    constructor(n, p, d, dL, i, material, tamano, interactivo) {
-        super(n, p, d, dL, i, 'Juguete');
+    constructor(n, p, d, i, tipo, tamano, interactivo) {
+        super(n, p, d, i, 'Juguete');
 
-        this.#material = material;
+        this.#tipo = tipo;
         this.#tamano = tamano;
         this.#esInteractivo = interactivo;
     }
 
-    get material() { return this.#material; }
-    set material(v) { this.#material = v; }
+    get tipo() { return this.#tipo; }
+    set tipo(v) { this.#tipo = v; }
 
     get tamano() { return this.#tamano; }
     set tamano(v) { this.#tamano = v; }

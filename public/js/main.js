@@ -264,8 +264,6 @@ form.addEventListener('submit', (e) => {
     const nombre = nombreInput.value.trim();
     const precio = parseFloat(precioInput.value);
     const descripcion = descInput.value.trim();
-    const descLargaInput = document.getElementById('productDescriptionLong');
-    const descripcionLarga = descLargaInput ? descLargaInput.value.trim() : descripcion;
     const tipo = selectTipo.value;
     const valorExtra = document.getElementById('campo-extra')?.value.trim() || "";
 
@@ -286,14 +284,16 @@ form.addEventListener('submit', (e) => {
         ? URL.createObjectURL(inputReal.files[0])
         : 'imagenes/productos/default.png';
 
-    const datosContenedor = { nombre, precio, descripcion, descripcionLarga, imagen, extra: valorExtra };
+    const datosContenedor = { nombre, precio, descripcion, imagen, extra: valorExtra };
     switch (tipo) {
         case 'mobiliario':
         case 'juguete':
-            datosContenedor.material = valorExtra;
+            datosContenedor.tipo = valorExtra;
             datosContenedor.extra = valorExtra;
             break;
+
         case 'alimentacion':
+        case 'accesorios':
         case 'merchandising':
         case 'cabello':
             datosContenedor.estilo = valorExtra;
@@ -332,11 +332,11 @@ selectTipo.addEventListener('change', () => {
 
     const placeholders = {
         mobiliario: "Material",
-        alimentacion: "Tipo Mascota",
+        alimentacion: "Tipo Alimento",
         cabello: "Estilo",
-        juguete: "Material",
-        merchandising: "Tipo Mascota"
-    };
+        juguete: "Tipo",
+        merchandising: "Parte del cuerpo",
+        accesosios: "Tipo mascota"    };
 
     const placeholder = placeholders[selectTipo.value];
 
@@ -633,7 +633,7 @@ function obtenerAtributoExtra(p) {
     }
 
     if (p instanceof Alimentacion) {
-        return `Tipo mascota: ${p.tipoMascota}`;
+        return `Tipo alimento: ${p.tipoAlimento}`;
     }
 
     if (p instanceof Cabello) {
@@ -641,11 +641,11 @@ function obtenerAtributoExtra(p) {
     }
 
     if (p instanceof Juguete) {
-        return `Material: ${p.material}`;
+        return `Tipo juguete: ${p.tipo}`;
     }
 
     if (p instanceof Merchandising) {
-        return `Tipo mascota: ${p.tipoMascota}`;
+        return `Parte del cuerpo: ${p.parteDelCuerpo}`;
     }
 
     if (p instanceof Mobiliario) {
@@ -928,7 +928,7 @@ window.abrirDetalleProducto = (id) => {
         <div style=" margin-top:20px; padding-top:20px; border-top:1px solid #eee; margin-right: 40px; margin-left: 10px;">
             <p style=" font-weight:600; margin-bottom:10px; color:#7d3c98; ">Descripción:</p>
             <p style=" line-height:1.6; color:#555;">
-                ${p.descripcionLarga}
+                ${p.descripcion}
             </p>
         </div>
     `;

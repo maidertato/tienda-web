@@ -4,8 +4,8 @@ export class Mobiliario extends Producto {
     #material;
     #usoInterior;
 
-    constructor(n, p, d, dL, i, material, usoInterior) {
-        super(n, p, d, dL, i, 'Mobiliario');
+    constructor(n, p, d, i, material, usoInterior) {
+        super(n, p, d, i, 'Mobiliario');
 
         this.#material = material;
         this.#usoInterior = usoInterior;

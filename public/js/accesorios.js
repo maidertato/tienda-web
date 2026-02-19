@@ -5,8 +5,8 @@ export class Accesorios extends Producto {
     #talla;
     #color;
 
-    constructor(n, p, d, dL, i, tipoMascota, talla, color) {
-        super(n, p, d, dL, i, 'Accesorios');
+    constructor(n, p, d, i, tipoMascota, talla, color) {
+        super(n, p, d, i, 'Accesorios');
 
         this.#tipoMascota = tipoMascota;
         this.#talla = talla;

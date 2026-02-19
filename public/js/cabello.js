@@ -6,8 +6,8 @@ export class Cabello extends Producto {
     #tipoMascota;
     #color;
 
-    constructor(n, p, d, dL, i, estilo, tamaño, tipoMascota, color) {
-        super(n, p, d, dL, i, 'Cabello');
+    constructor(n, p, d, i, estilo, tamaño, tipoMascota, color) {
+        super(n, p, d, i, 'Cabello');
 
         this.#estilo = estilo;
         this.#tamaño = tamaño;
