@@ -161,6 +161,7 @@ contenedor.addEventListener('click', (e) => {
             // 1. CREAR EL GLOBITO (Aparecerá al lado del carro)
             const globo = document.createElement('div');
             globo.className = 'mensaje-exito-flotante';
+            // CAMBIO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             globo.textContent = '¡Añadido con éxito!';
             btn.parentElement.appendChild(globo);
 
@@ -168,7 +169,6 @@ contenedor.addEventListener('click', (e) => {
                 globo.classList.add('fade-out');
                 setTimeout(() => {
                     globo.remove();
-                    renderizarTienda();
                 }, 300);
             }, 1500);
 
@@ -721,28 +721,6 @@ function actualizarInterfazPaginacion() {
 const btnInicio = document.getElementById("btn-inicio");
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    const btnInicio = document.getElementById("btn-inicio");
-
-    if (btnInicio) {
-        btnInicio.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            categoriaSeleccionada = "all";
-            productosFiltrados = [...inventario];
-            paginaActual = 1;
-
-            if (tituloTienda) {
-                tituloTienda.textContent = "Todos los productos";
-            }
-
-            renderizarTienda();
-        });
-    }
-});
-
-
-
 window.cambiarPagina = (n) => {
     paginaActual = n;
     renderizarTienda();
@@ -980,6 +958,29 @@ window.abrirDetalleProducto = (id) => {
 
 
 // ==================================== DOM inicial ====================================
+
+// NOSE QUE ES MIRAR
+document.addEventListener("DOMContentLoaded", () => {
+    const btnInicio = document.getElementById("btn-inicio");
+
+    if (btnInicio) {
+        btnInicio.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            categoriaSeleccionada = "all";
+            productosFiltrados = [...inventario];
+            paginaActual = 1;
+
+            if (tituloTienda) {
+                tituloTienda.textContent = "Todos los productos";
+            }
+
+            renderizarTienda();
+        });
+    }
+});
+
+
 document.addEventListener('DOMContentLoaded', () => {
     renderizarTienda();
     renderizarCarrito();
