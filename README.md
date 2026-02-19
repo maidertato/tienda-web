@@ -32,3 +32,8 @@ nmp start
 ### 3. Abrir en el navegador
 Una vez veas que el servidor ha arrancado, entra aqui:
 http://localhost:8080
+
+
+## Recomendaciones
+- Abrir la web en el navegador Google Chrome
+- Poner la pantalla en tamaño %80
