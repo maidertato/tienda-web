@@ -65,7 +65,7 @@ let productosFiltrados = [...inventario];
 let categoriaSeleccionada = "all";
 
 
-// --- 1. RENDER TIENDA ---
+// --- RENDER TIENDA ---
 export function renderizarTienda() {
     if (!contenedor) return;
     contenedor.innerHTML = '';
@@ -571,7 +571,7 @@ function renderizarCarrito() {
                     if (aviso) aviso.remove();
             }
 
-            // 1. Actualizamos el producto en el Map
+            // Actualizamos el producto en el Map
             if (carrito.has(idCarrito)) {
                 const producto = carrito.get(idCarrito);
                 producto.cantidad = nuevaCantidad;
@@ -630,14 +630,11 @@ function renderizarCarrito() {
 
 // FUNCION ELIMINAR
 window.eliminarDelCarrito = (id) => {
-    // 1. Eliminamos el producto del Map usando su ID
+    // Eliminamos el producto del Map usando su ID
     if (carrito.has(id)) {
         carrito.delete(id);
-
-        // 2. Volvemos a dibujar el carrito para que desaparezca visualmente
         renderizarCarrito();
 
-        // 3. Opcional: Si quieres que la tienda se actualice (por si cambian estados de botones)
         if (typeof renderizarTienda === 'function') {
             renderizarTienda();
         }
@@ -768,7 +765,7 @@ function aplicarFiltros() {
         }
     }
 
-    // 3. RESET DE PAGINACIÓN Y RENDER
+    // RESET DE PAGINACIÓN Y RENDER
     paginaActual = 1;
     renderizarTienda();
 }
@@ -785,7 +782,6 @@ listaCategorias.addEventListener('click', (e) => {
 
     categoriaSeleccionada = link.dataset.categoria;
 
-    // Opcional: Marcar visualmente la categoría seleccionada
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
     link.classList.add('active');
 
@@ -892,8 +888,6 @@ window.abrirDetalleProducto = (id) => {
     cerrar.addEventListener('click', () => {
         overlay.remove();
     });
-
-    detalle.style.position = 'relative';
     detalle.appendChild(cerrar);
 
     // Todo junto
@@ -901,10 +895,6 @@ window.abrirDetalleProducto = (id) => {
     detalle.appendChild(columnaInfo);
     overlay.appendChild(detalle);
     document.body.appendChild(overlay);
-
-    // Efecto al modal para que cuando se abra mole mas jeje
-    detalle.style.opacity = '0';
-    detalle.style.transition = 'opacity 0.3s ease';
 
     setTimeout(() => {
         detalle.style.opacity = '1';
