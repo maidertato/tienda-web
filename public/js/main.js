@@ -148,10 +148,9 @@ contenedor.addEventListener('click', (e) => {
 
 
         if (producto) {
-            // 1. CREAR EL GLOBITO (Aparecerá al lado del carro)
+            // crear el globito
             const globo = document.createElement('div');
             globo.className = 'mensaje-exito-flotante';
-            // CAMBIO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             globo.textContent = '¡Añadido con éxito!';
             btn.parentElement.appendChild(globo);
 
@@ -162,7 +161,6 @@ contenedor.addEventListener('click', (e) => {
                 }, 300);
             }, 1500);
 
-            // 2. LÓGICA DE CARRITO
             // Creamos una clave ÚNICA por variante
             const claveCarrito = variante
                 ? `${id}_${variante.nombre}`
@@ -541,12 +539,12 @@ function renderizarCarrito() {
             const carritoItem = e.target.closest('.carrito-item');
             let aviso = carritoItem.querySelector('.aviso-maximo');            
             
-            // Si el usuario borra con la tecla retroceso para escribir otro número, no hacemos nada y le dejamos la caja vacía un segundo para que pueda teclear.
+            // Evitar errores al escribir manualemnte
             if (e.target.value === '') {
                 return; 
             }
 
-            // Si baja a 0 con flechas, o escribe un número negativo, se borra al instante.
+            // Si 0 --> Elimina el prducto
             if (nuevaCantidad <= 0) {
                 eliminarDelCarrito(idCarrito);
                 return; // Paramos la ejecución aquí
@@ -797,30 +795,28 @@ listaCategorias.addEventListener('click', (e) => {
 const btnBorrar = document.getElementById('btn-borrar-filtros');
 
 btnBorrar?.addEventListener('click', () => {
-    // 1. Limpiar Buscador
+    // Limpiar Buscador
     if (buscador) buscador.value = "";
 
-    // 2. Resetear Precio (Volver al máximo)
+    // Resetear Precio (Volver al máximo)
     if (filtroPrecio) {
         filtroPrecio.value = 100;
         precioMaxValor.textContent = "100";
     }
 
-    // 3. Resetear Categoría
+    // Resetear Categoría
     categoriaSeleccionada = "all";
 
-    // 4. Limpiar estilos visuales de categorías
+    //Limpiar estilos visuales de categorías
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
 
-    // 5. Resetear el título
+    // Resetear el título
     if (tituloTienda) tituloTienda.textContent = "Todos los productos";
-
-    // --- EL PASO CLAVE ---
     // Reseteamos el array de filtrados al inventario completo
     productosFiltrados = [...inventario];
     paginaActual = 1;
 
-    // 6. Aplicar los cambios
+    // Aplicar los cambios
     aplicarFiltros();
 });
 
@@ -832,7 +828,6 @@ filtroPrecio.addEventListener('input', () => {
 
 // ==================================== Modal para ver los detalles del producto ==================================== 
 window.abrirDetalleProducto = (id) => {
-    // 1. Buscar el producto por ID
     const p = inventario.find(prod => prod.id === id);
     const index = varianteActualPorProducto.get(id) || 0;
     const variante = p.variantes?.[index];
@@ -842,79 +837,48 @@ window.abrirDetalleProducto = (id) => {
 
     // Fondo con opacidad menor a 1 (Overlay)
     const overlay = document.createElement('div');
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
-    overlay.style.display = 'flex';
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
-    overlay.style.zIndex = '9999';
+    overlay.className = 'modal-overlay';
 
     // Caja con la info
     const detalle = document.createElement('div');
-    detalle.style.backgroundColor = '#ffffff';
-    detalle.style.borderRadius = '20px';
-    detalle.style.width = '60%';
-    detalle.style.maxWidth = '900px';
-    detalle.style.maxHeight = '75vh';
-    detalle.style.display = 'flex';
-    detalle.style.borderRadius = '12px';
-    detalle.style.overflow = 'hidden';
-    detalle.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+    detalle.className = 'modal-detalle';
 
     // Columna izquierda con la imagen
     const columnaImagen = document.createElement('div');
-    columnaImagen.style.flex = '1';
-    columnaImagen.style.display = 'flex';
-    columnaImagen.style.alignItems = 'center';
-    columnaImagen.style.justifyContent = 'center';
-    columnaImagen.style.backgroundColor = '#f5f5f5';
-    columnaImagen.style.borderRight = '1px solid #ddd';
-
+    columnaImagen.className = 'modal-columna-imagen';
+    
     const img = document.createElement('img');
     img.src = variante ? variante.imagen : p.imagen;
-    img.style.maxWidth = '100%';
-    img.style.maxHeight = '100%';
-    img.style.objectFit = 'contain';
-
+    img.className = 'modal-imagen';
     columnaImagen.appendChild(img);
 
     // Columna derecha con la información del prooducto
     const columnaInfo = document.createElement('div');
-    columnaInfo.style.flex = '1';
-    columnaInfo.style.display = 'flex';
-    columnaInfo.style.flexDirection = 'column';
-    columnaInfo.style.justifyContent = 'flex-start';
-    columnaInfo.style.overflowY = 'auto';
-    columnaInfo.style.padding = '30px';
+    columnaInfo.className = 'modal-columna-info';
 
 
     columnaInfo.innerHTML = `
-        <h3 style="background:#9b59b6; color:white; padding:18px 22px; border-radius:10px; font-size:24px; font-weight:700; margin-bottom:30px; display:inline-block; margin-right: 40px;">
+        <h3 class="modal-titulo">
             ${variante ? `${p.nombre} – ${variante.nombre}` : p.nombre}
         </h3>
 
-        <div style="background:#f3e9fb; padding:12px 16px; border-radius:12px; margin-top:15px; margin-bottom:30px; display:inline-block;margin-right: 40px;">
+        <div class="modal-bloque-precio">
             <span style="font-size:18px; font-weight:600; color:#7d3c98;">Precio:</span>
             <span style="font-size:24px; font-weight:700; color:#555; margin-left:8px;">
                 ${p.precio}€
             </span>
         </div>
 
-
-        <div style=" background:#f9f6fc; padding:10px 15px; border-radius:10px; margin-bottom:20px; display:inline-block; margin-right: 40px;">
+        <div class="modal-bloque-tipo">
             <span style="font-weight:600; color:#7d3c98;">Tipo:</span>
             <span style="color:#555; margin-left:8px;"> 
-                ${p.tipo}</span>
+                ${p.tipo}
+            </span>
         </div>
 
-
-        <div style=" margin-top:20px; padding-top:20px; border-top:1px solid #eee; margin-right: 40px; margin-left: 10px;">
-            <p style=" font-weight:600; margin-bottom:10px; color:#7d3c98; ">Descripción:</p>
-            <p style=" line-height:1.6; color:#555;">
+        <div class="modal-bloque-desc">
+            <p style="font-weight:600; margin-bottom:10px; color:#7d3c98;">Descripción:</p>
+            <p style="line-height:1.6; color:#555;">
                 ${p.descripcion}
             </p>
         </div>
@@ -923,16 +887,7 @@ window.abrirDetalleProducto = (id) => {
     // La x para cerrar
     const cerrar = document.createElement('button');
     cerrar.textContent = '✕';
-    cerrar.style.position = 'absolute';
-    cerrar.style.top = '15px';
-    cerrar.style.right = '20px';
-    cerrar.style.border = 'none';
-    cerrar.style.background = 'transparent';
-    cerrar.style.fontSize = '20px';
-    cerrar.style.cursor = 'pointer';
-    cerrar.style.color = '#333';
-    cerrar.style.fontWeight = 'bold';
-
+    cerrar.className = 'modal-btn-cerrar';
 
     cerrar.addEventListener('click', () => {
         overlay.remove();
@@ -946,7 +901,6 @@ window.abrirDetalleProducto = (id) => {
     detalle.appendChild(columnaInfo);
     overlay.appendChild(detalle);
     document.body.appendChild(overlay);
-    //document.body.style.overflow = 'hidden'; // Para que lo de detrás no se pueda scrollear
 
     // Efecto al modal para que cuando se abra mole mas jeje
     detalle.style.opacity = '0';
