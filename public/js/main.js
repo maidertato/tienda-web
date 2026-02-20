@@ -1,10 +1,4 @@
-import { inventario, agregarProductoAlInventario, carrito } from './tienda.js';
-import { Alimentacion } from './alimentacion.js';
-import { Cabello } from './cabello.js';
-import { Juguete } from './juguete.js';
-import { Merchandising } from './merchandising.js';
-import { Mobiliario } from './mobiliario.js';
-import { Accesorios } from './accesorios.js';
+import { inventario, agregarProductoAlInventario, carrito, obtenerAtributoExtra } from './tienda.js';
 
 const normalizarTexto = (texto) => {
     return texto ? texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim() : "";
@@ -92,14 +86,10 @@ export function renderizarTienda() {
         let imagenMostrada = producto.imagen || "imagenes/productos/default.png";
         let nombreMostrado = producto.nombre || "Producto sin nombre";
 
-        if (variantes && variantes.length > 0) {
-            const index = varianteActualPorProducto.get(producto.id) || 0;
-            imagenMostrada = variantes[index].imagen;
-            nombreMostrado = `${producto.nombre} – ${variantes[index].nombre}`;
-        }
-
-
-        const itemEnCarrito = carrito.get(producto.id);
+        const index = varianteActualPorProducto.get(producto.id) || 0;
+        const variante = producto.variantes?.[index];
+        const claveCarrito = variante ? `${producto.id}_${variante.nombre}` : producto.id;
+        const itemEnCarrito = carrito.get(claveCarrito);
         const alcanzadoMaximo = itemEnCarrito && itemEnCarrito.cantidad >= 20;
 
         const card = document.createElement('div');
@@ -192,6 +182,16 @@ contenedor.addEventListener('click', (e) => {
             }
 
             renderizarCarrito();
+
+            // Si se llega al maximo ( 20 copias del producto) hay que desactivar el botón de esa card
+            const itemEnCarrito = carrito.get(claveCarrito);
+            if (itemEnCarrito.cantidad >= 20) { 
+                btn.disabled = true;
+                btn.classList.add('disabled');  
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('disabled');
+            }
         }
     }
     //Click sobre la imagen
@@ -222,8 +222,19 @@ contenedor.addEventListener('click', (e) => {
     if (card) {
         const imgElement = card.querySelector('.imagen-producto');
         const tituloElement = card.querySelector('.card-title');
-        
+        const btnAgregar = card.querySelector('.btn-agregar-flotante');
         const nuevaVariante = producto.variantes[siguiente];
+
+        const claveNuevaVariante = `${producto.id}_${nuevaVariante.nombre}`;
+        const item = carrito.get(claveNuevaVariante);
+
+        if (item?.cantidad >= 20) {
+            btnAgregar.disabled = true;
+            btnAgregar.classList.add('disabled');
+        } else {
+            btnAgregar.disabled = false;
+            btnAgregar.classList.remove('disabled');
+        }
 
         // Cambiamos solo lo necesario
         imgElement.src = nuevaVariante.imagen;
@@ -258,9 +269,8 @@ form.addEventListener('submit', (e) => {
     const nombreInput = document.getElementById('productName') || form.querySelector('input[placeholder*="Nombre"]');
     const precioInput = document.getElementById('productPrice') || form.querySelector('input[type="number"]');
     const descInput = document.getElementById('productDescription') || form.querySelector('textarea');
-    const selectTipo = document.getElementById('tipo-producto');
 
-    // Captura por ID o por nombre de campo es mucho más segura
+    // Coger valores del formulario
     const nombre = nombreInput.value.trim();
     const precio = parseFloat(precioInput.value);
     const descripcion = descInput.value.trim();
@@ -284,6 +294,7 @@ form.addEventListener('submit', (e) => {
         ? URL.createObjectURL(inputReal.files[0])
         : 'imagenes/productos/default.png';
 
+    
     const datosContenedor = { nombre, precio, descripcion, imagen };
     switch (tipo) {
         case 'mobiliario':
@@ -324,7 +335,7 @@ form.addEventListener('submit', (e) => {
 
         renderizarTienda();
         limpiarTodoElFormulario();
-        mostrarMensaje("success", "¡Producto añadido correctamente!");
+        mostrarMensaje("success", "¡Producto añadido con éxito!");
     } else {
         mostrarMensaje("error", "Hubo un problema al guardar el producto");
     }
@@ -412,7 +423,7 @@ dropZone.addEventListener("drop", (e) => {
         inputReal.value = '';
         dropText.textContent = predefText;
 
-        mostrarMensaje("error", "El formato del archivo no es válido.");
+        mostrarMensaje("error", "El formato del archivo no es válido. Debe ser JPG/JPEG o PNG.");
         return;
     }
 
@@ -477,8 +488,7 @@ function renderizarCarrito() {
         return;
     }
 
-    // ============================
-
+    // ============================ RENDERIZAR LOS PRODUCTOS DEL CARRITO  ============================
     let cantidadTotal = 0;
     carrito.forEach((item, id) => {
         cantidadTotal += item.cantidad;
@@ -496,7 +506,7 @@ function renderizarCarrito() {
                     <div class="d-flex align-items-center gap-1 mt-1">
                         <span class="precio-unitario text-muted">${item.precio.toFixed(2)}€</span>
                         <span>x</span>
-                        <input type="number" class="input-cantidad form-control form-control-sm text-center" data-id="${id}" value="${item.cantidad}" style="width: 50px;"> 
+                        <input type="number" class="input-cantidad form-control form-control-sm text-center" data-id="${id}" value="${item.cantidad}" min="0" style="width: 50px;"> 
                         <span>=</span>
                         <span class="precio-total-producto fw-bold">${(item.precio * item.cantidad).toFixed(2)}€</span>
                     </div>
@@ -511,26 +521,8 @@ function renderizarCarrito() {
         `;
 
         carritoContenedor.appendChild(div);
-        
-        // ===================== Actualizar total del producto individual =====================
-        const inputCantidad = div.querySelector('.input-cantidad');
-        const precioTotalProducto = div.querySelector('.precio-total-producto');
-
-        inputCantidad.addEventListener('input', (e) => {
-            let nuevaCantidad = parseInt(e.target.value) || 1;
-
-            // Forzamos mínimo 1
-            if (nuevaCantidad < 1) nuevaCantidad = 1;
-            e.target.value = nuevaCantidad;
-
-            // Actualizamos la cantidad del producto
-            item.cantidad = nuevaCantidad;
-
-            // --- LÍNEA CLAVE: actualiza solo el total de este producto ---
-            precioTotalProducto.textContent = `${(item.precio * nuevaCantidad).toFixed(2)}€`;
-        });
     });
-    
+
     actualizarIconoCarrito(cantidadTotal);
 
     const footer = document.createElement('div');
@@ -542,48 +534,58 @@ function renderizarCarrito() {
     const inputsCantidad = carritoContenedor.querySelectorAll('.input-cantidad');
 
     inputsCantidad.forEach(input => {
-        // Usamos 'input' en lugar de 'change' para detección instantánea
         input.addEventListener('input', (e) => {
-            const id = e.target.getAttribute('data-id');
+            const idCarrito = e.target.getAttribute('data-id');
             let nuevaCantidad = parseInt(e.target.value);
 
             const carritoItem = e.target.closest('.carrito-item');
             let aviso = carritoItem.querySelector('.aviso-maximo');            
             
-            if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
-                nuevaCantidad = 1; // Forzamos que el valor interno sea 1
-                e.target.value = 1; // Forzamos que el dibujo del input muestre 1
+            // Si el usuario borra con la tecla retroceso para escribir otro número, no hacemos nada y le dejamos la caja vacía un segundo para que pueda teclear.
+            if (e.target.value === '') {
+                return; 
             }
 
-            // 2. Si quieres poner un límite máximo (ejemplo 20)
+            // Si baja a 0 con flechas, o escribe un número negativo, se borra al instante.
+            if (nuevaCantidad <= 0) {
+                eliminarDelCarrito(idCarrito);
+                return; // Paramos la ejecución aquí
+            }
+            // MAXIMO 20
             if (nuevaCantidad > 20) {
                     nuevaCantidad = 20;
                     e.target.value = 20;
                 
-
-                // Si no existe el mensaje de aviso, lo creamos
                 if (!aviso) {
                     aviso = document.createElement('div');
                     aviso.className = 'aviso-maximo';
                     aviso.textContent = 'No se permiten más de 20 copias.';
                     carritoItem.appendChild(aviso);
+                    
+                    setTimeout(() => {
+                        if (aviso && aviso.parentNode) {
+                            aviso.remove();
+                        }
+                    }, 2500);
                 }
             }else {
-                    // Si baja de 20, borramos el aviso si existe
+                    // Si baja de 20, borramos el aviso
                     if (aviso) aviso.remove();
             }
 
             // 1. Actualizamos el producto en el Map
-            if (carrito.has(id)) {
-                const producto = carrito.get(id);
+            if (carrito.has(idCarrito)) {
+                const producto = carrito.get(idCarrito);
                 producto.cantidad = nuevaCantidad;
 
-                // 2. Recalculamos el total de unidades para el globo rojo
+                const precioLinea = carritoItem.querySelector('.precio-total-producto');
+                if (precioLinea) {
+                    precioLinea.textContent = `${(producto.precio * nuevaCantidad).toFixed(2)}€`;
+                }
                 let totalUnidades = 0;
                 carrito.forEach(p => totalUnidades += p.cantidad);
                 actualizarIconoCarrito(totalUnidades);
 
-                // 3. Actualizamos el precio total del carrito (el texto de abajo)
                 let nuevoTotalEuros = 0;
                 carrito.forEach(p => nuevoTotalEuros += p.precio * p.cantidad);
 
@@ -591,10 +593,34 @@ function renderizarCarrito() {
                 if (totalDisplay) {
                     totalDisplay.textContent = `Total: ${nuevoTotalEuros.toFixed(2)}€`;
                 }
+                
+                const [productoId, varianteNombre] = idCarrito.split('_');
+        
+                // Averiguamos qué variante se está mostrando en la tienda ahora mismo
+                const indexActual = varianteActualPorProducto.get(productoId) || 0;
+                const prodInventario = inventario.find(p => p.id === productoId);
+                const varianteActual = prodInventario?.variantes?.[indexActual];
+                const nombreVarianteActual = varianteActual ? varianteActual.nombre : undefined;
+
+                const card = document.querySelector(`.card-producto-tienda [data-id="${productoId}"]`)?.closest('.card-producto-tienda');
+                
+                if (card) {
+                    const btnAgregar = card.querySelector('.btn-agregar-flotante');
+                    
+                    // Clave: Solo bloqueamos el botón si la variante que vemos es la misma que llegó a 20 en el carrito
+                    if (varianteNombre === nombreVarianteActual || (!varianteNombre && !nombreVarianteActual)) {
+                        if (nuevaCantidad >= 20) {
+                            btnAgregar.disabled = true;
+                            btnAgregar.classList.add('disabled');
+                        } else {
+                            btnAgregar.disabled = false;
+                            btnAgregar.classList.remove('disabled');
+                        }
+                    }
+                }
             }
         });
 
-        // Evento extra por si el usuario deja el campo vacío y pincha fuera
         input.addEventListener('blur', (e) => {
             if (e.target.value === '' || parseInt(e.target.value) < 1) {
                 const id = e.target.getAttribute('data-id');
@@ -602,7 +628,8 @@ function renderizarCarrito() {
             }
         });
     });
-};
+}
+
 // FUNCION ELIMINAR
 window.eliminarDelCarrito = (id) => {
     // 1. Eliminamos el producto del Map usando su ID
@@ -636,34 +663,6 @@ function actualizarIconoCarrito(total) {
     }
 }
 
-function obtenerAtributoExtra(p) {
-
-    if (p instanceof Accesorios) {
-        return `Tipo mascota: ${p.tipoMascota}`;
-    }
-
-    if (p instanceof Alimentacion) {
-        return `Tipo alimento: ${p.tipoAlimento}`;
-    }
-
-    if (p instanceof Cabello) {
-        return `Estilo: ${p.estilo}`;
-    }
-
-    if (p instanceof Juguete) {
-        return `Tipo juguete: ${p.tipo}`;
-    }
-
-    if (p instanceof Merchandising) {
-        return `Parte del cuerpo: ${p.parteDelCuerpo}`;
-    }
-
-    if (p instanceof Mobiliario) {
-        return `Material: ${p.material}`;
-    }
-
-    return '';
-}
 
 function actualizarInterfazPaginacion() {
     const total = productosFiltrados.length;
@@ -966,32 +965,19 @@ window.abrirDetalleProducto = (id) => {
     });
 };
 
-
-// ==================================== DOM inicial ====================================
-
-// NOSE QUE ES MIRAR
 document.addEventListener("DOMContentLoaded", () => {
-    const btnInicio = document.getElementById("btn-inicio");
+    renderizarTienda();
+    renderizarCarrito();
 
+    const btnInicio = document.getElementById("btn-inicio");
     if (btnInicio) {
         btnInicio.addEventListener("click", (e) => {
             e.preventDefault();
-
             categoriaSeleccionada = "all";
             productosFiltrados = [...inventario];
             paginaActual = 1;
-
-            if (tituloTienda) {
-                tituloTienda.textContent = "Todos los productos";
-            }
-
+            if (tituloTienda) tituloTienda.textContent = "Todos los productos";
             renderizarTienda();
         });
     }
-});
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    renderizarTienda();
-    renderizarCarrito();
 });

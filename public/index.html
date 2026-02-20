@@ -135,7 +135,7 @@
             <div class="mb-3">
               <label class="form-label">Tipo de Producto</label>
               <select id="tipo-producto" class="form-select" required>
-                <option value="" selected disabled>Escoge un tipo</option>
+                <option value="" selected >Escoge un tipo</option>
                 <option value="mobiliario">Mobiliario</option>
                 <option value="cabello">Cabello</option>
                 <option value="juguete">Juguete</option>
@@ -159,8 +159,7 @@
 
             <div class="mb-3">
               <label class="form-label">Descripción</label>
-              <textarea id="productDescription" placeholder="Describe tu producto..." class="form-control" rows="3"
-                required></textarea>
+              <textarea id="productDescription" placeholder="Describe tu producto..." class="form-control" rows="3"></textarea>
             </div>
 
             <div id="campo-extra-container" class="mb-3"></div>
@@ -198,7 +197,7 @@
               d="M28,27.3,26.24,7.51a.75.75,0,0,0-.76-.69h-3.7a6,6,0,0,0-12,0H6.13a.76.76,0,0,0-.76.69L3.62,27.3v.07a4.29,4.29,0,0,0,4.52,4H23.48a4.29,4.29,0,0,0,4.52-4ZM15.81,2.37a4.47,4.47,0,0,1,4.46,4.45H11.35a4.47,4.47,0,0,1,4.46-4.45Zm7.67,27.48H8.13a2.79,2.79,0,0,1-3-2.45L6.83,8.34h3V11a.76.76,0,0,0,1.52,0V8.34h8.92V11a.76.76,0,0,0,1.52,0V8.34h3L26.48,27.4a2.79,2.79,0,0,1-3,2.44Z">
             </path>
           </svg>
-          <span class="quantity"></span>
+          <span class="quantity" id="cart-counter"></span>
         </button>
 
         <h5 class="offcanvas-title">Carrito de la compra</h5>

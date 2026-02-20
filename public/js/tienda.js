@@ -5,7 +5,7 @@ import { Cabello } from './cabello.js';
 import { Mobiliario } from './mobiliario.js';
 import { Accesorios } from './accesorios.js';
 
-// INVENTARIO INICIAL
+// INVENTARIO INICIAL(array de productos creados a mano)
 export const inventario = [
   // Juguetes
   new Juguete('Pelota de Goma', 10, 'La clásica pelota que no muere nunca, aunque tu perro sí pierda la cabeza cada vez que la ve. Rebota, resiste mordiscos nivel trituradora y convierte cualquier paseo en unas Olimpiadas caninas no autorizadas. Si desaparece bajo el sofá, prepárate para miradas acusadoras durante horas.', 'imagenes/productos/pelotaGoma.png', 'Pelota', 'Mediano', true),
@@ -187,7 +187,8 @@ inventario.find(p => p.nombre === 'Alfombra mascotas').variantes = [
   { nombre: 'Pawty Time', imagen: 'imagenes/productos/alfombrAntideslizante2.png' }
 ];
 
-// LISTA VACÍA PARA EL CARRITO 
+
+// LISTA VACÍA PARA EL CARRITO PARA EXPORTAR
 export const carrito = new Map();
 
 // FUNCIONES RELATIVAS A PRODUCTOS 
@@ -272,11 +273,38 @@ export function agregarProductoAlInventario(tipo, datos) {
 
       );
       break;
-
     default:
       return false;
   }
 
   inventario.push(nuevoProducto);
   return true;
+}
+export function obtenerAtributoExtra(p) {
+
+    if (p instanceof Accesorios) {
+        return `Tipo mascota: ${p.tipoMascota}`;
+    }
+
+    if (p instanceof Alimentacion) {
+        return `Tipo alimento: ${p.tipoAlimento}`;
+    }
+
+    if (p instanceof Cabello) {
+        return `Estilo: ${p.estilo}`;
+    }
+
+    if (p instanceof Juguete) {
+        return `Tipo juguete: ${p.tipo}`;
+    }
+
+    if (p instanceof Merchandising) {
+        return `Parte del cuerpo: ${p.parteDelCuerpo}`;
+    }
+
+    if (p instanceof Mobiliario) {
+        return `Material: ${p.material}`;
+    }
+
+    return '';
 }
