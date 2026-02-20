@@ -83,11 +83,14 @@ export function renderizarTienda() {
     productosPagina.forEach(producto => {
         const variantes = producto.variantes;
 
-        let imagenMostrada = producto.imagen || "imagenes/productos/default.png";
-        let nombreMostrado = producto.nombre || "Producto sin nombre";
-
         const index = varianteActualPorProducto.get(producto.id) || 0;
         const variante = producto.variantes?.[index];
+        
+        let imagenMostrada = producto.imagen || "imagenes/productos/default.png";
+        let nombreMostrado = (variante && variante.nombre) 
+            ? `${producto.nombre} – ${variante.nombre}` 
+            : (producto.nombre || "Producto sin nombre");
+
         const claveCarrito = variante ? `${producto.id}_${variante.nombre}` : producto.id;
         const itemEnCarrito = carrito.get(claveCarrito);
         const alcanzadoMaximo = itemEnCarrito && itemEnCarrito.cantidad >= 20;
@@ -668,9 +671,7 @@ function actualizarInterfazPaginacion() {
     if (!nav) return;
 
     nav.innerHTML = '';
-    // =============================================================================================
-    // TEXTO: Mostrando (numero de productos) de (numero de productos totales) productos
-    // =============================================================================================
+   
     if (total === 0) {
         info.textContent = 'Mostrando 0 de 0 productos';
         return;
@@ -681,11 +682,7 @@ function actualizarInterfazPaginacion() {
     const mostrado = total === 0 ? 0 : fin - inicio;
 
     info.textContent = `Mostrando ${mostrado} de ${total} productos`;
-
-
-    // ===============================
-    // BOTÓN ANTERIOR (si NO es la primera)
-    // ===============================
+    // Anterior
     if (paginaActual > 1) {
         nav.innerHTML += `
             <li class="page-item ">
@@ -695,9 +692,7 @@ function actualizarInterfazPaginacion() {
             </li>
         `;
     }
-    // ===============================
-    // BOTONES NUMÉRICOS
-    // ===============================
+    // Numeritos
     for (let i = 1; i <= numPaginas; i++) {
         nav.innerHTML += `
             <li class="page-item ${i === paginaActual ? 'active' : ''}">
@@ -707,10 +702,7 @@ function actualizarInterfazPaginacion() {
             </li>
         `;
     }
-
-    // ===============================
-    // BOTÓN SIGUIENTE (si NO es la última)
-    // ===============================
+    // Siguiente
     if (paginaActual < numPaginas) {
         nav.innerHTML += `
             <li class="page-item ${paginaActual === numPaginas ? 'disabled' : ''}">
@@ -744,15 +736,20 @@ function aplicarFiltros() {
             return coincideTexto && coincidePrecio;
         }
 
-        // Normalizamos ambos para evitar fallos por tildes o mayúsculas
+        // Normalizar porseaca
         const catNormalizada = normalizarTexto(categoriaSeleccionada);
-        const tipoProdNormalizado = normalizarTexto(p.tipo || "");
-
-        // Verificamos si coincide el tipo principal (clase) 
-        // o si es una instancia de Alimentacion/Merchandising
-        const coincideCategoria = tipoProdNormalizado === catNormalizada;
+        
+        let coincideCategoria = false;
+        const esClaseJuguete = p.constructor.name === "Juguete";
+        if (esClaseJuguete && catNormalizada === "juguete") {
+            coincideCategoria = true;
+        } else {
+            const tipoProdNormalizado = normalizarTexto(p.tipo || "");
+            coincideCategoria = tipoProdNormalizado === catNormalizada;
+        }
         return coincideTexto && coincidePrecio && coincideCategoria;
     });
+
     if (tituloTienda) {
         if (termino !== "") {
             tituloTienda.textContent = `Buscando por: "${buscador.value}"`;
