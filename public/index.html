@@ -1,212 +1,40 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="imagenes/icon/favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="imagenes/icon/favicon.svg">
-  <link rel="shortcut icon" href="imagenes/icon/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="imagenes/icon/apple-touch-icon.png">
-  <link rel="manifest" href="imagenes/icon/site.webmanifest">
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
 
-  <!-- Titulo de la Web -->
-  <title>Tienda de Mascotas</title>
-  <meta name="description" content="Esta tienda contiene productos para animales, para todos los gustos.">
-
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/styles.css">
-
-  <!-- main.js -->
-  <script type="module" src="js/main.js"></script>
-
-</head>
-
-<body>
-  <div id="contenedor">
-    <!-- HEADER -->
-    <header class="py-3 bg-light">
-      <h1 class="text-center"> 🐈   🐦 Tienda de Mascotas 🦮   🐇 </h1>
-    </header>
-
-    <!-- NAV -->
-    <nav class="nav-expand">
-      <ul class="button-container d-flex list-unstyled justify-content-center m-0 p-2 gap-4">
-        <!-- NAV -->
-        <li> 
-          <a href="#" class="nav-btn" id="btn-inicio">
-            <svg class="icon" width="24" height="24" viewBox="0 0 1024 1024">
-              <path fill="currentColor"
-                d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2z" />
-            </svg>
-            <span class="nav-text">Inicio</span>
-          </a>
-        </li>
-        <!-- NAV / BOTON CARRITO -->
-        <li>
-          <a href="#" class="nav-btn" data-bs-toggle="offcanvas" data-bs-target="#carrito">
-            <div style="position: relative; display: inline-flex;">
-              <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-              </svg>
-              <span id="cart-counter"class="cart-badge badge position-absolute top-0 start-100 translate-middle rounded-pill"></span>
-            </div>
-            <span class="nav-text">Carrito</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-
-    <!-- CONTENIDO -->
-    <div id="contenido" class="container-fluid">
-      <div class="row">
-        <!-- MAIN / PRODUCTOS -->
-        <main class="col">
-          <div class="d-flex align-items-center w-100 p-3 ">
-            <!-- Titulo todos los productos -->
-            <h2 id="titulo-tienda" class="m-0">Todos los productos</h2>
-            <!-- Buscador + Filtro -->
-            <div class="contenedor-busqueda-filtro ms-auto">
-              <input type="text" id="buscador" class="form-control buscador-custom" placeholder="Buscar por nombre...">
-              <div class="dropdown">
-                <button class="btn btn-primary p-0" type="button" id="btn-categorias" data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  style="width: 45px; height: 45px; background-color: #8e29b6; border: none; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="4" y1="21" x2="4" y2="14"></line>
-                    <line x1="4" y1="10" x2="4" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12" y2="3"></line>
-                    <line x1="20" y1="21" x2="20" y2="16"></line>
-                    <line x1="20" y1="12" x2="20" y2="3"></line>
-                    <line x1="2" y1="14" x2="6" y2="14"></line>
-                    <line x1="10" y1="8" x2="14" y2="8"></line>
-                    <line x1="18" y1="16" x2="22" y2="16"></line>
-                  </svg>
-                </button>
-                <div class="dropdown-menu p-3 shadow" aria-labelledby="btn-categorias"
-                  style="min-width: 250px; border-radius: 12px;">
-                  <h6 class="dropdown-header text-dark fw-bold ps-0">Categoría</h6>
-                  <ul class="list-unstyled mb-2" id="lista-categorias">
-                  </ul>
-                  <hr class="dropdown-divider">
-                  <h6 class="dropdown-header text-dark fw-bold ps-0">Precio máximo: <span
-                      id="precio-max-valor">100</span>€</h6>
-                  <div class="px-2">
-                    <input type="range" class="form-range" id="filtro-precio" min="0" max="100" step="1" value="100"
-                      style="accent-color: #9b59b6;">
-                    <button type="button" id="btn-borrar-filtros" class="btn btn-sm w-100 mt-3"
-                      style="background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; border-radius: 6px; font-weight: 600;">
-                      Borrar Filtros
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- PRODUCTOS -->
-          <div id="lista-productos" class="row g-4 px-3"></div>
-
-          <div class="mt-1 text-center">
-            <p id="info-paginacion" class="small text-muted"></p>
-            <nav>
-              <ul id="pagination-container" class="pagination justify-content-center"></ul>
-            </nav>
-          </div>
-        </main>
-
-        <!-- ASIDE / FORMULARIO -->
-        <aside class="col-auto ms-4">
-          <h3 class="text-center mb-3">Añadir Productos</h3>
-          <form id="form-producto">
-            <!-- Tipo de Producto (select) -->
-            <div class="mb-3">
-              <label class="form-label">Tipo de Producto</label>
-              <select id="tipo-producto" class="form-select" required>
-                <option value="" selected >Escoge un tipo</option>
-                <option value="mobiliario">Mobiliario</option>
-                <option value="cabello">Cabello</option>
-                <option value="juguete">Juguete</option>
-                <option value="merchandising">Merchandising</option>
-                <option value="alimentacion">Alimentación</option>
-                <option value="accesorios">Accesorios</option>
-                
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Nombre del Producto</label>
-              <input type="text" id="productName" placeholder="Ej:  Pelota de goma" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Precio (€)</label>
-              <input type="number" id="productPrice" placeholder="0.00" class="form-control" min="0.00" step="0.01"
-                required>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Descripción</label>
-              <textarea id="productDescription" placeholder="Describe tu producto..." class="form-control" rows="3"></textarea>
-            </div>
-
-            <div id="campo-extra-container" class="mb-3"></div>
-
-            <div class="mb-3">
-              <label class="form-label">Imagen del Producto</label>
-              <input type="file" id="input-file" class="form-control file-input">
-            </div>
-
-            <div class="mb-4">
-              <label class="form-label">O arrastra la imagen aquí</label>
-              <div id="drop-zone" class="drop-zone-style">
-                <p id="drop-text" class="m-0">Arrastra tu imagen aquí</p>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-custom w-100">
-              + Subir Producto
-            </button>
-          </form>
-        </aside>
-      </div>
-    </div>
-    <!-- FOOTER -->
-    <footer>
-      © Dawidawe taldea
-    </footer>
-  </div>
-  <!-- OFFCANVAS CARRITO -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="carrito">
-    <div class="offcanvas-header custom-header">
-      <div class="carrito-header-custom">
-        <button type="button" data-quantity="0" class="btn-cart" id="cart-icon">
-          <svg class="icon-cart" viewBox="0 0 24.38 30.52" xmlns="http://www.w3.org/2000/svg">
-            <path transform="translate(-3.62 -0.85)"
-              d="M28,27.3,26.24,7.51a.75.75,0,0,0-.76-.69h-3.7a6,6,0,0,0-12,0H6.13a.76.76,0,0,0-.76.69L3.62,27.3v.07a4.29,4.29,0,0,0,4.52,4H23.48a4.29,4.29,0,0,0,4.52-4ZM15.81,2.37a4.47,4.47,0,0,1,4.46,4.45H11.35a4.47,4.47,0,0,1,4.46-4.45Zm7.67,27.48H8.13a2.79,2.79,0,0,1-3-2.45L6.83,8.34h3V11a.76.76,0,0,0,1.52,0V8.34h8.92V11a.76.76,0,0,0,1.52,0V8.34h3L26.48,27.4a2.79,2.79,0,0,1-3,2.44Z">
-            </path>
-          </svg>
-          <span class="quantity" id="cart-counter"></span>
-        </button>
-
-        <h5 class="offcanvas-title">Carrito de la compra</h5>
-      </div>
-
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body" id="carrito-body"></div>
-  </div>
-
-</body>
-
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
 </html>
