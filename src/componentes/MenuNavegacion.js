@@ -1,0 +1,37 @@
+import React from 'react';
+
+const MenuNavegacion = ({ onInicioClick, carritoCantidad }) => {
+    return (
+        <nav className="nav-expand">
+            <ul className="button-container d-flex list-unstyled justify-content-center m-0 p-2 gap-4">
+                <li>
+                    <button className="nav-btn" onClick={onInicioClick}>
+                        <svg className="icon" width="24" height="24" viewBox="0 0 1024 1024">
+                            <path fill="currentColor" d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2z"/>
+                        </svg>
+                        Inicio
+                    </button>
+                </li>
+                <li>
+                    <button className="nav-btn">
+                        <div style={{ position: 'relative', display: 'inline-flex' }}>
+                            <svg className="icon" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                                <circle cx="9" cy="21" r="1"/>
+                                <circle cx="20" cy="21" r="1"/>
+                            </svg>
+                            {carritoCantidad > 0 && (
+                                <span className="cart-badge badge position-absolute top-0 start-100 translate-middle rounded-pill">
+                                    {carritoCantidad}
+                                </span>
+                            )}
+                        </div>
+                        Carrito
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    );
+};
+
+export default MenuNavegacion;

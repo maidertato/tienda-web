@@ -6,7 +6,7 @@
 
 
 body {
-  background-image: url("../imagenes/fondos/fondo.png");
+  background-image: url("./imagenes/fondo.png");
   background-repeat: repeat;
   background-color: #F2EAFA;
   margin: 0;
@@ -35,7 +35,7 @@ header {
   padding: 2rem;
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
-    url("../imagenes/fondos/fondo-huellas.png");
+    url("./imagenes/fondo-huellas.png");
   background-size: cover;
   background-position: center;
   color: #4b2e83;
