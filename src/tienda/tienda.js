@@ -200,59 +200,45 @@ export const buscarProductoPorNombre = (nombre) => {
 
 // ==================================== Agregar productos al inventario --> Con el formulario! ====================================
 export function crearNuevoProducto(tipo, datos) {
-  let nuevoProducto;
-
+  let nuevo;
   switch (tipo) {
     case 'mobiliario':
-      nuevoProducto = new Mobiliario(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Material genérico", false);
+      nuevo = new Mobiliario(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Madera", true);
       break;
     case 'cabello':
-      nuevoProducto = new Cabello(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Estilo genérico", "Pequeño", "General", "Sin color");
+      nuevo = new Cabello(datos.nombre, datos.precio, datos.descripcion, datos.imagen, "Kawaii", "Pequeño", "Perro", datos.extra || "Multicolor");
       break;
     case 'juguete':
-      nuevoProducto = new Juguete(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Pelota", "Mediano", true);
+      nuevo = new Juguete(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Peluche", "Mediano", true);
       break;
     case 'merchandising':
-      nuevoProducto = new Merchandising(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Cuerpo", "General", "Negro");
+      nuevo = new Merchandising(datos.nombre, datos.precio, datos.descripcion, datos.imagen, "Cuerpo", "Mediano", datos.extra || "Color");
       break;
     case 'alimentacion':
-      nuevoProducto = new Alimentacion(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Seco", "Doméstico");
+      nuevo = new Alimentacion(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Seco", "General");
       break;
     case 'accesorios':
-      nuevoProducto = new Accesorios(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Estándar", "General", "Negro");
+      nuevo = new Accesorios(datos.nombre, datos.precio, datos.descripcion, datos.imagen, "General", "Mediano", datos.extra || "Único");
       break;
     default:
       return null;
   }
+<<<<<<< HEAD
   return nuevoProducto; 
 }
 
 
 export function obtenerAtributoExtra(p) {
+=======
+  return nuevo;
+}
+>>>>>>> e26af28791da5e067d26bd7571f94761e1f7c651
 
-    if (p instanceof Accesorios) {
-        return `Tipo mascota: ${p.tipoMascota}`;
-    }
-
-    if (p instanceof Alimentacion) {
-        return `Tipo alimento: ${p.tipoAlimento}`;
-    }
-
-    if (p instanceof Cabello) {
-        return `Estilo: ${p.estilo}`;
-    }
-
-    if (p instanceof Juguete) {
-        return `Tipo juguete: ${p.subtipo}`;
-    }
-
-    if (p instanceof Merchandising) {
-        return `Parte del cuerpo: ${p.parteDelCuerpo}`;
-    }
-
-    if (p instanceof Mobiliario) {
-        return `Material: ${p.material}`;
-    }
-
-    return '';
+// Esta función es vital para que las Cards muestren info de la clase
+export function obtenerAtributoExtra(producto) {
+  if (typeof producto.obtenerInformacion === 'function') {
+    return producto.obtenerInformacion();
+  }
+  // Fallback por si es un objeto plano de localStorage que no se reinstanció
+  return producto.extra || "Producto de la tienda";
 }

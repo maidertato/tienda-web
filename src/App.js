@@ -65,7 +65,6 @@ function App() {
           />
         </aside>
       </div>
-
       {/* Footer */}
       <Pie contenido="© Dawidawe taldea" />
     </div>
