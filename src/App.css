@@ -6,7 +6,7 @@
 
 
 body {
-  background-image: url("../imagenes/fondos/fondo.png");
+  background-image: url("/public/imagenes/fondo.png");
   background-repeat: repeat;
   background-color: #F2EAFA;
   margin: 0;
@@ -35,7 +35,7 @@ header {
   padding: 2rem;
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
-    url("../imagenes/fondos/fondo-huellas.png");
+    url("/public/imagenes/fondo-huellas.png");
   background-size: cover;
   background-position: center;
   color: #4b2e83;
@@ -343,6 +343,42 @@ aside button:hover {
   transform: scale(1.02);
 }
 
+/* Contenedor personalizado de Drag & Drop */
+.custom-drag-drop {
+    border: 2px dashed #8e29b6;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+/* Estado sin conexión: Fondo gris claro */
+.custom-drag-drop.offline-mode {
+    background-color: #e9ecef !important; /* Gris claro conforme a Bootstrap */
+    border-color: #ced4da;
+    cursor: not-allowed;
+}
+
+.drop-zone-content {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.drop-zone-custom {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 30px 10px;
+  text-align: center;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.drop-zone-custom:hover {
+  border-color: #8e29b6;
+  color: #8e29b6;
+}
 .success-message {
   color: #fff !important;
   font-weight: bold;
@@ -1208,12 +1244,17 @@ footer {
 
 /* Aviso Offline - Figura 1 */
 .offline-badge {
-  background-color: red;
+ position: fixed;
+  top: 15px;
+  right: 20px;
+  background-color: #ff0000;
   color: white;
+  padding: 8px 16px;
   border: 2px solid white;
-  padding: 5px 15px;
+  border-radius: 5px;
   font-weight: bold;
-  font-family: sans-serif;
+  z-index: 1100;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 /* Zona Drag & Drop Personalizada - Requisito 3.1 */

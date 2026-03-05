@@ -1,164 +1,204 @@
-import React, { useState, useMemo } from 'react';
-import { inventario, obtenerAtributoExtra } from './tienda/tienda.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react';
+import { FileUploader } from "react-drag-drop-files";
+import { 
+  inventario as productosIniciales, 
+  DIVISA, 
+  crearNuevoProducto,
+  obtenerAtributoExtra 
+} from './tienda/tienda';
+import './App.css';
 
 function App() {
-  const [productos, setProductos] = useState(inventario);
-  const [carrito, setCarrito] = useState(new Map());
-  const [paginaActual, setPaginaActual] = useState(1);
-  const [busqueda, setBusqueda] = useState("");
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("all");
-  const [precioMax, setPrecioMax] = useState(100);
-  const [variantesState, setVariantesState] = useState({});
-
-  const productosPorPagina = 6;
-
-  // --- LÓGICA DE FILTRADO ---
-  const productosFiltrados = useMemo(() => {
-    return productos.filter(p => {
-      const nombreNorm = p.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const busquedaNorm = busqueda.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const coincideTexto = nombreNorm.includes(busquedaNorm);
-      const coincidePrecio = p.precio <= precioMax;
-      const coincideCat = categoriaSeleccionada === "all" || 
-                          p.tipo?.toLowerCase() === categoriaSeleccionada.toLowerCase();
-      return coincideTexto && coincidePrecio && coincideCat;
-    });
-  }, [productos, busqueda, categoriaSeleccionada, precioMax]);
-
-  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
-  const inicio = (paginaActual - 1) * productosPorPagina;
-  const productosVisibles = productosFiltrados.slice(inicio, inicio + productosPorPagina);
-
-  const cambiarVariante = (id, direccion, totalVariantes) => {
-    setVariantesState(prev => {
-      const actual = prev[id] || 0;
-      const siguiente = (actual + direccion + totalVariantes) % totalVariantes;
-      return { ...prev, [id]: siguiente };
-    });
-  };
-
-  const agregarAlCarrito = (producto) => {
-    const idx = variantesState[producto.id] || 0;
-    const variante = producto.variantes?.[idx];
-    const clave = variante ? `${producto.id}_${variante.nombre}` : producto.id;
-    setCarrito(prev => {
-      const nuevo = new Map(prev);
-      if (nuevo.has(clave)) {
-        const item = nuevo.get(clave);
-        if (item.cantidad < 20) item.cantidad++;
-      } else {
-        nuevo.set(clave, {
-          nombre: variante ? `${producto.nombre} – ${variante.nombre}` : producto.nombre,
-          precio: producto.precio,
-          imagen: variante ? variante.imagen : producto.imagen,
-          cantidad: 1
-        });
+  // 1. ESTADO: Persistencia corregida con reinstanciación de clases
+  const [productos, setProductos] = useState(() => {
+    const guardados = localStorage.getItem('productos_tienda');
+    if (guardados) {
+      try {
+        const datosPlanos = JSON.parse(guardados);
+        // IMPORTANTE: Convertimos los objetos planos de vuelta a instancias de Clase
+        return datosPlanos.map(p => crearNuevoProducto(p.tipo, p));
+      } catch (e) {
+        console.error("Error cargando localStorage", e);
+        return productosIniciales;
       }
-      return nuevo;
-    });
+    }
+    return productosIniciales;
+  });
+
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [file, setFile] = useState(null);
+
+  // 2. EFECTO: Guardar cambios en localStorage
+  useEffect(() => {
+    localStorage.setItem('productos_tienda', JSON.stringify(productos));
+  }, [productos]);
+
+  // 3. EFECTO: Detector de conexión (Requisito 3.2 - Figura 1)
+  useEffect(() => {
+    const handleStatusChange = () => setIsOffline(!navigator.onLine);
+
+    window.addEventListener('online', handleStatusChange);
+    window.addEventListener('offline', handleStatusChange);
+
+    return () => {
+      window.removeEventListener('online', handleStatusChange);
+      window.removeEventListener('offline', handleStatusChange);
+    };
+  }, []);
+
+  // 4. MANEJADOR: Alta de productos
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isOffline) return; // Bloqueo de seguridad
+
+    const fd = new FormData(e.target);
+    
+    // Generar URL temporal si hay archivo, si no usar una por defecto
+    let rutaImagen = 'imagenes/productos/default.png';
+    if (file) {
+      rutaImagen = URL.createObjectURL(file);
+    }
+
+    const datos = {
+      nombre: fd.get('productName'),
+      precio: parseFloat(fd.get('productPrice')),
+      descripcion: fd.get('productDescription'),
+      imagen: rutaImagen,
+      extra: fd.get('extra'),
+      tipo: fd.get('tipo') // Aseguramos capturar el tipo para crearNuevoProducto
+    };
+
+    const nuevo = crearNuevoProducto(datos.tipo, datos);
+    if (nuevo) {
+      setProductos(prev => [nuevo, ...prev]); // Añadimos al principio
+      e.target.reset();
+      setFile(null); // Limpiar el estado del FileUploader
+    }
   };
 
   return (
-    <div className="container-fluid py-4 px-5">
-      <h1 className="text-center mb-5">Tienda de mascotas</h1>
+    <div id="contenedor">
+      {/* Requisito 3.2 - Figura 1: Señalización offline */}
+      {isOffline && (
+        <div className="offline-badge">
+          Estás offline
+        </div>
+      )}
 
-      <div className="row">
-        {/* --- MAIN: PRODUCTOS (8 columnas) --- */}
-        <main className="col-md-8">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2>Todos los productos</h2>
-            <div className="d-flex gap-2">
-              <input 
-                type="text" 
-                className="form-control" 
-                placeholder="Buscar producto..." 
-                value={busqueda}
-                onChange={(e) => { setBusqueda(e.target.value); setPaginaActual(1); }}
-              />
-            </div>
-          </div>
+      <header className="py-3 bg-light shadow-sm mb-4">
+        <h1 className="text-center m-0">🐈 🐦 Tienda de Mascotas 🦮 🐇</h1>
+      </header>
 
-          <div className="row">
-            {productosVisibles.map(p => {
-              const vIdx = variantesState[p.id] || 0;
-              const varianteAct = p.variantes?.[vIdx];
-              const imgAMostrar = varianteAct ? varianteAct.imagen : p.imagen;
-              return (
-                <div key={p.id} className="col-12 col-lg-6 mb-4">
+      <div id="contenido" className="container-fluid">
+        <div className="row">
+          {/* MAIN: LISTA DE PRODUCTOS */}
+          <main className="col">
+            <div className="row row-cols-1 row-cols-md-3 g-4 px-3">
+              {productos.map((p, index) => (
+                <div key={p.id || index} className="col">
                   <div className="card h-100 shadow-sm border-0">
-                    <div className="position-relative" style={{ height: '250px' }}>
-                      <img src={imgAMostrar} className="card-img-top h-100 w-100" style={{ objectFit: 'cover' }} alt={p.nombre} />
-                      {p.variantes?.length > 1 && (
-                        <div className="position-absolute top-50 w-100 d-flex justify-content-between px-2">
-                          <button className="btn btn-light btn-sm rounded-circle" onClick={() => cambiarVariante(p.id, -1, p.variantes.length)}>‹</button>
-                          <button className="btn btn-light btn-sm rounded-circle" onClick={() => cambiarVariante(p.id, 1, p.variantes.length)}>›</button>
-                        </div>
-                      )}
+                    <div className="d-flex justify-content-center align-items-center bg-white" style={{ height: '200px' }}>
+                      <img src={p.imagen} className="card-img-top" alt={p.nombre} style={{ 
+                          maxHeight: '100%', 
+                          maxWidth: '90%', 
+                          objectFit: 'contain',
+                          padding: '15px'
+                        }} 
+                      />
                     </div>
-                    <div className="card-body">
+                    <div className="card-body d-flex flex-column">
                       <h5 className="card-title">{p.nombre}</h5>
-                      <p className="text-primary fw-bold fs-4">{p.precio}€</p>
-                      <p className="text-muted small"><strong>{obtenerAtributoExtra(p)}</strong></p>
-                      <p className="card-text text-truncate">{p.descripcion}</p>
-                      <button className="btn btn-dark w-100" onClick={() => agregarAlCarrito(p)}>🛒 Añadir</button>
+                      <p className="card-text small text-muted flex-grow-1">
+                        {p.descripcion ? p.descripcion.substring(0, 80) + "..." : "Sin descripción"}
+                      </p>
+                      {/* Uso de obtenerAtributoExtra corregido gracias a la reinstanciación */}
+                      <p className="small fw-bold text-secondary mb-2">
+                        {obtenerAtributoExtra(p)}
+                      </p>
+                      <div className="mt-auto pt-3 border-top">
+                        <p className="fw-bold fs-5 mb-1 text-primary">{p.precio}{DIVISA}</p>
+                        <span className="badge bg-info text-dark mb-3">{p.tipo}</span>
+                        <button className="btn btn-dark w-100 py-2">🛒 Añadir al carrito</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          </main>
 
-          {/* Paginación */}
-          {totalPaginas > 1 && (
-            <nav className="d-flex justify-content-center mt-4">
-              <ul className="pagination">
-                {Array.from({ length: totalPaginas }, (_, i) => (
-                  <li key={i} className={`page-item ${paginaActual === i + 1 ? 'active' : ''}`}>
-                    <button className="page-link" onClick={() => setPaginaActual(i + 1)}>{i + 1}</button>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )}
-        </main>
-
-        {/* --- ASIDE: FORMULARIO (4 columnas) --- */}
-        <aside className="col-md-4 ps-4 border-start">
-          <div className="p-4 bg-white rounded shadow-sm">
-            <h3 className="mb-4">Añadir Productos</h3>
-            <form>
-              <div className="mb-3">
-                <label className="form-label">Tipo de Producto</label>
-                <select className="form-select" onChange={(e) => setCategoriaSeleccionada(e.target.value)}>
-                  <option value="all">Escoge un tipo</option>
-                  <option value="Juguete">Juguete</option>
-                  <option value="Alimentacion">Alimentación</option>
-                  <option value="Mobiliario">Mobiliario</option>
-                </select>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Nombre</label>
-                <input type="text" className="form-control" />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Precio</label>
-                <input type="number" className="form-control" />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Descripción</label>
-                <textarea className="form-control" rows="3"></textarea>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Imagen</label>
-                <div className="border border-dashed p-4 text-center text-muted">
-                  Arrastra tu imagen aquí
+          {/* ASIDE: FORMULARIO (Requisito 3.1 y 3.2) */}
+          <aside className="col-lg-3 col-md-4 ms-4">
+            <div className="p-4 bg-white rounded shadow-sm border">
+              <h3 className="text-center mb-4">Nuevo Producto</h3>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Categoría</label>
+                  <select name="tipo" className="form-select" required disabled={isOffline}>
+                    <option value="">Escoge tipo...</option>
+                    <option value="juguete">Juguete</option>
+                    <option value="alimentacion">Alimentación</option>
+                    <option value="mobiliario">Mobiliario</option>
+                    <option value="cabello">Cabello</option>
+                    <option value="merchandising">Merchandising</option>
+                    <option value="accesorios">Accesorios</option>
+                  </select>
                 </div>
-              </div>
-              <button type="button" className="btn btn-primary w-100">+ Subir Producto</button>
-            </form>
-          </div>
-        </aside>
+
+                <div className="mb-3">
+                  <input type="text" name="productName" className="form-control" placeholder="Nombre" required disabled={isOffline} />
+                </div>
+                
+                <div className="mb-3">
+                  <div className="input-group">
+                    <input type="number" name="productPrice" className="form-control" placeholder="Precio" step="0.01" required disabled={isOffline} />
+                    <span className="input-group-text">{DIVISA}</span>
+                  </div>
+                </div>
+
+                {/* Input para el dato extra capturado en handleSubmit */}
+                <div className="mb-3">
+                  <input type="text" name="extra" className="form-control" placeholder="Dato extra (Material, Estilo...)" disabled={isOffline} />
+                </div>
+
+                <div className="mb-3">
+                  <textarea name="productDescription" className="form-control" placeholder="Descripción breve..." rows="3" disabled={isOffline}></textarea>
+                </div>
+
+                {/* Requisito 3.1 - React Drag & Drop */}
+                <div className="mb-4">
+                  <label className="form-label fw-bold">Imagen del producto</label>
+                  <FileUploader
+                    handleChange={(f) => setFile(f)}
+                    name="file"
+                    types={["JPG", "PNG", "GIF"]}
+                    hoverTitle="Suelta la imagen" // Requisito 3.1
+                    label="" // Sin mensaje inicial
+                    disabled={isOffline} //
+                  >
+                    {/* Requisito 3.2 - Estética offline */}
+                    <div className="drop-zone-custom" 
+                         style={{ 
+                           backgroundColor: isOffline ? '#eeeeee' : '#f8f9fa',
+                           cursor: isOffline ? 'not-allowed' : 'pointer',
+                           border: '2px dashed #ccc',
+                           padding: '20px',
+                           textAlign: 'center'
+                         }}>
+                      <p className="m-0 small">
+                        {isOffline ? "Campo deshabilitado" : file ? `Cargado: ${file.name}` : "Arrastra tu imagen aquí"}
+                      </p>
+                    </div>
+                  </FileUploader>
+                </div>
+
+                <button type="submit" className="btn btn-primary w-100 fw-bold py-2" disabled={isOffline}>
+                  + Subir Producto
+                </button>
+              </form>
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
   );
