@@ -223,16 +223,10 @@ export function crearNuevoProducto(tipo, datos) {
     default:
       return null;
   }
-<<<<<<< HEAD
-  return nuevoProducto; 
+
+  return nuevo; 
 }
 
-
-export function obtenerAtributoExtra(p) {
-=======
-  return nuevo;
-}
->>>>>>> e26af28791da5e067d26bd7571f94761e1f7c651
 
 // Esta función es vital para que las Cards muestren info de la clase
 export function obtenerAtributoExtra(producto) {
@@ -242,3 +236,11 @@ export function obtenerAtributoExtra(producto) {
   // Fallback por si es un objeto plano de localStorage que no se reinstanció
   return producto.extra || "Producto de la tienda";
 }
+export const guardarEnCarrito = (carrito) => {
+  localStorage.setItem('carrito_tienda', JSON.stringify(carrito));
+};
+
+export const cargarCarrito = () => {
+  const datos = localStorage.getItem('carrito_tienda');
+  return datos ? JSON.parse(datos) : [];
+};

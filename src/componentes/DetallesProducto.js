@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 
 const DetallesProducto = ({ producto, onCerrar }) => {
@@ -16,3 +18,4 @@ const DetallesProducto = ({ producto, onCerrar }) => {
 };
 
 export default DetallesProducto;
+
