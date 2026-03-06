@@ -234,3 +234,27 @@ export function obtenerAtributoExtra(producto) {
   // Fallback por si es un objeto plano de localStorage que no se reinstanció
   return producto.extra || "Producto de la tienda";
 }
+
+// ================= FUNCIONES DE CARRITO (Requisito 5.2) =================
+
+export const guardarEnCarrito = (producto) => {
+  // Guardamos el objeto como string (JSON)
+  localStorage.setItem(`producto_${producto.id}`, JSON.stringify(producto));
+};
+
+export const borrarDelCarrito = (id) => {
+  // Borra por ID
+  localStorage.removeItem(`producto_${id}`);
+};
+
+export const cargarCarrito = () => {
+  const carrito = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const clave = localStorage.key(i);
+    // Filtramos buscando el substring 'producto_'
+    if (clave.startsWith('producto_')) {
+      carrito.push(JSON.parse(localStorage.getItem(clave)));
+    }
+  }
+  return carrito;
+};

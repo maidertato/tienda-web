@@ -6,4 +6,8 @@ export default class Mobiliario extends Producto {
         this.material = material;
         this.usoInterior = usoInterior;
     }
+
+    obtenerInformacion() {
+        return `Material: ${this.material} - ${this.usoInterior ? 'Interior' : 'Exterior'}`;
+    }
 }

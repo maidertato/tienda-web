@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { FileUploader } from "react-drag-drop-files"; // Librería requerida
+import { FileUploader } from "react-drag-drop-files"; // Requisito 5.1.7
 
-// Recibe 'isOffline' como prop desde App.js para manejar el bloqueo
-const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
+const FormularioNuevosProductos = ({ onAgregarProducto }) => {
     const fileTypes = ["JPG", "PNG", "GIF"];
     
-    // Estados para los campos del formulario
+    // Estados para controlar los inputs (Sin usar el Árbol DOM)
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
     const [tipo, setTipo] = useState("");
@@ -15,19 +14,21 @@ const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (isOffline) return; // Doble seguridad: no enviar si está offline
 
-        const nuevoDoc = {
+        const nuevoProducto = {
             nombre,
             precio: parseFloat(precio),
             descripcion,
             tipo,
             extra,
+            // URL temporal para previsualizar la imagen subida
             imagen: file ? URL.createObjectURL(file) : 'imagenes/productos/default.png'
         };
 
-        onAgregarProducto(tipo, nuevoDoc);
-        // Limpiar formulario tras subir
+        // 5.1.7: Mantiene la funcionalidad de agregar productos
+        onAgregarProducto(tipo, nuevoProducto);
+
+        // Limpiar formulario
         setNombre(""); setPrecio(""); setDescripcion(""); setExtra(""); setFile(null);
     };
 
@@ -36,7 +37,6 @@ const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
             <h3 className="text-center mb-3">Añadir Productos</h3>
             <form id="form-producto" onSubmit={handleSubmit}>
                 
-                {/* Selector de tipo */}
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
                     <select 
@@ -44,7 +44,6 @@ const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
                         value={tipo} 
                         onChange={(e) => setTipo(e.target.value)}
                         required 
-                        disabled={isOffline} // Deshabilitar si está offline
                     >
                         <option value="">Escoge un tipo</option>
                         <option value="mobiliario">Mobiliario</option>
@@ -56,7 +55,6 @@ const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
                     </select>
                 </div>
 
-                {/* Nombre y Precio */}
                 <div className="mb-3">
                     <label className="form-label">Nombre del Producto</label>
                     <input 
@@ -64,7 +62,7 @@ const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
                         className="form-control" 
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
-                        disabled={isOffline} 
+                        placeholder="Ej: Pelota de goma"
                         required 
                     />
                 </div>
@@ -76,13 +74,24 @@ const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
                         className="form-control" 
                         value={precio}
                         onChange={(e) => setPrecio(e.target.value)}
-                        disabled={isOffline} 
                         step="0.01" 
+                        placeholder="0.00"
                         required 
                     />
                 </div>
 
-                {/* Campo dinámico según el tipo (Atributo Extra) */}
+                <div className="mb-3">
+                    <label className="form-label">Descripción</label>
+                    <textarea 
+                        className="form-control" 
+                        value={descripcion}
+                        onChange={(e) => setDescripcion(e.target.value)}
+                        placeholder="Describe tu producto..."
+                        rows="3"
+                    ></textarea>
+                </div>
+
+                {/* Campo dinámico que aparece según el tipo */}
                 {tipo && (
                     <div className="mb-3">
                         <label className="form-label">Dato extra ({tipo})</label>
@@ -91,43 +100,34 @@ const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
                             className="form-control" 
                             value={extra}
                             onChange={(e) => setExtra(e.target.value)}
-                            disabled={isOffline} 
-                            placeholder="Ej: Madera, Pequeño, etc."
+                            placeholder="Ej: Madera, sabor pollo, etc."
                         />
                     </div>
                 )}
 
-                {/* Drag & Drop Requisito 3.1 */}
                 <div className="mb-4">
                     <label className="form-label">Imagen del Producto</label>
-                    <div className={`custom-drag-drop ${isOffline ? 'offline-mode' : ''}`}>
+                    <div className="custom-drag-drop">
+                        {/* 5.1.7: Librería React Drag & Drop obligatoria */}
                         <FileUploader
                             handleChange={(file) => setFile(file)}
                             name="file"
                             types={fileTypes}
-                            disabled={isOffline} // Bloqueado si no hay conexión
-                            hoverTitle="Suelta la imagen" // Mensaje al arrastrar
-                            label="" // Sin mensaje inicial
+                            label="Arrastra o haz clic aquí"
+                            hoverTitle="Suelta la imagen"
                         >
-                            {/* Diseño personalizado para cumplir con el requisito de NO usar el de serie */}
-                            <div className="drop-zone-content">
+                            <div className="drop-zone-content p-4 border rounded text-center bg-light">
                                 {file ? (
-                                    <p className="text-success m-0">Archivo cargado: {file.name}</p>
+                                    <p className="text-success m-0">✓ {file.name}</p>
                                 ) : (
-                                    <p className="m-0 text-muted">
-                                        {isOffline ? "Subida deshabilitada" : "Arrastra tu imagen aquí"}
-                                    </p>
+                                    <p className="m-0 text-muted">Arrastra tu imagen aquí</p>
                                 )}
                             </div>
                         </FileUploader>
                     </div>
                 </div>
 
-                <button 
-                    type="submit" 
-                    className="btn btn-custom w-100" 
-                    disabled={isOffline}
-                >
+                <button type="submit" className="btn btn-custom w-100">
                     + Subir Producto
                 </button>
             </form>
@@ -135,4 +135,4 @@ const FormularioProducto = ({ isOffline, onAgregarProducto }) => {
     );
 };
 
-export default FormularioProducto;
+export default FormularioNuevosProductos;
