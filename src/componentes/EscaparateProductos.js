@@ -21,7 +21,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito }) => {
     return (
         <div className="container-fluid">
             <BuscadorProductos
-                titulo="Buscar Productos"
+                titulo="Todos los productos"
                 terminoBusqueda={terminoBusqueda}
                 onCambio={valor => { setTerminoBusqueda(valor); setPaginaActual(1); }}
             />
