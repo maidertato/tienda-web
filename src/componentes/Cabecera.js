@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 
 const Cabecera = ({ titulo }) => {
@@ -11,4 +9,3 @@ const Cabecera = ({ titulo }) => {
 };
 
 export default Cabecera;
-

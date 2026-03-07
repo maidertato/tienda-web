@@ -62,11 +62,13 @@ nav ul {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-nav ul li a {
+nav ul li button {
+  background: none;
+  border: none;
   text-decoration: none;
   color: #521F84;
   font-weight: bold;
-  transition: color 0.3s, transform 0.2s;
+  cursor: pointer;
 }
 
 nav ul li a:hover {
@@ -79,7 +81,6 @@ nav ul li a:hover {
   justify-content: center;
   margin-top: 10px;
 }
-
 .button-container {
   display: flex;
   background-color: #9C66D4;
@@ -150,21 +151,23 @@ nav ul li a:hover {
 
 .cart-badge {
   position: absolute;
-  bottom: 14px;
-  right: -12px;
+  top: -12px !important;    
+  right: -15px !important;   
   background-color: #6b4692;
-  color: white;
-  font-size: 10px;
-  font-weight: bold;
-  width: 14px;
-  height: 14px;
+  color: white !important;
+  width: 18px; 
+  height: 18px;
   border-radius: 50%;
-  display: none;
-  /* Se activa por JS */
-  align-items: center;
-  justify-content: center;
   border: 2px solid #fffafc;
-  z-index: 5;
+  display: flex !important;
+  align-items: center !important;    
+  justify-content: center !important; 
+  font-size: 10px !important;
+  font-weight: bold;
+  line-height: 1 !important; 
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 10;
 }
 
 main .pagination-wrapper {
@@ -201,7 +204,6 @@ main .pagination-wrapper {
   background-color: #9C66D4;
   border-color: #9C66D4;
 }
-
 
 /* =========================================
   FORMULARIO
@@ -1026,6 +1028,12 @@ main {
 .icon-cart path {
   fill: #7b1cff;
   transition: 0.2s ease;
+}
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px; 
 }
 
 .btn-cart:hover>.icon-cart {

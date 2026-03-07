@@ -41,10 +41,11 @@ function App() {
     localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
   };
 
+
   return (
     <div className="contenedor">
       {/* Cabecera */}
-      <Cabecera titulo="Mi Tienda de Mascotas" />
+      <Cabecera titulo="🐱 🦩 Tienda de Mascotas 🐕 🐇" />
 
       {/* MenuNavegacion */}
       <MenuNavegacion 
