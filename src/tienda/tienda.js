@@ -231,7 +231,7 @@ export function crearNuevoProducto(tipo, datos) {
 export function obtenerAtributoExtra(producto) {
   // Definimos la etiqueta según el tipo de producto
   const etiquetas = {
-    'Juguete': 'Tipo',
+    'Juguete': 'Tipo de juguete',
     'Alimentación': 'Tipo de alimento',
     'Mobiliario': 'Material',
     'Cabello': 'Estilo',
