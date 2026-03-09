@@ -78,7 +78,7 @@ function App() {
           </main>
         
           {/* Aside */}
-          <aside className="col-md-4">
+          <aside className="col-md-3">
             <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}
             />
           </aside>
