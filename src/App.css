@@ -976,6 +976,59 @@ main {
   margin-bottom: 1.5rem;
 }
 
+/*////////////////////BOTON CIRCULAR PRODUCTO CARRITO //////////////////////////////
+
+/* Estilo del texto de descripción en la tarjeta */
+.description-text-card {
+    color: #777;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    height: 4.2em;
+}
+
+/* Título morado del escaparate */
+.card-title-escaparate {
+    color: #4b1a8a; 
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+/* Estilo del precio */
+.card-precio-escaparate {
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+/* Botón circular flotante */
+.btn-carrito-circular {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #f3e8f7;
+    background-color: #f3e8f7;
+    color: #a362bc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-carrito-circular:hover {
+    background-color: #a362bc;
+    color: white;
+}
+
 .btn-inicio {
   background-color: #f8f4ff;
   color: #521F84;
