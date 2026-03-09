@@ -7,6 +7,7 @@ import Cabecera from './componentes/Cabecera';
 import MenuNavegacion from './componentes/MenuNavegacion';
 import EscaparateProductos from './componentes/EscaparateProductos';
 import FormularioNuevosProductos from './componentes/FormularioNuevosProductos';
+import Paginacion from './componentes/Paginacion';
 import Pie from './componentes/Pie';
 import Carrito from './componentes/Carrito';
 
@@ -17,8 +18,13 @@ function App() {
   const [carrito, setCarrito] = useState(cargarCarrito());
   const [showCarrito, setShowCarrito] = useState(false);
 
-  // Probando algun prod
+  // Paginacion
   const [paginaActual, setPaginaActual] = useState(1);
+  const productosPorPagina = 6;
+  const inicio = (paginaActual - 1) * productosPorPagina;
+  const fin = inicio + productosPorPagina;
+  const productosPagina = productos.slice(inicio, fin);
+  
   const [busqueda, setBusqueda] = useState("");
 
   const manejarNuevoProducto = (tipo, datos) => {
@@ -67,18 +73,30 @@ function App() {
       <div id="contenido" className="container-fluid mt-4">
         <div className="row">
           <main className="col-md-8">
+            
             <EscaparateProductos 
-              productos={productos} 
+              productos={productosPagina} 
               onAnadirAlCarrito={manejarAnadirAlCarrito}
+            />
+
+            <Paginacion
+              totalProductos={productos.length}
+              productosPorPagina={productosPorPagina}
+              paginaActual={paginaActual}
+              /* para ir arriba */
+              onCambiarPagina={(p) => {
+                setPaginaActual(p);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             />
           </main>
         
-        {/* Aside */}
-        <aside className="col-md-4">
-          <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}
-          />
-        </aside>
-      </div>
+          {/* Aside */}
+          <aside className="col-md-4">
+            <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}
+            />
+          </aside>
+        </div>
       </div>
       {/* Footer */}
       <Pie contenido="© Dawidawe taldea" />

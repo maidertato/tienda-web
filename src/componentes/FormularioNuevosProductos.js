@@ -1,7 +1,6 @@
-
-
 import React, { useState } from 'react';
-import { FileUploader } from "react-drag-drop-files"; // Requisito 5.1.7
+import { FileUploader } from "react-drag-drop-files"; 
+import { DIVISA } from '../tienda/tienda.js';
 
 const FormularioNuevosProductos = ({ onAgregarProducto }) => {
     const fileTypes = ["JPG", "PNG", "GIF"];
@@ -27,10 +26,8 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
             imagen: file ? URL.createObjectURL(file) : 'imagenes/productos/default.png'
         };
 
-        // 5.1.7: Mantiene la funcionalidad de agregar productos
         onAgregarProducto(tipo, nuevoProducto);
 
-        // Limpiar formulario
         setNombre(""); setPrecio(""); setDescripcion(""); setExtra(""); setFile(null);
     };
 
