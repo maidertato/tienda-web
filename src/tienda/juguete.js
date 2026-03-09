@@ -7,4 +7,7 @@ export default class Juguete extends Producto {
         this.tamano = tamano;
         this.esInteractivo = interactivo;
     }
+    obtenerInformacion() {
+        return this.subtipo;
+    }
 }

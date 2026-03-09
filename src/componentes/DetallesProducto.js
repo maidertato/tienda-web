@@ -1,5 +1,5 @@
 import React from 'react';
-import { DIVISA } from '../tienda/tienda.js'; 
+import { DIVISA } from '../tienda/tienda.js';
 
 const DetallesProducto = ({ producto, onCerrar }) => {
     if (!producto) return null;
@@ -7,7 +7,7 @@ const DetallesProducto = ({ producto, onCerrar }) => {
     return (
         <div className="modal-overlay-custom" onClick={onCerrar}>
             <div className="modal-container-custom" onClick={(e) => e.stopPropagation()}>
-                
+
                 {/* Botón X de cerrar */}
                 <button type="button" className="btn-close-custom" onClick={onCerrar}>×</button>
 
@@ -32,7 +32,7 @@ const DetallesProducto = ({ producto, onCerrar }) => {
                             <span className="label">Tipo:</span>
                             <span className="value">{producto.tipo || 'Peluche'}</span>
                         </div>
-                        
+
 
                         <hr className="modal-separator" />
 

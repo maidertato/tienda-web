@@ -7,4 +7,8 @@ export default class Accesorios extends Producto {
         this.talla = talla;
         this.color = color;
     }
+
+    obtenerInformacion() {
+        return this.tipoMascotay;
+    }
 }

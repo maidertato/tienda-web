@@ -8,4 +8,7 @@ export default class Cabello extends Producto {
         this.tipoMascota = tipoMascota;
         this.color = color;
     }
+    obtenerInformacion() {
+        return this.estilo;
+    }
 }

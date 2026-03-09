@@ -6,4 +6,7 @@ export default class Alimentacion extends Producto {
         this.tipoAlimento = tipoAlimento;
         this.tipoMascota = tipoMascota;
     }
+    obtenerInformacion() {
+        return this.tipoAlimento;
+    }
 }

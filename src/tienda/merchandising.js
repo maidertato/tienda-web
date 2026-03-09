@@ -7,4 +7,7 @@ export default class Merchandising extends Producto {
         this.talla = talla;
         this.color = color;
     }
+    obtenerInformacion() {
+        return this.parteDelCuerpo;
+    }
 }

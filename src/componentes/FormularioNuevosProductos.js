@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { FileUploader } from "react-drag-drop-files"; 
+import { FileUploader } from "react-drag-drop-files";
 import { DIVISA } from '../tienda/tienda.js';
 
 const FormularioNuevosProductos = ({ onAgregarProducto }) => {
-    const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];    
-    
+    const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
+
     // Estados
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
@@ -15,7 +15,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
 
     // Alertas
     const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" });
-    
+
     const mostrarAlerta = (texto, tipo) => {
         setAlerta({ visible: true, texto, tipo });
         setTimeout(() => {
@@ -73,9 +73,9 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
         try {
             onAgregarProducto(tipo, nuevoProducto);
             mostrarAlerta("¡Producto añadido con éxito!", "success");
-            
+
             // Limpiar todo
-            setNombre(""); setPrecio(""); setDescripcion(""); 
+            setNombre(""); setPrecio(""); setDescripcion("");
             setExtra(""); setFile(null); setTipo("");
         } catch (error) {
             mostrarAlerta("Error al añadir el producto", "danger");
@@ -86,18 +86,18 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
         <div className="formulario-wrapper">
             <h3 className="text-center mb-3">Añadir Productos</h3>
             <form id="form-producto" onSubmit={handleSubmit}>
-                
+
                 {/* Tipo de producto */}
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
-                    <select 
-                        className="form-select" 
-                        value={tipo} 
+                    <select
+                        className="form-select"
+                        value={tipo}
                         onChange={(e) => {
                             setTipo(e.target.value);
                             setExtra(""); // Limpiar extra al cambiar
                         }}
-                        required 
+                        required
                     >
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
@@ -112,36 +112,36 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                 {/*  Nombre del Producto  */}
                 <div className="mb-3">
                     <label className="form-label">Nombre del Producto</label>
-                    <input 
-                        type="text" 
-                        className="form-control" 
+                    <input
+                        type="text"
+                        className="form-control"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
                         placeholder="Ej: Pelota de goma"
-                        required 
+                        required
                     />
                 </div>
 
                 {/* Precio */}
                 <div className="mb-3">
                     <label className="form-label">Precio (€)</label>
-                    <input 
-                        type="number" 
-                        className="form-control" 
+                    <input
+                        type="number"
+                        className="form-control"
                         value={precio}
                         onChange={(e) => setPrecio(e.target.value)}
-                        step="0.01" 
+                        step="0.01"
                         min="0"
                         placeholder="0.00"
-                        required 
+                        required
                     />
                 </div>
 
                 {/* Descripción */}
                 <div className="mb-3">
                     <label className="form-label">Descripción</label>
-                    <textarea 
-                        className="form-control" 
+                    <textarea
+                        className="form-control"
                         value={descripcion}
                         onChange={(e) => setDescripcion(e.target.value)}
                         placeholder="Describe tu producto..."
@@ -154,13 +154,13 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                     <div className="mb-3 animate__animated animate__fadeIn">
                         <label className="form-label fw-bold">
                             {titulosExtra[tipo] || "Dato Extra"}</label>
-                        <input 
-                            type="text" 
-                            className="form-control" 
+                        <input
+                            type="text"
+                            className="form-control"
                             value={extra}
                             onChange={(e) => setExtra(e.target.value)}
-                            placeholder={placeholdersExtra[tipo]} 
-                            required 
+                            placeholder={placeholdersExtra[tipo]}
+                            required
                         />
                     </div>
                 )}
@@ -176,7 +176,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                             label="Arrastra o haz clic aquí"
                             hoverTitle="Suelta la imagen"
                         >
-                            <div className="drop-zone-content p-4 border rounded text-center bg-light" style={{cursor: 'pointer'}}>
+                            <div className="drop-zone-content p-4 border rounded text-center bg-light" style={{ cursor: 'pointer' }}>
                                 {file ? (
                                     <p className="text-success m-0 fw-bold">✓ {file.name}</p>
                                 ) : (

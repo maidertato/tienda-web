@@ -20,7 +20,8 @@ body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  min-height:100vh; /* Para que se quede pegado abajo */
+  min-height: 100vh;
+  /* Para que se quede pegado abajo */
   background-color: rgba(255, 248, 252, 0.95);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
@@ -81,6 +82,7 @@ nav ul li a:hover {
   justify-content: center;
   margin-top: 10px;
 }
+
 .button-container {
   display: flex;
   background-color: #9C66D4;
@@ -151,20 +153,20 @@ nav ul li a:hover {
 
 .cart-badge {
   position: absolute;
-  top: -12px !important;    
-  right: -15px !important;   
+  top: -12px !important;
+  right: -15px !important;
   background-color: #6b4692;
   color: white !important;
-  width: 18px; 
+  width: 18px;
   height: 18px;
   border-radius: 50%;
   border: 2px solid #fffafc;
   display: flex !important;
-  align-items: center !important;    
-  justify-content: center !important; 
+  align-items: center !important;
+  justify-content: center !important;
   font-size: 10px !important;
   font-weight: bold;
-  line-height: 1 !important; 
+  line-height: 1 !important;
   padding: 0 !important;
   margin: 0 !important;
   z-index: 10;
@@ -346,25 +348,26 @@ aside button:hover {
 
 /* Contenedor personalizado de Drag & Drop */
 .custom-drag-drop {
-    border: 2px dashed #8e29b6;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    transition: background-color 0.3s;
+  border: 2px dashed #8e29b6;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: background-color 0.3s;
 }
 
 /* Estado sin conexión: Fondo gris claro */
 .custom-drag-drop.offline-mode {
-    background-color: #e9ecef !important; /* Gris claro conforme a Bootstrap */
-    border-color: #ced4da;
-    cursor: not-allowed;
+  background-color: #e9ecef !important;
+  /* Gris claro conforme a Bootstrap */
+  border-color: #ced4da;
+  cursor: not-allowed;
 }
 
 .drop-zone-content {
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .drop-zone-custom {
@@ -380,6 +383,7 @@ aside button:hover {
   border-color: #8e29b6;
   color: #8e29b6;
 }
+
 .success-message {
   color: #fff !important;
   font-weight: bold;
@@ -523,17 +527,18 @@ main {
   transform: translateY(-8px);
   box-shadow: 0 8px 25px rgba(156, 102, 212, 0.2);
 }
+
 .card-body {
-  flex-grow: 1; 
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
 .card-img-container {
-  height: 200px; 
+  height: 200px;
   width: 100%;
   overflow: hidden;
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -543,7 +548,7 @@ main {
 .card-img-top {
   max-height: 100%;
   max-width: 100%;
-  object-fit: contain; 
+  object-fit: contain;
   width: auto;
   height: auto;
 }
@@ -561,11 +566,11 @@ main {
 }
 
 .card-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    font-size: 0.9rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.9rem;
 }
 
 .descripcion-producto {
@@ -880,9 +885,9 @@ main {
 }
 
 .aviso-maximo {
-  width: 100%; 
-  background-color: #f8d7da;        
-  color: #842029;                   
+  width: 100%;
+  background-color: #f8d7da;
+  color: #842029;
   border: 1px solid #f5c2c7;
   padding: 10px 12px;
   margin-top: 8px;
@@ -980,53 +985,53 @@ main {
 
 /* Estilo del texto de descripción en la tarjeta */
 .description-text-card {
-    color: #777;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;  
-    overflow: hidden;
-    height: 4.2em;
+  color: #777;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 4.2em;
 }
 
 /* Título morado del escaparate */
 .card-title-escaparate {
-    color: #4b1a8a; 
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-bottom: 5px;
+  color: #4b1a8a;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
 }
 
 /* Estilo del precio */
 .card-precio-escaparate {
-    font-weight: 600;
-    font-size: 1.3rem;
-    color: #333;
-    margin-bottom: 5px;
-  }
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 5px;
+}
 
 /* Botón circular flotante */
 .btn-carrito-circular {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 2px solid #f3e8f7;
-    background-color: #f3e8f7;
-    color: #a362bc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #f3e8f7;
+  background-color: #f3e8f7;
+  color: #a362bc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-carrito-circular:hover {
-    background-color: #a362bc;
-    color: white;
+  background-color: #a362bc;
+  color: white;
 }
 
 .btn-inicio {
@@ -1082,11 +1087,12 @@ main {
   fill: #7b1cff;
   transition: 0.2s ease;
 }
+
 .icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 24px; 
+  height: 24px;
 }
 
 .btn-cart:hover>.icon-cart {
@@ -1177,139 +1183,158 @@ main {
     transform: translate(-50%, -10px);
   }
 }
+
 /*/////////////////////////DETALLES PRODUCTO ////////////////////*/
 
 .modal-overlay-custom {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    backdrop-filter: blur(5px);
-    font-family: 'Quicksand', sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+  font-family: 'Quicksand', sans-serif;
 }
 
 .modal-container-custom {
-    background-color: white;
-    width: 80%;
-    max-width: 900px;
-    height: 600px;
-    border-radius: 20px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-    animation: modalFadeUp 0.4s ease;
+  background-color: white;
+  width: 80%;
+  max-width: 900px;
+  height: 600px;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  animation: modalFadeUp 0.4s ease;
 }
 
 .modal-content-wrapper {
-    display: flex;
-    height: 100%;
+  display: flex;
+  height: 100%;
 }
 
 .modal-left-column {
-    flex: 1;
-    background-color: #f8f9fa; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
+  flex: 1;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
 }
 
 .modal-img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .modal-right-column {
-    flex: 1;
-    padding: 60px 40px;
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Caja del título Morada */
 .modal-title-box {
-    background-color: #a362bc;
-    color: white;
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 1.8rem;
-    margin-bottom: 30px;
+  background-color: #a362bc;
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
 }
 
 /* Filas de Precio y Tipo */
 .modal-info-row {
-    padding: 12px 20px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
+  padding: 12px 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
 }
 
-.purple-light { background-color: #f3e8f7; }
-.gray-light { background-color: #f7f0fa9c; }
+.purple-light {
+  background-color: #f3e8f7;
+}
+
+.gray-light {
+  background-color: #f7f0fa9c;
+}
 
 .modal-info-row .label {
-    color: #a362bc;
-    font-weight: bold;
-    margin-right: 10px;
+  color: #a362bc;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 .modal-info-row .value {
-    font-weight: normal;
-    font-size: 1rem;
+  font-weight: normal;
+  font-size: 1rem;
 }
 
 .modal-separator {
-    border: 0;
-    border-top: 1px solid #eee;
-    margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 20px 0;
 }
 
 /* Sección de descripción y SCROLL */
 .description-title {
-    color: #a362bc;
-    font-weight: bold;
-    margin-bottom: 10px;
+  color: #a362bc;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .description-scroll {
-    max-height: 200px;
-    overflow-y: auto;
-    color: #666;
-    line-height: 1.6;
-    padding-right: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  color: #666;
+  line-height: 1.6;
+  padding-right: 10px;
 }
 
 /* Botón cerrar X */
 .btn-close-custom {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    background: none;
-    border: none;
-    font-size: 35px;
-    color: #666;
-    cursor: pointer;
-    z-index: 10;
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: none;
+  border: none;
+  font-size: 35px;
+  color: #666;
+  cursor: pointer;
+  z-index: 10;
 }
 
 @keyframes modalFadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Scrollbar bonito */
-.description-scroll::-webkit-scrollbar { width: 5px; }
-.description-scroll::-webkit-scrollbar-thumb { background: #a362bc; border-radius: 10px; }
+.description-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.description-scroll::-webkit-scrollbar-thumb {
+  background: #a362bc;
+  border-radius: 10px;
+}
 
 /*////////////////////////////////////////////////////////////*/
 
@@ -1439,7 +1464,7 @@ footer {
 
 /* Aviso Offline - Figura 1 */
 .offline-badge {
- position: fixed;
+  position: fixed;
   top: 15px;
   right: 20px;
   background-color: #ff0000;
@@ -1449,7 +1474,7 @@ footer {
   border-radius: 5px;
   font-weight: bold;
   z-index: 1100;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Zona Drag & Drop Personalizada - Requisito 3.1 */
@@ -1466,10 +1491,12 @@ footer {
 .offline-dropzone {
   background-color: #e9ecef !important;
   border: 2px solid #ced4da !important;
-  min-height: 80px; 
+  min-height: 80px;
   width: 100%;
 }
 
-input:disabled, select:disabled, button:disabled {
+input:disabled,
+select:disabled,
+button:disabled {
   cursor: not-allowed;
 }
