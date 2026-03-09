@@ -7,7 +7,6 @@ import Cabecera from './componentes/Cabecera';
 import MenuNavegacion from './componentes/MenuNavegacion';
 import EscaparateProductos from './componentes/EscaparateProductos';
 import FormularioNuevosProductos from './componentes/FormularioNuevosProductos';
-import Paginacion from './componentes/Paginacion';
 import Pie from './componentes/Pie';
 import Carrito from './componentes/Carrito';
 
@@ -17,23 +16,21 @@ function App() {
   const [productos, setProductos] = useState(inventarioInicial); 
   const [carrito, setCarrito] = useState(cargarCarrito());
   const [showCarrito, setShowCarrito] = useState(false);
-
-  // Paginacion
-  const [paginaActual, setPaginaActual] = useState(1);
-  const productosPorPagina = 6;
-  const inicio = (paginaActual - 1) * productosPorPagina;
-  const fin = inicio + productosPorPagina;
-  const productosPagina = productos.slice(inicio, fin);
-  
   const [busqueda, setBusqueda] = useState("");
+
+
 
   const manejarNuevoProducto = (tipo, datos) => {
     const nuevo = crearNuevoProducto(tipo, datos);
     if (nuevo) {
       setProductos([nuevo, ...productos]);
-      setPaginaActual(1);
     }
   };
+
+  const productosFiltrados = productos.filter(p => 
+    p.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
 
   const manejarAnadirAlCarrito = (producto) => {
     const nuevoCarrito = [...carrito, producto];
@@ -75,19 +72,8 @@ function App() {
           <main className="col-md-8">
             
             <EscaparateProductos 
-              productos={productosPagina} 
+              productos={productosFiltrados} 
               onAnadirAlCarrito={manejarAnadirAlCarrito}
-            />
-
-            <Paginacion
-              totalProductos={productos.length}
-              productosPorPagina={productosPorPagina}
-              paginaActual={paginaActual}
-              /* para ir arriba */
-              onCambiarPagina={(p) => {
-                setPaginaActual(p);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
             />
           </main>
         
