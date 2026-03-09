@@ -1124,6 +1124,141 @@ main {
     transform: translate(-50%, -10px);
   }
 }
+/*/////////////////////////DETALLES PRODUCTO ////////////////////*/
+
+.modal-overlay-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+    font-family: 'Quicksand', sans-serif;
+}
+
+.modal-container-custom {
+    background-color: white;
+    width: 80%;
+    max-width: 900px;
+    height: 600px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    animation: modalFadeUp 0.4s ease;
+}
+
+.modal-content-wrapper {
+    display: flex;
+    height: 100%;
+}
+
+.modal-left-column {
+    flex: 1;
+    background-color: #f8f9fa; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.modal-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.modal-right-column {
+    flex: 1;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Caja del título Morada */
+.modal-title-box {
+    background-color: #a362bc;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+}
+
+/* Filas de Precio y Tipo */
+.modal-info-row {
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.purple-light { background-color: #f3e8f7; }
+.gray-light { background-color: #f7f0fa9c; }
+
+.modal-info-row .label {
+    color: #a362bc;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.modal-info-row .value {
+    font-weight: normal;
+    font-size: 1rem;
+}
+
+.modal-separator {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+/* Sección de descripción y SCROLL */
+.description-title {
+    color: #a362bc;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.description-scroll {
+    max-height: 200px;
+    overflow-y: auto;
+    color: #666;
+    line-height: 1.6;
+    padding-right: 10px;
+}
+
+/* Botón cerrar X */
+.btn-close-custom {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: none;
+    border: none;
+    font-size: 35px;
+    color: #666;
+    cursor: pointer;
+    z-index: 10;
+}
+
+@keyframes modalFadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar bonito */
+.description-scroll::-webkit-scrollbar { width: 5px; }
+.description-scroll::-webkit-scrollbar-thumb { background: #a362bc; border-radius: 10px; }
+
+/*////////////////////////////////////////////////////////////*/
 
 /* =========================
    FOOTER
@@ -1145,8 +1280,8 @@ footer {
 }
 
 /* ====================================
-   ESTILOS DEL MODAL (DETALLE PRODUCTO)
-   ==================================== */
+   ESTILOS DEL MODAL (DETALLE PRODUCTO) NO SE USA
+   ==================================== 
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1247,7 +1382,7 @@ footer {
     cursor: pointer;
     color: #333;
     font-weight: bold;
-}
+}*/
 
 /* Aviso Offline - Figura 1 */
 .offline-badge {
