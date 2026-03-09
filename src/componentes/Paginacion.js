@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Paginacion = ({ 
+const Paginacion = ({
     totalProductos,
     productosPorPagina,
     paginaActual,
@@ -10,7 +10,7 @@ const Paginacion = ({
     const inicio = (paginaActual - 1) * productosPorPagina;
     const fin = Math.min(inicio + productosPorPagina, totalProductos);
     const mostrados = totalProductos === 0 ? 0 : fin - inicio;
-    // si no hay productoos nada --> 0 de 0 productos
+    // si no hay productos nada --> 0 de 0 productos
     if (totalProductos === 0) {
         return (
             <nav className="mt-3">
@@ -49,7 +49,7 @@ const Paginacion = ({
                 {/* Num Páginas */}
                 {paginas.map(num => (
                     <li key={num} className={`page-item ${num === paginaActual ? 'active' : ''}`}>
-                        <button className="page-link" onClick={() => onCambiarPagina(num)} > 
+                        <button className="page-link" onClick={() => onCambiarPagina(num)} >
                             {num}
                         </button>
                     </li>

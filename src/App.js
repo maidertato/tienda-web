@@ -13,7 +13,7 @@ import Carrito from './componentes/Carrito';
 
 function App() {
   // Estados básicos
-  const [productos, setProductos] = useState(inventarioInicial); 
+  const [productos, setProductos] = useState(inventarioInicial);
   const [carrito, setCarrito] = useState(cargarCarrito());
   const [showCarrito, setShowCarrito] = useState(false);
   const [busqueda, setBusqueda] = useState("");
@@ -27,7 +27,7 @@ function App() {
     }
   };
 
-  const productosFiltrados = productos.filter(p => 
+  const productosFiltrados = productos.filter(p =>
     p.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
 
@@ -51,16 +51,16 @@ function App() {
       <Cabecera titulo="🐱 🦩 Tienda de Mascotas 🐕 🐇" />
 
       {/* MenuNavegacion */}
-      <MenuNavegacion 
-        cantidadCarrito={carrito.length} 
-        toggleCarrito={() => setShowCarrito(!showCarrito)} 
+      <MenuNavegacion
+        cantidadCarrito={carrito.length}
+        toggleCarrito={() => setShowCarrito(!showCarrito)}
         isOnline={true} // temporal
       />
 
       {/* Carrito */}
       {showCarrito && (
-        <Carrito 
-          productosCarrito={carrito} 
+        <Carrito
+          productosCarrito={carrito}
           alEliminar={manejarEliminarDelCarrito}
           alVaciar={() => { localStorage.clear(); setCarrito([]); }}
         />
@@ -70,13 +70,13 @@ function App() {
       <div id="contenido" className="container-fluid mt-4">
         <div className="row">
           <main className="col-md-8">
-            
-            <EscaparateProductos 
-              productos={productosFiltrados} 
+
+            <EscaparateProductos
+              productos={productosFiltrados}
               onAnadirAlCarrito={manejarAnadirAlCarrito}
             />
           </main>
-        
+
           {/* Aside */}
           <aside className="col-md-3">
             <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}

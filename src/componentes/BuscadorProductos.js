@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-const BuscadorProductos = ({ 
+const BuscadorProductos = ({
     titulo,
-    terminoBusqueda, 
-    onCambio 
+    terminoBusqueda,
+    onCambio
 
 }) => {
-    
+
     const [termino, setTermino] = useState(terminoBusqueda);
 
     return (

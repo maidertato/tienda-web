@@ -6,6 +6,6 @@ export default class Producto {
         this.descripcion = descripcion;
         this.imagen = imagen || '/imagenes/productos/default.png';
         this.tipo = tipo;
-        this.variantes = []; 
+        this.variantes = [];
     }
 }

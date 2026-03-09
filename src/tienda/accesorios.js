@@ -9,6 +9,6 @@ export default class Accesorios extends Producto {
     }
 
     obtenerInformacion() {
-        return this.tipoMascotay;
+        return this.tipoMascota;
     }
 }

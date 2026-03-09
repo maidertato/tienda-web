@@ -20,13 +20,13 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito }) => {
 
     return (
         <div className="container-fluid">
-            <div className="row g-4 p-3">
+            <div className="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 p-3 justify-content-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 {currentProducts.map((prod, i) => {
                     const info = obtenerAtributoExtra(prod);
 
                     return (
-                        <div key={prod.id || i} className="col-md-4">
-                            <div className="card h-100 shadow-sm border-0 card-producto-tienda">
+                        <div key={prod.id || i} className="col d-flex justify-content-center">
+                            <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
                                 <div className="position-relative">
                                     <img
                                         src={prod.imagen}
