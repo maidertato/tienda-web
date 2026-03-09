@@ -251,11 +251,22 @@ export function obtenerAtributoExtra(producto) {
 
   return { etiqueta, valor };
 }
-export const guardarEnCarrito = (carrito) => {
-  localStorage.setItem('carrito_tienda', JSON.stringify(carrito));
-};
+
+//=================== FUNCIONES PARA EL CARRITO =====================
+export function guardarEnCarrito(producto) {
+  localStorage.setItem("producto_" + producto.id, JSON.stringify(producto));
+}
+
+export function borrarDelCarrito(productoId) {
+  localStorage.removeItem("producto_" + productoId);
+}
 
 export const cargarCarrito = () => {
-  const datos = localStorage.getItem('carrito_tienda');
-  return datos ? JSON.parse(datos) : [];
+  const carrito = [];
+  for (let key in localStorage) {
+    if (key.startsWith("producto_")) {
+      carrito.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+  return carrito;
 };
