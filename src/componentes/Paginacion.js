@@ -7,17 +7,21 @@ const Paginacion = ({
     onCambiarPagina
 }) => {
     const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
-
     const inicio = (paginaActual - 1) * productosPorPagina;
     const fin = Math.min(inicio + productosPorPagina, totalProductos);
     const mostrados = totalProductos === 0 ? 0 : fin - inicio;
     // si no hay productoos nada --> 0 de 0 productos
     if (totalProductos === 0) {
         return (
-            <nav>
-                <p className="text-center">Mostrando 0 de 0 productos</p>
+            <nav className="mt-3">
+                <p className="text-center">No hay productos disponibles</p>
             </nav>
         );
+    }
+    // lista de páginas --> cuantos botones
+    const paginas = [];
+    for (let i = 1; i <= totalPaginas; i++) {
+        paginas.push(i);
     }
 
     return (
@@ -43,12 +47,9 @@ const Paginacion = ({
                 )}
 
                 {/* Num Páginas */}
-                {Array.from({ length: totalPaginas }, (_, i) => i + 1).map(num => (
+                {paginas.map(num => (
                     <li key={num} className={`page-item ${num === paginaActual ? 'active' : ''}`}>
-                        <button
-                            className="page-link"
-                            onClick={() => onCambiarPagina(num)}
-                        >
+                        <button className="page-link" onClick={() => onCambiarPagina(num)} > 
                             {num}
                         </button>
                     </li>
@@ -57,15 +58,11 @@ const Paginacion = ({
                 {/* btn Siguiente */}
                 {paginaActual < totalPaginas && (
                     <li className="page-item">
-                        <button
-                            className="page-link"
-                            onClick={() => onCambiarPagina(paginaActual + 1)}
-                        >
+                        <button className="page-link" onClick={() => onCambiarPagina(paginaActual + 1)} >
                             Siguiente
                         </button>
                     </li>
                 )}
-
             </ul>
         </nav>
     );
