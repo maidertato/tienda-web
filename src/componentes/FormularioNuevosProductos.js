@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FileUploader } from "react-drag-drop-files"; 
-import { DIVISA, crearNuevoProducto } from '../tienda/tienda.js';
+import { DIVISA, crearNuevoProducto, inventario } from '../tienda/tienda.js';
 
 const FormularioNuevosProductos = ({ onAgregarProducto }) => {
     const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];    
@@ -45,6 +45,12 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        const existe = inventario.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
+        if (existe) {
+            mostrarAlerta("Este producto ya existe en el catálogo", "danger");
+            return;
+        }
 
         if (!tipo) {
             mostrarAlerta('Debes escoger un tipo de producto', 'danger');
@@ -100,15 +106,8 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                 {/* Tipo de producto */}
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
-                    <select 
-                        className="form-select" 
-                        value={tipo} 
-                        onChange={(e) => {
-                            setTipo(e.target.value);
-                            setExtra(""); // Limpiar extra al cambiar
-                        }}
-                        required 
-                    >
+                    <select className="form-select" value={tipo} 
+                        onChange={(e) => {setTipo(e.target.value); setExtra(""); }} required >
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
                         <option value="Cabello">Cabello</option>
@@ -122,41 +121,22 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                 {/*  Nombre del Producto  */}
                 <div className="mb-3">
                     <label className="form-label">Nombre del Producto</label>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
-                        placeholder="Ej: Pelota de goma"
-                        required 
-                    />
+                    <input type="text" className="form-control" value={nombre}
+                        onChange={(e) => setNombre(e.target.value)} placeholder="Ej: Pelota de goma" required />
                 </div>
 
                 {/* Precio */}
                 <div className="mb-3">
                     <label className="form-label">Precio ({DIVISA})</label>
-                    <input 
-                        type="number" 
-                        className="form-control" 
-                        value={precio}
-                        onChange={(e) => setPrecio(e.target.value)}
-                        step="0.01" 
-                        min="0"
-                        placeholder="0.00"
-                        required 
-                    />
+                    <input type="number" className="form-control" value={precio}
+                        onChange={(e) => setPrecio(e.target.value)} step="0.01" min="0" placeholder="0.00" required />
                 </div>
 
                 {/* Descripción */}
                 <div className="mb-3">
                     <label className="form-label">Descripción</label>
-                    <textarea 
-                        className="form-control" 
-                        value={descripcion}
-                        onChange={(e) => setDescripcion(e.target.value)}
-                        placeholder="Describe tu producto..."
-                        rows="3"
-                    ></textarea>
+                    <textarea className="form-control" value={descripcion}
+                        onChange={(e) => setDescripcion(e.target.value)} placeholder="Describe tu producto..." rows="3"></textarea>
                 </div>
 
                 {/* Campo Extra  (Solo si hay tipo) */}
@@ -175,26 +155,47 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                     </div>
                 )}
 
-                {/* 6. Imagen */}
+                {/* Imagen */}
                 <div className="mb-4">
-                    <label className="form-label">Imagen del Producto</label>
-                    <div className="custom-drag-drop">
-                        <FileUploader
-                            handleChange={(file) => setFile(file)}
-                            name="file"
-                            types={fileTypes}
-                            label="Arrastra o haz clic aquí"
-                            hoverTitle="Suelta la imagen"
-                        >
-                            <div className="drop-zone-content p-4 border rounded text-center bg-light" style={{cursor: 'pointer'}}>
-                                {file ? (
-                                    <p className="text-success m-0 fw-bold">✓ {file.name}</p>
-                                ) : (
-                                    <p className="m-0 text-muted">Arrastra tu imagen aquí</p>
-                                )}
-                            </div>
-                        </FileUploader>
-                    </div>
+                    <label className="form-label d-block fw-bold mb-2">Imagen del Producto</label>
+                    
+                    <FileUploader 
+                        handleChange={(file) => setFile(file)} 
+                        name="file" 
+                        types={fileTypes} 
+                        classes="w-100" // Esto hace que el área de drop ocupe todo el ancho
+                    >
+                        <div className="drop-zone-custom p-4 border rounded text-center shadow-sm" style={{ 
+                            cursor: 'pointer', 
+                            borderStyle: 'dashed !important', 
+                            borderColor: file ? '#28a745' : '#6c757d',
+                            backgroundColor: '#f8f9fa',
+                            transition: 'all 0.3s ease'
+                        }}>
+                            {file ? (
+                                <div className="animate__animated animate__fadeIn">
+                                    {/* Previsualización de la imagen */}
+                                    <img 
+                                        src={URL.createObjectURL(file)} 
+                                        alt="Preview" 
+                                        style={{ maxWidth: '100px', maxHeight: '100px' }} 
+                                        className="mb-2 rounded shadow-sm"
+                                    />
+                                    <p className="text-success m-0 fw-bold">
+                                        <i className="bi bi-check-circle-fill me-2"></i>
+                                        {file.name}
+                                    </p>
+                                    <small className="text-muted">(Haz clic para cambiar la imagen)</small>
+                                </div>
+                            ) : (
+                                <div className="py-2">
+                                    <i className="bi bi-cloud-arrow-up text-primary fs-1 mb-2"></i>
+                                    <p className="m-0 text-dark fw-medium">Arrastra tu imagen aquí</p>
+                                    <p className="text-muted small">o haz clic para buscar archivos</p>
+                                </div>
+                            )}
+                        </div>
+                    </FileUploader>
                 </div>
 
                 <button type="submit" className="btn btn-custom w-100">

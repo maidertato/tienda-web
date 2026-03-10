@@ -21,15 +21,15 @@ function App() {
 
 
   const manejarNuevoProducto = (tipo, datos) => {
-    const nuevo = crearNuevoProducto(tipo.toLowerCase(), datos);
+    const nuevo = crearNuevoProducto(tipo, datos);
     if (nuevo) {
-      setProductos([...inventarioInicial]);
+      setProductos(prevProductos => [...prevProductos, nuevo]);
       setBusqueda("");
     }
   };
 
   const productosFiltrados = productos.filter(p =>
-    p.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    p?.nombre?.toLowerCase().includes(busqueda.toLowerCase())
   );
 
 
