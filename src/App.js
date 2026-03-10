@@ -35,7 +35,7 @@ function App() {
   const manejarAnadirAlCarrito = (producto) => {
     const nuevoCarrito = [...carrito, producto];
     setCarrito(nuevoCarrito);
-    guardarEnCarrito(nuevoCarrito);
+    guardarEnCarrito(producto);
   };
 
   const manejarEliminarDelCarrito = (id) => {
@@ -53,18 +53,18 @@ function App() {
       {/* MenuNavegacion */}
       <MenuNavegacion
         cantidadCarrito={carrito.length}
-        toggleCarrito={() => setShowCarrito(!showCarrito)}
-        isOnline={true} // temporal
+        toggleCarrito={() => setShowCarrito(true)}
       />
 
       {/* Carrito */}
-      {showCarrito && (
-        <Carrito
-          productosCarrito={carrito}
-          alEliminar={manejarEliminarDelCarrito}
-          alVaciar={() => { localStorage.clear(); setCarrito([]); }}
-        />
-      )}
+      <Carrito
+        show={showCarrito} 
+        alCerrar={()=> setShowCarrito(false)}
+        productosCarrito={carrito}
+        alEliminar={manejarEliminarDelCarrito}
+        alVaciar={() => { localStorage.clear(); setCarrito([]); }}
+      />
+  
 
       {/* escaparate + formulario */}
       <div id="contenido" className="container-fluid mt-4">
