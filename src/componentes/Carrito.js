@@ -1,61 +1,130 @@
 import React from 'react';
 import { DIVISA } from '../tienda/tienda';
 
-// Fíjate en los parámetros de la función: hemos añadido 'show' y 'alCerrar'
-const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar }) => {
-
-  const total = productosCarrito.reduce((acc, prod) => acc + prod.precio, 0);
+const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, onCambiarCantidad }) => {
+  // Calculamos el total multiplicando precio por cantidad
+  const total = productosCarrito.reduce((acc, prod) => acc + (prod.precio * (prod.cantidad || 1)), 0);
 
   return (
     <>
-      {/* 1. Fondo oscurecido (backdrop) que aparece solo si show es true */}
-      {show && <div className="offcanvas-backdrop fade show" onClick={alCerrar}></div>}
+      {/* Fondo oscurecido con desenfoque suave */}
+      {show && (
+        <div 
+          className="offcanvas-backdrop fade show" 
+          onClick={alCerrar}
+          style={{ backdropFilter: 'blur(4px)', backgroundColor: 'rgba(106, 27, 154, 0.1)' }}
+        ></div>
+      )}
       
-      {/* 2. El contenedor del carrito */}
       <div
         className={`offcanvas offcanvas-start ${show ? 'show' : ''}`} 
         tabIndex="-1"
         style={{ 
           visibility: show ? 'visible' : 'hidden',
-          display: 'block' // Forzamos bloque para que la clase 'show' de Bootstrap funcione
+          display: 'block',
+          width: '400px',
+          borderRight: 'none',
+          backgroundColor: '#FDF8FF', // Fondo lila muy clarito
+          boxShadow: '10px 0 30px rgba(0,0,0,0.1)',
+          borderRadius: '0 20px 20px 0' // Bordes redondeados a la derecha
         }}
-        id="carrito"
       >
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title">🛒 Carrito</h5>
-          <button
-            type="button"
-            className="btn-close"
-            onClick={alCerrar} // Usamos la prop alCerrar
+        {/* Cabecera personalizada */}
+        <div className="offcanvas-header" style={{ borderBottom: '1px solid #eee', padding: '20px' }}>
+          <h5 className="offcanvas-title" style={{ fontWeight: '700', color: '#6A1B9A', fontSize: '1.5rem' }}>
+            🛒 Mi Carrito
+          </h5>
+          <button 
+            type="button" 
+            className="btn-close" 
+            onClick={alCerrar}
+            style={{ backgroundColor: '#E6D5F7', opacity: 1, borderRadius: '50%', padding: '10px' }}
           ></button>
         </div>
 
-        <div className="offcanvas-body">
+        <div className="offcanvas-body" style={{ padding: '20px' }}>
           {productosCarrito.length === 0 ? (
-            <p>El carrito está vacío</p>
+            <div className="text-center mt-5">
+              <p style={{ color: '#999', fontSize: '1.1rem' }}>No hay productos aún... 🐾</p>
+            </div>
           ) : (
-            <>
-              {productosCarrito.map(prod => (
-                <div key={prod.id} className="d-flex justify-content-between mb-2">
-                  <span>{prod.nombre}</span>
-                  <span>{prod.precio}{DIVISA}</span>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => alEliminar(prod.id)}
-                  >
-                    🗑
-                  </button>
+            <div className="d-flex flex-column h-100">
+              <div className="flex-grow-1">
+            {productosCarrito.map((prod) => (
+              <div key={prod.id} className="d-flex justify-content-between align-items-center mb-3 p-3" 
+                  style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
+                
+                <div style={{ flex: 1 }}>
+                  <h6 className="m-0" style={{ fontWeight: '600' }}>{prod.nombre}</h6>
+                  <span style={{ color: '#6A1B9A', fontWeight: '700' }}>
+                    {(prod.precio * (prod.cantidad || 1)).toFixed(2)}{DIVISA}
+                  </span>
                 </div>
-              ))}
-              <hr />
-              <p><strong>Total:</strong> {total.toFixed(2)}{DIVISA}</p>
-              <button
-                className="btn btn-warning w-100"
-                onClick={alVaciar}
-              >
-                Vaciar Carrito
-              </button>
-            </>
+
+                {/* Selector de cantidad: Ajusta unidad a unidad */}
+                <div className="d-flex align-items-center" 
+                    style={{ backgroundColor: '#F2EAFA', borderRadius: '10px', padding: '2px 8px' }}>
+                  <button 
+                    className="btn btn-sm" 
+                    onClick={() => onCambiarCantidad(prod.id, -1)}
+                    style={{ border: 'none', fontWeight: 'bold', color: '#6A1B9A' }}
+                  >-</button>
+                  
+                  <span className="mx-2" style={{ fontWeight: 'bold' }}>
+                    {prod.cantidad || 1}
+                  </span>
+                  
+                  <button 
+                    className="btn btn-sm" 
+                    onClick={() => onCambiarCantidad(prod.id, 1)}
+                    style={{ border: 'none', fontWeight: 'bold', color: '#6A1B9A' }}
+                  >+</button>
+                </div>
+
+                {/* Papelera: Elimina el producto por completo del carrito */}
+                <button
+                  className="btn ms-2"
+                  style={{ color: '#ff6b6b', fontSize: '1.2rem' }}
+                  onClick={() => alEliminar(prod.id)} // Llama a la función que hace el filter
+                >
+                  🗑️
+                </button>
+              </div>
+            ))}
+              </div>
+              {/* Sección de Total y Botones inferior */}
+              <div className="mt-auto pt-4" style={{ borderTop: '2px dashed #E6D5F7' }}>
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                  <span style={{ fontSize: '1.2rem', fontWeight: '600', color: '#666' }}>Total:</span>
+                  <span style={{ fontSize: '1.8rem', fontWeight: '800', color: '#6A1B9A' }}>
+                    {total.toFixed(2)}{DIVISA}
+                  </span>
+                </div>
+                
+                <button
+                  className="btn w-100 mb-3"
+                  style={{ 
+                    backgroundColor: '#6A1B9A', 
+                    color: 'white', 
+                    padding: '12px', 
+                    borderRadius: '12px', 
+                    fontWeight: '700',
+                    fontSize: '1.1rem',
+                    boxShadow: '0 4px 15px rgba(106, 27, 154, 0.3)'
+                  }}
+                >
+                  Confirmar Pedido
+                </button>
+                
+                <button
+                  className="btn btn-link w-100 text-muted"
+                  style={{ textDecoration: 'none', fontSize: '0.9rem' }}
+                  onClick={alVaciar}
+                >
+                  Vaciar todo
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>
