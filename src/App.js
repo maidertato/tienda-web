@@ -21,9 +21,10 @@ function App() {
 
 
   const manejarNuevoProducto = (tipo, datos) => {
-    const nuevo = crearNuevoProducto(tipo, datos);
+    const nuevo = crearNuevoProducto(tipo.toLowerCase(), datos);
     if (nuevo) {
-      setProductos([nuevo, ...productos]);
+      setProductos([...inventarioInicial]);
+      setBusqueda("");
     }
   };
 

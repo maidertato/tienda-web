@@ -1,4 +1,3 @@
-
 import Juguete from './juguete.js';
 import Alimentacion from './alimentacion.js';
 import Merchandising from './merchandising.js';
@@ -201,6 +200,8 @@ export const buscarProductoPorNombre = (nombre) => {
 // ==================================== Agregar productos al inventario --> Con el formulario! ====================================
 export function crearNuevoProducto(tipo, datos) {
   let nuevo;
+  const tipoNormalizado = tipo.toLowerCase();
+
   switch (tipo) {
     case 'mobiliario':
       nuevo = new Mobiliario(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Madera", true);
@@ -221,10 +222,16 @@ export function crearNuevoProducto(tipo, datos) {
       nuevo = new Accesorios(datos.nombre, datos.precio, datos.descripcion, datos.imagen, "General", "Mediano", datos.extra || "Único");
       break;
     default:
+      console.log("Tipo recibido:", tipoNormalizado);
       return null;
   }
-
-  return nuevo;
+  if (nuevo) {
+    nuevo.id = datos.id || Date.now(); 
+    // ✅ OPCIÓN A: Si prefieres que la tienda lo guarde ella misma:
+    inventario.push(nuevo); 
+    return nuevo; 
+  }
+  return null;
 }
 
 
