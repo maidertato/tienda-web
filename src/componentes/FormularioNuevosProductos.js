@@ -155,44 +155,57 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                     </div>
                 )}
 
-                {/* Imagen */}
+                {/* Imagen --> selecciona */}
+                <div className="mb-3">
+                    <label className="form-label text-white">Imagen del Producto</label>
+                    <input 
+                        type="file" 
+                        className="form-control" 
+                        accept="image/*"
+                        onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                                setFile(e.target.files[0]);
+                            }
+                        }} 
+                    />
+                </div>
+
+                {/* Imagen --> drag&drop */}
                 <div className="mb-4">
-                    <label className="form-label d-block fw-bold mb-2">Imagen del Producto</label>
-                    
+                    <label className="form-label d-block text-white">O arrastra la imagen aquí</label>
                     <FileUploader 
                         handleChange={(file) => setFile(file)} 
                         name="file" 
-                        types={fileTypes} 
-                        classes="w-100" // Esto hace que el área de drop ocupe todo el ancho
+                        types={fileTypes}
+                        hoverTitle="Suelta aquí"
+                        // CAMBIO 1: Esta clase hace que el componente ocupe todo el ancho del formulario
+                        classes="w-100" 
                     >
-                        <div className="drop-zone-custom p-4 border rounded text-center shadow-sm" style={{ 
-                            cursor: 'pointer', 
-                            borderStyle: 'dashed !important', 
-                            borderColor: file ? '#28a745' : '#6c757d',
-                            backgroundColor: '#f8f9fa',
-                            transition: 'all 0.3s ease'
+                        {/* CAMBIO 2: Añadimos w-100 y estilos para que se vea largo y profesional */}
+                        <div className="drop-zone-custom p-3 border rounded text-center w-100" style={{ 
+                            cursor: 'pointer',
+                            borderStyle: 'dashed', 
+                            borderColor: 'rgba(255,255,255,0.7)', 
+                            backgroundColor: 'rgba(255,255,255,0.1)',
+                            minHeight: '80px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            boxSizing: 'border-box' 
                         }}>
                             {file ? (
-                                <div className="animate__animated animate__fadeIn">
-                                    {/* Previsualización de la imagen */}
+                                <div className="animate__animated animate__fadeIn text-center">
                                     <img 
                                         src={URL.createObjectURL(file)} 
-                                        alt="Preview" 
-                                        style={{ maxWidth: '100px', maxHeight: '100px' }} 
-                                        className="mb-2 rounded shadow-sm"
+                                        alt="Vista previa" 
+                                        style={{ maxWidth: '80px', borderRadius: '5px' }} 
+                                        className="mb-2 d-block mx-auto"
                                     />
-                                    <p className="text-success m-0 fw-bold">
-                                        <i className="bi bi-check-circle-fill me-2"></i>
-                                        {file.name}
-                                    </p>
-                                    <small className="text-muted">(Haz clic para cambiar la imagen)</small>
+                                    <p className="text-success m-0 small fw-bold">✓ {file.name}</p>
                                 </div>
                             ) : (
-                                <div className="py-2">
-                                    <i className="bi bi-cloud-arrow-up text-primary fs-1 mb-2"></i>
-                                    <p className="m-0 text-dark fw-medium">Arrastra tu imagen aquí</p>
-                                    <p className="text-muted small">o haz clic para buscar archivos</p>
-                                </div>
+                                <p className="m-0 text-white" style={{ opacity: 0.8 }}>Arrastra tu imagen aquí</p>
                             )}
                         </div>
                     </FileUploader>
