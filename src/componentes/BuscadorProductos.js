@@ -7,18 +7,24 @@ const BuscadorProductos = ({
 
 }) => {
 
-    const [termino, setTermino] = useState(terminoBusqueda);
+    //const [termino, setTermino] = useState(terminoBusqueda);
 
     return (
-        <div className="d-flex align-items-center w-100 p-3">
-            <h2 className="m-0">{titulo}</h2>
-            <input
-                type="text"
-                className="form-control ms-auto buscador-custom"
-                placeholder="Buscar por nombre..."
-                value={terminoBusqueda}
-                onChange={e => onCambio(e.target.value)}
-            />
+        <div className="d-flex align-items-center flex-grow mx-1">
+            <h4 className="m-0 me-3 text-nowrap d-none d-md-block">{titulo}</h4>
+            
+            <div className='input-group'>
+                <span className="input-group-text bg-transparent border-end-0"> 
+                    🔍
+                </span>
+                <input 
+                    type="text"
+                    className="form-control border-start-0 ps-0 shadow-none"
+                    placeholder="Buscar por nombre..."
+                    value={terminoBusqueda}
+                    onChange={(e) => onCambio(e.target.value)}                
+                />
+            </div>
         </div>
     );
 };
