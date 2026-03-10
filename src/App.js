@@ -33,15 +33,51 @@ function App() {
 
 
   const manejarAnadirAlCarrito = (producto) => {
-    const nuevoCarrito = [...carrito, producto];
-    setCarrito(nuevoCarrito);
-    guardarEnCarrito(producto);
-  };
-
-  const manejarEliminarDelCarrito = (id) => {
-    const nuevoCarrito = carrito.filter(item => item.id !== id);
-    setCarrito(nuevoCarrito);
+  setCarrito(prevCarrito => {
+    // Buscamos si el producto ya está en el carrito
+    const existe = prevCarrito.find(item => item.id === producto.id);
+    
+    let nuevoCarrito;
+    if (existe) {
+      // Si existe, mapeamos el carrito y sumamos 1 a la cantidad del producto encontrado
+      nuevoCarrito = prevCarrito.map(item =>
+        item.id === producto.id 
+          ? { ...item, cantidad: (item.cantidad || 1) + 1 } 
+          : item
+      );
+    } else {
+      // Si no existe, lo añadimos con cantidad 1
+      nuevoCarrito = [...prevCarrito, { ...producto, cantidad: 1 }];
+    }
+    
     localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
+    return nuevoCarrito;
+  });
+};
+
+  const manejarCambiarCantidad = (id, delta) => {
+  setCarrito(prevCarrito => {
+    const nuevoCarrito = prevCarrito.map(item => {
+      if (item.id === id) {
+        const nuevaCantidad = (item.cantidad || 1) + delta;
+        // Evitamos que baje de 1. Si llega a 1 y pulsan "-", no hace nada.
+        return { ...item, cantidad: Math.max(1, nuevaCantidad) };
+      }
+      return item;
+    });
+    localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
+    return nuevoCarrito;
+  });
+};
+
+  // Función para la PAPELERA (Elimina todo el grupo de ese producto)
+  const manejarEliminarDelCarrito = (id) => {
+    setCarrito(prevCarrito => {
+      // Filtramos para que NO queden productos con ese ID
+      const nuevoCarrito = prevCarrito.filter(item => item.id !== id);
+      localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
+      return nuevoCarrito;
+    });
   };
 
 
@@ -62,6 +98,7 @@ function App() {
         alCerrar={()=> setShowCarrito(false)}
         productosCarrito={carrito}
         alEliminar={manejarEliminarDelCarrito}
+        onCambiarCantidad={manejarCambiarCantidad}
         alVaciar={() => { localStorage.clear(); setCarrito([]); }}
       />
   
