@@ -75,16 +75,8 @@ function App() {
 
   return (
     <div className="contenedor">
-      {/* MODIFICACIÓN AQUÍ: He añadido las props necesarias para que Cabecera 
-          pueda controlar el buscador y el botón del carrito.
-      */}
-      <Cabecera 
-        titulo="🐱 🦩 Tienda de Mascotas 🐕 🐇" 
-        busqueda={busqueda}
-        setBusqueda={setBusqueda}
-        totalItems={carrito.length}
-        onAbrirCarrito={() => setShowCarrito(true)}
-      />
+      {/* 1. Cabecera limpia: Solo recibe el título */}
+      <Cabecera titulo="🐱 🦩 Tienda de Mascotas 🐕 🐇" />
 
       {/* MenuNavegacion */}
       <MenuNavegacion
@@ -107,14 +99,15 @@ function App() {
       <div id="contenido" className="container-fluid mt-4">
         <div className="row">
           <main className="col-md-8">
-
+            {/* 2. EscaparateProductos ahora recibe la lógica de búsqueda */}
             <EscaparateProductos
               productos={productosFiltrados}
               onAnadirAlCarrito={manejarAnadirAlCarrito}
+              busqueda={busqueda}
+              setBusqueda={setBusqueda}
             />
           </main>
 
-          {/* Aside */}
           <aside className="col-md-3">
             <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}
             />

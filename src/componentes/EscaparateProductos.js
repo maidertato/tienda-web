@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DetallesProducto from './DetallesProducto';
 import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
 import { obtenerAtributoExtra } from '../tienda/tienda.js';
 
-const EscaparateProductos = ({ productos, onAnadirAlCarrito }) => {
+const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda }) => {
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [productosPerPage] = useState(6);
+
+    // Requisito 5.1.3: Volver a la primera página al buscar
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [busqueda]);
 
     const indexOfLastProduct = currentPage * productosPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
@@ -20,6 +25,18 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito }) => {
 
     return (
         <div className="container-fluid">
+            {/* Buscador integrado en la parte superior del escaparate */}
+            <div className="d-flex justify-content-between align-items-center px-3 mb-2" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <h2 className="h4 text-secondary m-0">Todos los productos</h2>
+                <div style={{ width: '300px' }}>
+                    <BuscadorProductos 
+                        titulo="" 
+                        terminoBusqueda={busqueda} 
+                        onCambio={setBusqueda} 
+                    />
+                </div>
+            </div>
+
             <div className="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 p-3 justify-content-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 {currentProducts.map((prod) => {
                     const info = obtenerAtributoExtra(prod);
