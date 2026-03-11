@@ -4,15 +4,15 @@ import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
 import { obtenerAtributoExtra } from '../tienda/tienda.js';
 
-const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda }) => {
+const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual }) => {
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
     const [productosPerPage] = useState(6);
-
     const [idAnadido, setIdAnadido] = useState(null);
+
+
     useEffect(() => {
-        setCurrentPage(1);
-    }, [busqueda]);
+        setPaginaActual(1);
+    }, [busqueda, setPaginaActual]);
 
     const handleAnadirConTooltip = (prod) => {
         onAnadirAlCarrito(prod);
@@ -22,12 +22,12 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
         }, 2000);
     };
 
-    const indexOfLastProduct = currentPage * productosPerPage;
+    const indexOfLastProduct = paginaActual * productosPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
     const currentProducts = productos.slice(indexOfFirstProduct, indexOfLastProduct);
 
     const paginate = (pageNumber) => {
-        setCurrentPage(pageNumber);
+        setPaginaActual(pageNumber);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -63,7 +63,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                     <div className="btn-carrito-container">
                                         {idAnadido === prod.id && (
                                             <div className="mensaje-exito-flotante">
-                                                ¡Añadido con éxito!
+                                                ¡Añadido!
                                             </div>
                                         )}
                                         <button
@@ -98,7 +98,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             <Paginacion
                 totalProductos={productos.length}
                 productosPorPagina={productosPerPage}
-                paginaActual={currentPage}
+                paginaActual={paginaActual}
                 onCambiarPagina={paginate}
             />
 

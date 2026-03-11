@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { FileUploader } from "react-drag-drop-files"; 
+import { FileUploader } from "react-drag-drop-files";
 import { DIVISA, crearNuevoProducto, inventario } from '../tienda/tienda.js';
 
 const FormularioNuevosProductos = ({ onAgregarProducto }) => {
-    const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];    
-    
+    const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
+
     // Estados
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
@@ -15,7 +15,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
 
     // Alertas
     const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" });
-    
+
     const mostrarAlerta = (texto, tipo) => {
         setAlerta({ visible: true, texto, tipo });
         setTimeout(() => {
@@ -45,7 +45,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         const existe = inventario.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
         if (existe) {
             mostrarAlerta("Este producto ya existe en el catálogo", "danger");
@@ -65,10 +65,10 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
         }
 
         if (file && !file.type.startsWith("image/")) {
-        mostrarAlerta("El archivo debe ser una imagen", "danger");
-        return;
+            mostrarAlerta("El archivo debe ser una imagen", "danger");
+            return;
         }
-        
+
         const nuevoProducto = {
             id: "prod-" + Date.now(),
             nombre,
@@ -86,7 +86,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                 mostrarAlerta("¡Producto añadido con éxito!", "success");
 
                 // Limpiar el formulario
-                setNombre(""); setPrecio(""); setDescripcion(""); 
+                setNombre(""); setPrecio(""); setDescripcion("");
                 setExtra(""); setFile(null); setTipo("");
             } else {
                 // Si llega aquí es porque crearNuevoProducto devolvió null o false
@@ -102,12 +102,12 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
         <div className="formulario-wrapper">
             <h3 className="text-center mb-3">Añadir Productos</h3>
             <form id="form-producto" onSubmit={handleSubmit}>
-                
+
                 {/* Tipo de producto */}
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
-                    <select className="form-select" value={tipo} 
-                        onChange={(e) => {setTipo(e.target.value); setExtra(""); }} required >
+                    <select className="form-select" value={tipo}
+                        onChange={(e) => { setTipo(e.target.value); setExtra(""); }} required >
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
                         <option value="Cabello">Cabello</option>
@@ -144,13 +144,13 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                     <div className="mb-3 animate__animated animate__fadeIn">
                         <label className="form-label fw-bold">
                             {titulosExtra[tipo] || "Dato Extra"}</label>
-                        <input 
-                            type="text" 
-                            className="form-control" 
+                        <input
+                            type="text"
+                            className="form-control"
                             value={extra}
                             onChange={(e) => setExtra(e.target.value)}
-                            placeholder={placeholdersExtra[tipo]} 
-                            required 
+                            placeholder={placeholdersExtra[tipo]}
+                            required
                         />
                     </div>
                 )}
@@ -158,48 +158,48 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                 {/* Imagen --> selecciona */}
                 <div className="mb-3">
                     <label className="form-label text-white">Imagen del Producto</label>
-                    <input 
-                        type="file" 
-                        className="form-control" 
+                    <input
+                        type="file"
+                        className="form-control"
                         accept="image/*"
                         onChange={(e) => {
                             if (e.target.files && e.target.files[0]) {
                                 setFile(e.target.files[0]);
                             }
-                        }} 
+                        }}
                     />
                 </div>
 
                 {/* Imagen --> drag&drop */}
                 <div className="mb-4">
                     <label className="form-label d-block text-white">O arrastra la imagen aquí</label>
-                    <FileUploader 
-                        handleChange={(file) => setFile(file)} 
-                        name="file" 
+                    <FileUploader
+                        handleChange={(file) => setFile(file)}
+                        name="file"
                         types={fileTypes}
                         hoverTitle="Suelta aquí"
                         // CAMBIO 1: Esta clase hace que el componente ocupe todo el ancho del formulario
-                        classes="w-100" 
+                        classes="w-100"
                     >
                         {/* CAMBIO 2: Añadimos w-100 y estilos para que se vea largo y profesional */}
-                        <div className="drop-zone-custom p-3 border rounded text-center w-100" style={{ 
+                        <div className="drop-zone-custom p-3 border rounded text-center w-100" style={{
                             cursor: 'pointer',
-                            borderStyle: 'dashed', 
-                            borderColor: 'rgba(255,255,255,0.7)', 
+                            borderStyle: 'dashed',
+                            borderColor: 'rgba(255,255,255,0.7)',
                             backgroundColor: 'rgba(255,255,255,0.1)',
                             minHeight: '80px',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            boxSizing: 'border-box' 
+                            boxSizing: 'border-box'
                         }}>
                             {file ? (
                                 <div className="animate__animated animate__fadeIn text-center">
-                                    <img 
-                                        src={URL.createObjectURL(file)} 
-                                        alt="Vista previa" 
-                                        style={{ maxWidth: '80px', borderRadius: '5px' }} 
+                                    <img
+                                        src={URL.createObjectURL(file)}
+                                        alt="Vista previa"
+                                        style={{ maxWidth: '80px', borderRadius: '5px' }}
                                         className="mb-2 d-block mx-auto"
                                     />
                                     <p className="text-success m-0 small fw-bold">✓ {file.name}</p>

@@ -17,6 +17,12 @@ function App() {
   const [carrito, setCarrito] = useState(cargarCarrito());
   const [showCarrito, setShowCarrito] = useState(false);
   const [busqueda, setBusqueda] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
+
+  const irAInicio = () => {
+    setBusqueda("");      // Limpia el buscador
+    setPaginaActual(1);   // Vuelve a la página 1
+  };
 
   const manejarNuevoProducto = (tipo, datos) => {
     const nuevo = crearNuevoProducto(tipo, datos);
@@ -33,18 +39,18 @@ function App() {
   const manejarAnadirAlCarrito = (producto) => {
     setCarrito(prevCarrito => {
       const existe = prevCarrito.find(item => item.id === producto.id);
-      
+
       let nuevoCarrito;
       if (existe) {
         nuevoCarrito = prevCarrito.map(item =>
-          item.id === producto.id 
-            ? { ...item, cantidad: (item.cantidad || 1) + 1 } 
+          item.id === producto.id
+            ? { ...item, cantidad: (item.cantidad || 1) + 1 }
             : item
         );
       } else {
         nuevoCarrito = [...prevCarrito, { ...producto, cantidad: 1 }];
       }
-      
+
       localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
       return nuevoCarrito;
     });
@@ -83,18 +89,19 @@ function App() {
       <MenuNavegacion
         cantidadCarrito={totalUnidades}
         toggleCarrito={() => setShowCarrito(true)}
+        irAInicio={irAInicio}
       />
 
       {/* Carrito */}
       <Carrito
-        show={showCarrito} 
-        alCerrar={()=> setShowCarrito(false)}
+        show={showCarrito}
+        alCerrar={() => setShowCarrito(false)}
         productosCarrito={carrito}
         alEliminar={manejarEliminarDelCarrito}
         onCambiarCantidad={manejarCambiarCantidad}
         alVaciar={() => { localStorage.clear(); setCarrito([]); }}
       />
-  
+
 
       {/* escaparate + formulario */}
       <div id="contenido" className="container-fluid mt-4">
@@ -106,6 +113,8 @@ function App() {
               onAnadirAlCarrito={manejarAnadirAlCarrito}
               busqueda={busqueda}
               setBusqueda={setBusqueda}
+              paginaActual={paginaActual}
+              setPaginaActual={setPaginaActual}
             />
           </main>
 

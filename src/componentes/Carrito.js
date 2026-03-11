@@ -9,17 +9,17 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
     <>
       {/* Fondo oscurecido con desenfoque suave */}
       {show && (
-        <div 
-          className="offcanvas-backdrop fade show" 
+        <div
+          className="offcanvas-backdrop fade show"
           onClick={alCerrar}
           style={{ backdropFilter: 'blur(4px)', backgroundColor: 'rgba(106, 27, 154, 0.1)' }}
         ></div>
       )}
-      
+
       <div
-        className={`offcanvas offcanvas-start ${show ? 'show' : ''}`} 
+        className={`offcanvas offcanvas-start ${show ? 'show' : ''}`}
         tabIndex="-1"
-        style={{ 
+        style={{
           visibility: show ? 'visible' : 'hidden',
           display: 'block',
           width: '400px',
@@ -34,9 +34,9 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
           <h5 className="offcanvas-title" style={{ fontWeight: '700', color: '#6A1B9A', fontSize: '1.5rem' }}>
             🛒 Mi Carrito
           </h5>
-          <button 
-            type="button" 
-            className="btn-close" 
+          <button
+            type="button"
+            className="btn-close"
             onClick={alCerrar}
             style={{ backgroundColor: '#E6D5F7', opacity: 1, borderRadius: '50%', padding: '10px' }}
           ></button>
@@ -50,47 +50,47 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
           ) : (
             <div className="d-flex flex-column h-100">
               <div className="flex-grow-1">
-            {productosCarrito.map((prod) => (
-              <div key={prod.id} className="d-flex justify-content-between align-items-center mb-3 p-3" 
-                  style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
-                
-                <div style={{ flex: 1 }}>
-                  <h6 className="m-0" style={{ fontWeight: '600' }}>{prod.nombre}</h6>
-                  <span style={{ color: '#6A1B9A', fontWeight: '700' }}>
-                    {(prod.precio * (prod.cantidad || 1)).toFixed(2)}{DIVISA}
-                  </span>
-                </div>
+                {productosCarrito.map((prod) => (
+                  <div key={prod.id} className="d-flex justify-content-between align-items-center mb-3 p-3"
+                    style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
 
-                {/* Selector de cantidad: Ajusta unidad a unidad */}
-                <div className="d-flex align-items-center" 
-                    style={{ backgroundColor: '#F2EAFA', borderRadius: '10px', padding: '2px 8px' }}>
-                  <button 
-                    className="btn btn-sm" 
-                    onClick={() => onCambiarCantidad(prod.id, -1)}
-                    style={{ border: 'none', fontWeight: 'bold', color: '#6A1B9A' }}
-                  >-</button>
-                  
-                  <span className="mx-2" style={{ fontWeight: 'bold' }}>
-                    {prod.cantidad || 1}
-                  </span>
-                  
-                  <button 
-                    className="btn btn-sm" 
-                    onClick={() => onCambiarCantidad(prod.id, 1)}
-                    style={{ border: 'none', fontWeight: 'bold', color: '#6A1B9A' }}
-                  >+</button>
-                </div>
+                    <div style={{ flex: 1 }}>
+                      <h6 className="m-0" style={{ fontWeight: '600' }}>{prod.nombre}</h6>
+                      <span style={{ color: '#6A1B9A', fontWeight: '700' }}>
+                        {(prod.precio * (prod.cantidad || 1)).toFixed(2)}{DIVISA}
+                      </span>
+                    </div>
 
-                {/* Papelera: Elimina el producto por completo del carrito */}
-                <button
-                  className="btn ms-2"
-                  style={{ color: '#ff6b6b', fontSize: '1.2rem' }}
-                  onClick={() => alEliminar(prod.id)} // Llama a la función que hace el filter
-                >
-                  🗑️
-                </button>
-              </div>
-            ))}
+                    {/* Selector de cantidad: Ajusta unidad a unidad */}
+                    <div className="d-flex align-items-center"
+                      style={{ backgroundColor: '#F2EAFA', borderRadius: '10px', padding: '2px 8px' }}>
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => onCambiarCantidad(prod.id, -1)}
+                        style={{ border: 'none', fontWeight: 'bold', color: '#6A1B9A' }}
+                      >-</button>
+
+                      <span className="mx-2" style={{ fontWeight: 'bold' }}>
+                        {prod.cantidad || 1}
+                      </span>
+
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => onCambiarCantidad(prod.id, 1)}
+                        style={{ border: 'none', fontWeight: 'bold', color: '#6A1B9A' }}
+                      >+</button>
+                    </div>
+
+                    {/* Papelera: Elimina el producto por completo del carrito */}
+                    <button
+                      className="btn ms-2"
+                      style={{ color: '#ff6b6b', fontSize: '1.2rem' }}
+                      onClick={() => alEliminar(prod.id)} // Llama a la función que hace el filter
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                ))}
               </div>
               {/* Sección de Total y Botones inferior */}
               <div className="mt-auto pt-4" style={{ borderTop: '2px dashed #E6D5F7' }}>
@@ -100,14 +100,14 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                     {total.toFixed(2)}{DIVISA}
                   </span>
                 </div>
-                
+
                 <button
                   className="btn w-100 mb-3"
-                  style={{ 
-                    backgroundColor: '#6A1B9A', 
-                    color: 'white', 
-                    padding: '12px', 
-                    borderRadius: '12px', 
+                  style={{
+                    backgroundColor: '#6A1B9A',
+                    color: 'white',
+                    padding: '12px',
+                    borderRadius: '12px',
                     fontWeight: '700',
                     fontSize: '1.1rem',
                     boxShadow: '0 4px 15px rgba(106, 27, 154, 0.3)'
@@ -115,7 +115,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                 >
                   Confirmar Pedido
                 </button>
-                
+
                 <button
                   className="btn btn-link w-100 text-muted"
                   style={{ textDecoration: 'none', fontSize: '0.9rem' }}

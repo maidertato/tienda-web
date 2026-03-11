@@ -226,8 +226,8 @@ export function crearNuevoProducto(tipo, datos) {
   }
   if (nuevo) {
     nuevo.id = datos.id || Date.now();
-  //  inventario.push(nuevo); 
-    return nuevo; 
+    //  inventario.push(nuevo); 
+    return nuevo;
   }
   return null;
 }
