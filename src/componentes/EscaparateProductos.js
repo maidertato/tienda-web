@@ -11,11 +11,11 @@ import { obtenerAtributoExtra } from '../tienda/tienda.js';
 const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => {
     // Usamos useMemo para que el array de imágenes sea estable y no cambie en cada render
     const imagenes = useMemo(() => {
-        return prod.variantes && prod.variantes.length > 0 
-            ? prod.variantes 
+        return prod.variantes && prod.variantes.length > 0
+            ? prod.variantes
             : [{ nombre: '', imagen: prod.imagen }];
     }, [prod.variantes, prod.imagen]);
-     
+
     const [idx, setIdx] = useState(0);
 
     // Sincronizar el nombre de la variante
@@ -26,7 +26,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
     }, [idx, imagenes, onVarianteChange]);
 
     const cambiarImagen = (e, direccion) => {
-        e.stopPropagation(); 
+        e.stopPropagation();
         if (direccion === 'next') {
             setIdx((prev) => (prev + 1) % imagenes.length);
         } else {
@@ -42,7 +42,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
                     <div className="flecha flecha-der" onClick={(e) => cambiarImagen(e, 'next')}></div>
                 </>
             )}
-            
+
             <img
                 src={imagenes[idx]?.imagen || prod.imagen}
                 className="card-img-top p-3"
@@ -63,26 +63,30 @@ const TarjetaProducto = ({ prod, setProductoSeleccionado, idAnadido, handleAnadi
 
     return (
         <div className="col d-flex justify-content-center">
-            <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
-                <div className="position-relative">
-                    <CarruselImagen 
-                        prod={prod} 
-                        setProductoSeleccionado={setProductoSeleccionado}
-                        onVarianteChange={setNombreVariante}
-                    />
-                    
-                    <div className="btn-carrito-container">
-                        {idAnadido === prod.id && (
-                            <div className="mensaje-exito-flotante">¡Añadido!</div>
-                        )}
-                        <button
-                            className="btn-carrito-circular"
-                            onClick={() => handleAnadirConTooltip(prod)}
-                        >
-                            🛒
-                        </button>
-                    </div>
+            <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>                <div className="position-relative">
+                <CarruselImagen
+                    prod={prod}
+                    setProductoSeleccionado={setProductoSeleccionado}
+                    onVarianteChange={setNombreVariante}
+                />
+
+                <div className="btn-carrito-container">
+                    {idAnadido === `${prod.id}-exito` && (
+                        <div className="mensaje-exito-flotante">¡Añadido!</div>
+                    )}
+                    {idAnadido === `${prod.id}-error` && (
+                        <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>
+                            Máx. 20 unidades
+                        </div>
+                    )}
+                    <button
+                        className="btn-carrito-circular"
+                        onClick={() => handleAnadirConTooltip(prod)}
+                    >
+                        🛒
+                    </button>
                 </div>
+            </div>
 
                 <div className="card-body d-flex flex-column text-start">
                     <h4 className="card-title-escaparate">
@@ -104,17 +108,18 @@ const TarjetaProducto = ({ prod, setProductoSeleccionado, idAnadido, handleAnadi
 //////////////////////////////////////
 // COMPONENTE PRINCIPAL
 //////////////////////////////////////
-const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual,carrito }) => {
+const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual, carrito = [] }) => {
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [productosPerPage] = useState(6);
     const [idAnadido, setIdAnadido] = useState(null);
+    const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
 
     useEffect(() => {
         setPaginaActual(1);
     }, [busqueda, setPaginaActual]);
 
     const handleAnadirConTooltip = (prod) => {
-        const itemEnCarrito =carrito.find(item => item.id === prod.id);
+        const itemEnCarrito = carrito.find(item => item.id === prod.id);
         const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
 
         // Comprobamos el límite de 20 unidades
@@ -155,26 +160,26 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             <div className="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 p-3 justify-content-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 {currentProducts.map((prod) => {
                     const info = obtenerAtributoExtra(prod);
+                    const nombreVariante = variantesSeleccionadas[prod.id] || "";
 
                     return (
                         <div key={prod.id} className="col d-flex justify-content-center">
                             <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
                                 <div className="position-relative">
-                                    <img
-                                        src={prod.imagen}
-                                        className="card-img-top p-3"
-                                        alt={prod.nombre}
-                                        style={{ height: '220px', objectFit: 'contain', cursor: 'pointer' }}
-                                        onClick={() => setProductoSeleccionado(prod)}
+                                    <CarruselImagen
+                                        prod={prod}
+                                        setProductoSeleccionado={setProductoSeleccionado}
+                                        onVarianteChange={(nombre) => {
+                                            setVariantesSeleccionadas(prev => ({
+                                                ...prev,
+                                                [prod.id]: nombre
+                                            }));
+                                        }}
                                     />
                                     <div className="btn-carrito-container">
-                                        {/*Mensaje de exito*/ }
                                         {idAnadido === `${prod.id}-exito` && (
-                                            <div className="mensaje-exito-flotante">
-                                                ¡Añadido!
-                                            </div>
+                                            <div className="mensaje-exito-flotante">¡Añadido!</div>
                                         )}
-                                        {/*Mensaje de error*/ }
                                         {idAnadido === `${prod.id}-error` && (
                                             <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>
                                                 Máx. 20 unidades
@@ -190,14 +195,15 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                 </div>
 
                                 <div className="card-body d-flex flex-column text-start">
-                                    <h4 className="card-title-escaparate">{prod.nombre}</h4>
+                                    <h4 className="card-title-escaparate">
+                                        {prod.nombre}{nombreVariante ? ` - ${nombreVariante}` : ""}
+                                    </h4>
                                     <p className="card-precio-escaparate">{prod.precio}€</p>
 
                                     <div className="mt-2">
                                         <p className="mb-1 text-secondary" style={{ fontSize: '0.9rem' }}>
                                             <strong>{info.etiqueta}:</strong> {info.valor}
                                         </p>
-
                                         <p className="description-text-card">
                                             {prod.descripcion}
                                         </p>
