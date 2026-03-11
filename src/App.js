@@ -72,6 +72,7 @@ function App() {
     });
   };
 
+  const totalUnidades = carrito.reduce((acc, item) => acc + (item.cantidad || 1), 0);
 
   return (
     <div className="contenedor">
@@ -80,7 +81,7 @@ function App() {
 
       {/* MenuNavegacion */}
       <MenuNavegacion
-        cantidadCarrito={carrito.length}
+        cantidadCarrito={totalUnidades}
         toggleCarrito={() => setShowCarrito(true)}
       />
 

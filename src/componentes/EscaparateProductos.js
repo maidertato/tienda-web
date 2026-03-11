@@ -9,10 +9,18 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
     const [currentPage, setCurrentPage] = useState(1);
     const [productosPerPage] = useState(6);
 
-    // Requisito 5.1.3: Volver a la primera página al buscar
+    const [idAnadido, setIdAnadido] = useState(null);
     useEffect(() => {
         setCurrentPage(1);
     }, [busqueda]);
+
+    const handleAnadirConTooltip = (prod) => {
+        onAnadirAlCarrito(prod);
+        setIdAnadido(prod.id);
+        setTimeout(() => {
+            setIdAnadido(null);
+        }, 2000);
+    };
 
     const indexOfLastProduct = currentPage * productosPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
@@ -29,10 +37,10 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             <div className="d-flex justify-content-between align-items-center px-3 mb-2" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <h2 className="h4 text-secondary m-0">Todos los productos</h2>
                 <div style={{ width: '300px' }}>
-                    <BuscadorProductos 
-                        titulo="" 
-                        terminoBusqueda={busqueda} 
-                        onCambio={setBusqueda} 
+                    <BuscadorProductos
+                        titulo=""
+                        terminoBusqueda={busqueda}
+                        onCambio={setBusqueda}
                     />
                 </div>
             </div>
@@ -52,12 +60,19 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                         style={{ height: '220px', objectFit: 'contain', cursor: 'pointer' }}
                                         onClick={() => setProductoSeleccionado(prod)}
                                     />
-                                    <button
-                                        className="btn-carrito-circular"
-                                        onClick={() => onAnadirAlCarrito(prod)}
-                                    >
-                                        🛒
-                                    </button>
+                                    <div className="btn-carrito-container">
+                                        {idAnadido === prod.id && (
+                                            <div className="mensaje-exito-flotante">
+                                                ¡Añadido con éxito!
+                                            </div>
+                                        )}
+                                        <button
+                                            className="btn-carrito-circular"
+                                            onClick={() => handleAnadirConTooltip(prod)}
+                                        >
+                                            🛒
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="card-body d-flex flex-column text-start">

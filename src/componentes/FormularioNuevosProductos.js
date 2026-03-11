@@ -39,7 +39,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
         Alimentacion: "Tipo de Alimento",
         Cabello: "Estilo",
         Juguete: "Tipo de Juguete",
-        Merchandising: "Categoría",
+        Merchandising: "Parte del cuerpo",
         Accesorios: "Tipo de Mascota"
     };
 
