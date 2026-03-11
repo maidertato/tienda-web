@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { inventario as inventarioInicial, crearNuevoProducto, guardarEnCarrito, cargarCarrito } from './tienda/tienda';
 import './App.css';
 
@@ -37,23 +37,29 @@ function App() {
   );
 
   const manejarAnadirAlCarrito = (producto) => {
-    setCarrito(prevCarrito => {
-      const existe = prevCarrito.find(item => item.id === producto.id);
+    // 1. Buscamos si el producto ya está en el carrito
+    const productoExistente = carrito.find(item => item.id === producto.id);
 
-      let nuevoCarrito;
-      if (existe) {
-        nuevoCarrito = prevCarrito.map(item =>
-          item.id === producto.id
-            ? { ...item, cantidad: (item.cantidad || 1) + 1 }
-            : item
-        );
-      } else {
-        nuevoCarrito = [...prevCarrito, { ...producto, cantidad: 1 }];
+    if (productoExistente) {
+      // 2. Si ya existe, comprobamos si ha llegado al tope de 20
+      if (productoExistente.cantidad >= 20) {
+        return; // Salimos de la función sin añadir nada
       }
 
+      // 3. Si existe pero tiene menos de 20, incrementamos su cantidad
+      const nuevoCarrito = carrito.map(item =>
+        item.id === producto.id 
+          ? { ...item, cantidad: item.cantidad + 1 } 
+          : item
+      );
+      setCarrito(nuevoCarrito);
       localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
-      return nuevoCarrito;
-    });
+    } else {
+      // 4. Si es un producto nuevo, lo añadimos con cantidad 1
+      const nuevoCarrito = [...carrito, { ...producto, cantidad: 1 }];
+      setCarrito(nuevoCarrito);
+      localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
+    }
   };
 
   const manejarCambiarCantidad = (id, delta) => {
@@ -80,6 +86,8 @@ function App() {
 
   const totalUnidades = carrito.reduce((acc, item) => acc + (item.cantidad || 1), 0);
 
+
+
   return (
     <div className="contenedor">
       {/* 1. Cabecera limpia: Solo recibe el título */}
@@ -103,6 +111,7 @@ function App() {
       />
 
 
+
       {/* escaparate + formulario */}
       <div id="contenido" className="container-fluid mt-4">
         <div className="row">
@@ -111,6 +120,7 @@ function App() {
             <EscaparateProductos
               productos={productosFiltrados}
               onAnadirAlCarrito={manejarAnadirAlCarrito}
+              carrito={carrito}
               busqueda={busqueda}
               setBusqueda={setBusqueda}
               paginaActual={paginaActual}

@@ -53,7 +53,19 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                 {productosCarrito.map((prod) => (
                   <div key={prod.id} className="d-flex justify-content-between align-items-center mb-3 p-3"
                     style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
-
+                    {/* FOTO DEL PRODUCTO */}
+                    <img
+                      src={prod.imagen}
+                      alt={prod.nombre}
+                      style = {{
+                        width: '60px',
+                        height: '60px',
+                        objectFit: 'cover',
+                        borderRadius: '10px',
+                        marginRight: '15px',
+                        backgroundColor: '#f9f9f9'
+                      }}/>
+                    
                     <div style={{ flex: 1 }}>
                       <h6 className="m-0" style={{ fontWeight: '600' }}>{prod.nombre}</h6>
                       <span style={{ color: '#6A1B9A', fontWeight: '700' }}>
@@ -62,24 +74,25 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                     </div>
 
                     {/* Selector de cantidad: Ajusta unidad a unidad */}
-                    <div className="d-flex align-items-center"
-                      style={{ backgroundColor: '#F2EAFA', borderRadius: '10px', padding: '2px 8px' }}>
-                      <button
-                        className="btn btn-sm"
-                        onClick={() => onCambiarCantidad(prod.id, -1)}
-                        style={{ border: 'none', fontWeight: 'bold', color: '#6A1B9A' }}
-                      >-</button>
-
-                      <span className="mx-2" style={{ fontWeight: 'bold' }}>
-                        {prod.cantidad || 1}
-                      </span>
-
-                      <button
-                        className="btn btn-sm"
-                        onClick={() => onCambiarCantidad(prod.id, 1)}
-                        style={{ border: 'none', fontWeight: 'bold', color: '#6A1B9A' }}
-                      >+</button>
-                    </div>
+                    {/* Maximo 20 unidades */}
+                    <input 
+                      type="number"
+                      value={prod.cantidad}
+                      min="1"
+                      max="20"
+                      onChange={(e)=> {
+                        const valor = parseInt(e.target.value);
+                        if (isNaN(valor)) return; // Evita valores no numéricos
+                        const cantidadActual = prod.cantidad;
+                        const diferencia = valor - cantidadActual;
+                        if (valor<=20 && valor >= 1) {
+                          onCambiarCantidad(prod.id, diferencia);
+                        } else if (valor > 20) {
+                          alert('No puedes añadir más de 20 unidades de este producto.');
+                        }
+                      }}
+                    />
+                      
 
                     {/* Papelera: Elimina el producto por completo del carrito */}
                     <button

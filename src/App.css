@@ -706,6 +706,44 @@ LISTA DE PRODUCTOS Y TARJETAS
   transition: all 0.3s ease;
 }
 
+/* Estilo para el mensaje de error */
+.mensaje-error-flotante {
+  position: absolute;
+  top: -25px;
+  right: 5px;
+  background-color: #d93025; /* Rojo de error */
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Quicksand', sans-serif;
+  white-space: nowrap;
+  z-index: 20;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: popUp 0.3s ease-out forwards;
+}
+
+/* La flechita indicadora del bocadillo */
+.mensaje-error-flotante::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  right: 15px;
+  border-width: 5px 5px 0 5px;
+  border-style: solid;
+  border-color: #d93025 transparent transparent transparent; /* Mismo rojo que el fondo */
+}
+
+/* Desvanecimiento suave al salir */
+.mensaje-error-flotante.fade-out {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+
 .imagen-wrapper {
   position: relative;
   overflow: hidden;

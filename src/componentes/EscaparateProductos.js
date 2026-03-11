@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import DetallesProducto from './DetallesProducto';
 import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
+import Carrito from './Carrito';
 import { obtenerAtributoExtra } from '../tienda/tienda.js';
 
-const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual }) => {
+const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual, carrito }) => {
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [productosPerPage] = useState(6);
     const [idAnadido, setIdAnadido] = useState(null);
@@ -15,11 +16,20 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
     }, [busqueda, setPaginaActual]);
 
     const handleAnadirConTooltip = (prod) => {
-        onAnadirAlCarrito(prod);
-        setIdAnadido(prod.id);
-        setTimeout(() => {
-            setIdAnadido(null);
-        }, 2000);
+        // Buscamos la cantidad actual en el carrito
+        const itemEnCarrito =carrito.find(item => item.id === prod.id);
+        const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+
+        // Comprobamos el límite de 20 unidades
+        if (cantidadActual >= 20) {
+            setIdAnadido(`${prod.id}-error`);
+        } else {
+            onAnadirAlCarrito(prod);
+            setIdAnadido(`${prod.id}-exito`);
+        }
+
+        // Limpiamos el mensaje después de 2 segundos
+        setTimeout(() => setIdAnadido(null), 2000);
     };
 
     const indexOfLastProduct = paginaActual * productosPerPage;
@@ -61,9 +71,16 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                         onClick={() => setProductoSeleccionado(prod)}
                                     />
                                     <div className="btn-carrito-container">
-                                        {idAnadido === prod.id && (
+                                        {/*Mensaje de exito*/ }
+                                        {idAnadido === `${prod.id}-exito` && (
                                             <div className="mensaje-exito-flotante">
                                                 ¡Añadido!
+                                            </div>
+                                        )}
+                                        {/*Mensaje de error*/ }
+                                        {idAnadido === `${prod.id}-error` && (
+                                            <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>
+                                                Máx. 20 unidades
                                             </div>
                                         )}
                                         <button
