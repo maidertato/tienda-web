@@ -1,22 +1,119 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import DetallesProducto from './DetallesProducto';
 import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
 import Carrito from './Carrito';
 import { obtenerAtributoExtra } from '../tienda/tienda.js';
 
-const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual, carrito }) => {
+//////////////////////////////////
+// COMPONENTE PARA GESTIONAR LAS IMÁGENES Y VARIANTES
+//////////////////////////////////
+const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => {
+    // Usamos useMemo para que el array de imágenes sea estable y no cambie en cada render
+    const imagenes = useMemo(() => {
+        return prod.variantes && prod.variantes.length > 0 
+            ? prod.variantes 
+            : [{ nombre: '', imagen: prod.imagen }];
+    }, [prod.variantes, prod.imagen]);
+     
+    const [idx, setIdx] = useState(0);
+
+    // Sincronizar el nombre de la variante
+    useEffect(() => {
+        if (onVarianteChange && imagenes[idx]) {
+            onVarianteChange(imagenes[idx].nombre || "");
+        }
+    }, [idx, imagenes, onVarianteChange]);
+
+    const cambiarImagen = (e, direccion) => {
+        e.stopPropagation(); 
+        if (direccion === 'next') {
+            setIdx((prev) => (prev + 1) % imagenes.length);
+        } else {
+            setIdx((prev) => (prev - 1 + imagenes.length) % imagenes.length);
+        }
+    };
+
+    return (
+        <div className="position-relative imagen-wrapper">
+            {imagenes.length > 1 && (
+                <>
+                    <div className="flecha flecha-izq" onClick={(e) => cambiarImagen(e, 'prev')}></div>
+                    <div className="flecha flecha-der" onClick={(e) => cambiarImagen(e, 'next')}></div>
+                </>
+            )}
+            
+            <img
+                src={imagenes[idx]?.imagen || prod.imagen}
+                className="card-img-top p-3"
+                alt={prod.nombre}
+                style={{ height: '220px', objectFit: 'contain', cursor: 'pointer' }}
+                onClick={() => setProductoSeleccionado(prod)}
+            />
+        </div>
+    );
+};
+
+//////////////////////////////////
+// COMPONENTE HIJO: TARJETA INDIVIDUAL
+//////////////////////////////////
+const TarjetaProducto = ({ prod, setProductoSeleccionado, idAnadido, handleAnadirConTooltip }) => {
+    const info = obtenerAtributoExtra(prod);
+    const [nombreVariante, setNombreVariante] = useState("");
+
+    return (
+        <div className="col d-flex justify-content-center">
+            <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
+                <div className="position-relative">
+                    <CarruselImagen 
+                        prod={prod} 
+                        setProductoSeleccionado={setProductoSeleccionado}
+                        onVarianteChange={setNombreVariante}
+                    />
+                    
+                    <div className="btn-carrito-container">
+                        {idAnadido === prod.id && (
+                            <div className="mensaje-exito-flotante">¡Añadido!</div>
+                        )}
+                        <button
+                            className="btn-carrito-circular"
+                            onClick={() => handleAnadirConTooltip(prod)}
+                        >
+                            🛒
+                        </button>
+                    </div>
+                </div>
+
+                <div className="card-body d-flex flex-column text-start">
+                    <h4 className="card-title-escaparate">
+                        {prod.nombre} {nombreVariante ? `- ${nombreVariante}` : ""}
+                    </h4>
+                    <p className="card-precio-escaparate">{prod.precio}€</p>
+                    <div className="mt-2">
+                        <p className="mb-1 text-secondary" style={{ fontSize: '0.9rem' }}>
+                            <strong>{info.etiqueta}:</strong> {info.valor}
+                        </p>
+                        <p className="description-text-card">{prod.descripcion}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+//////////////////////////////////////
+// COMPONENTE PRINCIPAL
+//////////////////////////////////////
+const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual,carrito }) => {
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [productosPerPage] = useState(6);
     const [idAnadido, setIdAnadido] = useState(null);
-
 
     useEffect(() => {
         setPaginaActual(1);
     }, [busqueda, setPaginaActual]);
 
     const handleAnadirConTooltip = (prod) => {
-        // Buscamos la cantidad actual en el carrito
         const itemEnCarrito =carrito.find(item => item.id === prod.id);
         const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
 
