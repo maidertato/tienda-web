@@ -769,6 +769,13 @@ LISTA DE PRODUCTOS Y TARJETAS
   transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   user-select: none;
   box-shadow: 0 4px 10px rgba(168, 85, 247, 0.35);
+  z-index: 10;
+}
+
+.imagen-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden; /* Para que nada sobresalga de la tarjeta */
 }
 
 .flecha-izq {
