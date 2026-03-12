@@ -13,12 +13,27 @@ export default class Accesorios extends Producto {
         this.#color = color;
     }
 
-    get tipoMascota() { return this.#tipoMascota; }
-    set tipoMascota(v) { this.#tipoMascota = v; }
+    get tipoMascota() {
+        return this.#tipoMascota; 
+    }
 
-    get talla() { return this.#talla; }
-    set talla(v) { this.#talla = v; }
+    set tipoMascota(v) { 
+        this.#tipoMascota = v; 
+    }
 
-    get color() { return this.#color; }
-    set color(v) { this.#color = v; }
+    get talla() { 
+        return this.#talla; 
+    }
+
+    set talla(v) { 
+        this.#talla = v; 
+    }
+
+    get color() { 
+        return this.#color; 
+    }
+
+    set color(v) { 
+        this.#color = v; 
+    }
 }

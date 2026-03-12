@@ -13,12 +13,27 @@ export default class Juguete extends Producto {
         this.#esInteractivo = interactivo;
     }
 
-    get tipo() { return this.#tipo; }
-    set tipo(v) { this.#tipo = v; }
+    get tipo() { 
+        return this.#tipo; 
+    }
 
-    get tamano() { return this.#tamano; }
-    set tamano(v) { this.#tamano = v; }
+    set tipo(v) { 
+        this.#tipo = v; 
+    }
 
-    get esInteractivo() { return this.#esInteractivo; }
-    set esInteractivo(v) { this.#esInteractivo = v; }
+    get tamano() { 
+        return this.#tamano; 
+    }
+
+    set tamano(v) { 
+        this.#tamano = v; 
+    }
+
+    get esInteractivo() { 
+        return this.#esInteractivo; 
+    }
+
+    set esInteractivo(v) { 
+        this.#esInteractivo = v; 
+    }
 }

@@ -7,8 +7,8 @@ export default class Producto {
     #tipo;
 
     constructor(nombre, precio, descripcion, imagen, tipo = 'general') {
+        
         this.#id = btoa(nombre + Date.now() + Math.random()).substring(0, 12);
-
         this.#nombre = nombre;
         this.#precio = precio;
         this.#descripcion = descripcion;

@@ -199,11 +199,6 @@ inventario.find(p => p.nombre === 'Alfombra mascotas').variantes = [
   { nombre: 'Pawty Time', imagen: '/imagenes/productos/alfombrAntideslizante2.png' }
 ];
 
-// ========================================================================
-// FUNCIONES DE LÓGICA DE NEGOCIO
-// Herramientas para que la tienda funcione.
-// ========================================================================
-
 // BUSCADOR: Filtra el inventario comparando el texto con el nombre del producto
 export const buscarProductoPorNombre = (nombre) => {
   return inventario.filter(p => p.nombre.toLowerCase().includes(nombre.toLowerCase()));
@@ -212,69 +207,107 @@ export const buscarProductoPorNombre = (nombre) => {
 // CREADOR: Recibe datos del formulario de la web y crea un objeto de la clase correcta
 export function crearNuevoProducto(tipo, datos) {
   let nuevo;
-  const tipoNormalizado = tipo.toLowerCase();
-  
-  switch (tipoNormalizado) {
+
+  switch (tipo) {
     case 'mobiliario':
-      nuevo = new Mobiliario(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Madera", true);
+      nuevo = new Mobiliario(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.material || "Madera",
+        datos.usoInterior === 'true'
+      );
       break;
     case 'cabello':
-      nuevo = new Cabello(datos.nombre, datos.precio, datos.descripcion, datos.imagen, "Kawaii", "Pequeño", "Perro", datos.extra || "Multicolor");
+      nuevo = new Cabello(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.estilo,
+        datos.tamaño || "Pequeño",
+        datos.tipoMascota || "Perro",
+        datos.color || "Azul"
+      );
       break;
     case 'juguete':
-      nuevo = new Juguete(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Peluche", "Mediano", true);
+      nuevo = new Juguete(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.tipo || "Pelota",
+        datos.tamano || "Mediano",
+        datos.esInteractivo === 'true'
+      );
       break;
     case 'merchandising':
-      nuevo = new Merchandising(datos.nombre, datos.precio, datos.descripcion, datos.imagen, "Cuerpo", "Mediano", datos.extra || "Color");
+      nuevo = new Merchandising(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.parteDelCuerpo || "Cabeza",
+        datos.talla || "M",
+        datos.color || "Azul"
+      );
       break;
     case 'alimentacion':
-      nuevo = new Alimentacion(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Seco", "General");
+      nuevo = new Alimentacion(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.tipoAlimento || "Seco",
+        datos.tipoMascota || "Perro"
+      );
       break;
     case 'accesorios':
-      nuevo = new Accesorios(datos.nombre, datos.precio, datos.descripcion, datos.imagen, "General", "Mediano", datos.extra || "Único");
+      nuevo = new Accesorios(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.tipoMascota || "Perro",
+        datos.talla || "M",
+        datos.color || "Azul"
+      );
       break;
     default:
-      return null;
+      return false; // No reconoce el tipo
   }
-  
   if (nuevo) {
-    nuevo.id = datos.id || Date.now(); // Si no tiene ID, le damos uno basado en la hora actual
-    //  inventario.push(nuevo); 
-    return nuevo;
+    nuevo.id = datos.id || Date.now();
+    if (!inventario.find(p => p.id === nuevo.id)) {
+        inventario.push(nuevo);
+        return true; // añadido correctamente
+    } else {
+        return false; // duplicado
+    }
   }
-  return null;
-}
+  return false;
+} 
 
-// FORMATEADOR DE INFO EXTRA: Decide qué mostrar según la categoría (Material, Estilo, etc.)
-export function obtenerAtributoExtra(producto) {
-  // Definimos la etiqueta según el tipo de producto
-  const etiquetas = {
-    'Juguete': 'Tipo de juguete',
-    'Alimentación': 'Tipo de alimento',
-    'Mobiliario': 'Material',
-    'Cabello': 'Estilo',
-    'Merchandising': 'Parte del cuerpo',
-    'Accesorios': 'Tipo mascota'
-  };
 
-  const etiqueta = etiquetas[producto.tipo] || 'Info';
-  let valor = "";
-
-  // Si el objeto tiene su propia función de info, la usamos, si no, buscamos en sus propiedades
-  if (typeof producto.obtenerInformacion === 'function') {
-    valor = producto.obtenerInformacion() || "";
-  } else {
-    valor = 
-      producto.material || 
-      producto.subtipo || 
-      producto.tipoAlimento ||
-      producto.estilo ||
-      producto.tipoMascota ||
-      producto.parteDelCuerpo || "Producto de la tienda";
-  }
-
-  return { etiqueta, valor };
-}
+export const obtenerAtributoExtra = (producto) => {
+    switch (producto.tipo) {
+        case 'Mobiliario':
+            return { etiqueta: 'Material', valor: producto.material || '' };
+        case 'Cabello':
+            return { etiqueta: 'Estilo', valor: producto.estilo || '' };
+        case 'Alimentacion':
+            return { etiqueta: 'Tipo de Alimento', valor: producto.tipoAlimento || '' };
+        case 'Juguete':
+            return { etiqueta: 'Tipo de Juguete', valor: producto.tipoJuguete || '' };
+        case 'Merchandising':
+            return { etiqueta: 'Parte del cuerpo', valor: producto.parteCuerpo || '' };
+        case 'Accesorios':
+            return { etiqueta: 'Tipo de Mascota', valor: producto.tipoMascota || '' };
+        default:
+            return { etiqueta: 'Extra', valor: '' };
+    }
+};
 
 // ========================================================================
 // GESTIÓN DEL CARRITO (LocalStorage)

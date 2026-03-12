@@ -11,9 +11,19 @@ export default class Mobiliario extends Producto {
         this.#usoInterior = usoInterior;
     }
 
-    get material() { return this.#material; }
-    set material(v) { this.#material = v; }
+    get material() { 
+        return this.#material; 
+    }
 
-    get usoInterior() { return this.#usoInterior; }
-    set usoInterior(v) { this.#usoInterior = v; }
+    set material(v) { 
+        this.#material = v; 
+    }
+
+    get usoInterior() { 
+        return this.#usoInterior; 
+    }
+
+    set usoInterior(v) { 
+        this.#usoInterior = v; 
+    }
 }
