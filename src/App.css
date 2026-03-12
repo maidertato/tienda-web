@@ -593,6 +593,7 @@ LISTA DE PRODUCTOS Y TARJETAS
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 0.9rem;
+  line-clamp: 3;
 }
 
 .descripcion-producto {
@@ -1072,6 +1073,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   -webkit-box-orient: vertical;
   overflow: hidden;
   height: 4.2em;
+  line-clamp: 3;
 }
 
 /* Título morado del escaparate */
