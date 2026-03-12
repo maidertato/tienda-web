@@ -1082,6 +1082,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   gap: 8px;
 }
 
+
 .vacio-icono-home,
 .icono-casa {
   width: 18px;
@@ -1089,6 +1090,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   color: #521F84;
   font-size: 1.1rem;
 }
+
 /*////////////////////BOTON CIRCULAR PRODUCTO CARRITO //////////////////////////////
 
 /* Estilo del texto de descripción en la tarjeta */

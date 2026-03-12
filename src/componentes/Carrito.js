@@ -37,15 +37,15 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
           display: 'block',
           width: '400px',
           borderRight: 'none',
-          backgroundColor: '#FDF8FF', // Fondo lila muy clarito
+          backgroundColor: '#e8b5fd', 
           boxShadow: '10px 0 30px rgba(0,0,0,0.1)',
           borderRadius: '0 20px 20px 0' // Bordes redondeados a la derecha
         }}
       >
         {/* Cabecera personalizada */}
-        <div className="offcanvas-header" style={{ borderBottom: '1px solid #eee', padding: '20px' }}>
+        <div className="offcanvas-header" style={{ borderBottom: '1px solid #d1a7eb', padding: '20px' }}>
           <h5 className="offcanvas-title" style={{ fontWeight: '700', color: '#6A1B9A', fontSize: '1.5rem' }}>
-            🛒 Mi Carrito
+            Mi Carrito
           </h5>
           {/* Botón para cerrar el panel lateral */}
           <button
@@ -60,8 +60,19 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
         <div className="offcanvas-body" style={{ padding: '20px' }}>
           {/* Si el carrito está vacío, mostramos un mensaje */}
           {productosCarrito.length === 0 ? (
-            <div className="text-center mt-5">
-              <p style={{ color: '#999', fontSize: '1.1rem' }}>No hay productos aún... 🐾</p>
+            <div className="carrito-vacio-vista">
+              {/* Aquí pones tu icono, puede ser un emoji grande o un SVG */}
+              
+              
+              <h4>¡Tu carrito está vacío!</h4>
+              <p>Parece que aún no has elegido nada para tu mascota.</p>
+              
+              <button className="btn-inicio" onClick={alCerrar}>
+                <svg viewBox="0 0 24 24" width="20" height="20" className="icono-casa-glow" style={{ marginRight: '10px' }}>
+                  <path d="M12 3L2 12H5V20H19V12H22L12 3Z" style={{ fill: '#521F84' }} />
+                </svg>
+                Volver a la tienda
+              </button>
             </div>
           ) : (
             <div className="d-flex flex-column h-100">
