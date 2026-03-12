@@ -1414,23 +1414,23 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 
 /*////////////////////////////////////////////////////////////*/
 
-/* =========================
-   FOOTER
-   ========================= */
 footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
   text-align: center;
   padding: 1rem;
-  background-color: #4b2e83;
-  background: linear-gradient(90deg, #d0b4f5);
+  background: linear-gradient(90deg, #d0b4f5, #e6d5f7);
   color: #4b2e83;
-  margin-top: auto;
-  border-radius: 0 0 15px 15px;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
   font-family: 'Quicksand', sans-serif;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(75, 46, 131, 0.2);
 }
 
-.imagen-producto {
-  cursor: pointer;
+.contenedor {
+  padding-bottom: 80px;
 }
 
 /* =========================
