@@ -129,7 +129,13 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                 <div className="mb-3">
                     <label className="form-label">Precio ({DIVISA})</label>
                     <input type="number" className="form-control" value={precio}
-                        onChange={(e) => setPrecio(e.target.value)} step="0.01" min="0" placeholder="0.00" required />
+                        onChange={(e) => setPrecio(e.target.value)}
+                        onKeyDown={(e) => {
+                        if (["e", "E", "+", "-"].includes(e.key)) {
+                            e.preventDefault();
+                        }
+                    }}
+                    step="0.01" min="0" placeholder="0.00" required />
                 </div>
 
                 {/* Descripción */}

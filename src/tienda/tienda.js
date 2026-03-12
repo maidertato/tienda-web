@@ -213,7 +213,7 @@ export const buscarProductoPorNombre = (nombre) => {
 export function crearNuevoProducto(tipo, datos) {
   let nuevo;
   const tipoNormalizado = tipo.toLowerCase();
-
+  
   switch (tipoNormalizado) {
     case 'mobiliario':
       nuevo = new Mobiliario(datos.nombre, datos.precio, datos.descripcion, datos.imagen, datos.extra || "Madera", true);
@@ -236,6 +236,7 @@ export function crearNuevoProducto(tipo, datos) {
     default:
       return null;
   }
+  
   if (nuevo) {
     nuevo.id = datos.id || Date.now(); // Si no tiene ID, le damos uno basado en la hora actual
     //  inventario.push(nuevo); 
