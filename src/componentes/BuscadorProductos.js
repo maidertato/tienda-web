@@ -10,6 +10,7 @@ const BuscadorProductos = ({
     //const [termino, setTermino] = useState(terminoBusqueda);
 
     return (
+        // Selector de cantidad: Ajusta unidad a unidad
         <div className="d-flex align-items-center flex-grow mx-1">
             <h4 className="m-0 me-3 text-nowrap d-none d-md-block">{titulo}</h4>
 
