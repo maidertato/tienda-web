@@ -120,7 +120,7 @@ function App() {
   const totalUnidades = carrito.reduce((acc, item) => acc + (item.cantidad || 1), 0);
 
   return (
-    <div className="contenedor">
+    <div id="contenedor">
       {/* 1. Cabecera limpia: Solo recibe el título */}
       <Cabecera titulo="🐈   🐦 Tienda de Mascotas 🦮   🐇" />
 

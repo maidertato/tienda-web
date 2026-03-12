@@ -264,8 +264,13 @@ export function obtenerAtributoExtra(producto) {
   if (typeof producto.obtenerInformacion === 'function') {
     valor = producto.obtenerInformacion() || "";
   } else {
-    valor = producto.material || producto.subtipo || producto.tipoAlimento ||
-      producto.estilo || producto.parteDelCuerpo || "Producto de la tienda";
+    valor = 
+      producto.material || 
+      producto.subtipo || 
+      producto.tipoAlimento ||
+      producto.estilo ||
+      producto.tipoMascota ||
+      producto.parteDelCuerpo || "Producto de la tienda";
   }
 
   return { etiqueta, valor };
@@ -278,7 +283,19 @@ export function obtenerAtributoExtra(producto) {
 
 // Guarda un producto en la memoria del navegador usando su ID como clave
 export function guardarEnCarrito(producto) {
-  localStorage.setItem("producto_" + producto.id, JSON.stringify(producto));
+  // Creamos un objeto simple con los datos que queremos conservar
+  const datosParaGuardar = {
+    id: producto.id,
+    nombre: producto.nombre,
+    precio: producto.precio,
+    descripcion: producto.descripcion,
+    imagen: producto.imagen,
+    tipo: producto.tipo,
+    // Guardamos el atributo extra según el tipo
+    extra: producto.tipoAlimento || producto.tipoMascota || producto.material || producto.estilo || ""
+  };
+  
+  localStorage.setItem("producto_" + producto.id, JSON.stringify(datosParaGuardar));
 }
 
 // Elimina un producto específico de la memoria del navegador
@@ -289,9 +306,19 @@ export function borrarDelCarrito(productoId) {
 // Recupera todos los productos guardados que empiecen por "producto_"
 export const cargarCarrito = () => {
   const carrito = [];
-  for (let key in localStorage) {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
     if (key.startsWith("producto_")) {
-      carrito.push(JSON.parse(localStorage.getItem(key)));
+      const datosRaw = JSON.parse(localStorage.getItem(key));
+      
+      // Convertimos el objeto plano otra vez en Clase
+      const productoConClase = crearNuevoProducto(datosRaw.tipo, datosRaw);
+      
+      if (productoConClase) {
+        // Le devolvemos su ID original para que no genere uno nuevo
+        productoConClase.id = datosRaw.id; 
+        carrito.push(productoConClase);
+      }
     }
   }
   return carrito;
