@@ -21,11 +21,12 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* Para que se quede pegado abajo */
   background-color: rgba(255, 248, 252, 0.95);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 1rem;
+  padding-bottom: 100px !important;
+
 }
 
 /* =========================================
@@ -183,7 +184,7 @@ main .pagination-wrapper {
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  margin-bottom: 4rem;
+  margin-bottom: 8rem !important; 
 }
 
 #info-paginacion {
