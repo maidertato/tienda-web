@@ -5,11 +5,15 @@ import Cabello from './cabello.js';
 import Mobiliario from './mobiliario.js';
 import Accesorios from './accesorios.js';
 
-
+// Configuración: Moneda y límite de stock por producto
 export const DIVISA = '€';
 export const MAX_COPIAS = 20;
 
-// INVENTARIO INICIAL(array de productos creados a mano)
+// ========================================================================
+// INVENTARIO INICIAL
+// Array de productos creados a mano
+// ========================================================================
+
 export const inventario = [
   // Juguetes
   new Juguete('Pelota de Goma', 10, 'La clásica pelota que no muere nunca, aunque tu perro sí pierda la cabeza cada vez que la ve. Rebota, resiste mordiscos nivel trituradora y convierte cualquier paseo en unas Olimpiadas caninas no autorizadas. Si desaparece bajo el sofá, prepárate para miradas acusadoras durante horas.', '/imagenes/productos/pelotaGoma.png', 'Pelota', 'Mediano', true),
@@ -67,7 +71,11 @@ export const inventario = [
   new Mobiliario('Alfombra mascotas', 30, 'La zona VIP del suelo donde se concentran siestas, juguetes y decisiones cuestionables. Suave para las patas, antideslizante para evitar derrapes estilo película de acción y útil para delimitar “aquí vive el caos pero con elegancia”. Bonus: reduce el sonido de pasos ninja nocturnos… un poco.', '/imagenes/productos/alfombrAntideslizante.png', 'Textil', true),
 ];
 
-// ================= IMÁGENES EXTRA POR PRODUCTO =================
+// ========================================================================
+// VARIANTES DE IMAGEN
+// Para los productos que tienen varios colores o modelos, les añadimos 
+// el array "variantes" buscando el producto por su nombre en el inventario.
+// ========================================================================
 
 // JUGUETES
 inventario.find(p => p.nombre === 'Pelota de Goma').variantes = [
@@ -191,13 +199,17 @@ inventario.find(p => p.nombre === 'Alfombra mascotas').variantes = [
   { nombre: 'Pawty Time', imagen: '/imagenes/productos/alfombrAntideslizante2.png' }
 ];
 
+// ========================================================================
+// FUNCIONES DE LÓGICA DE NEGOCIO
+// Herramientas para que la tienda funcione.
+// ========================================================================
 
-// FUNCIONES RELATIVAS A PRODUCTOS 
+// BUSCADOR: Filtra el inventario comparando el texto con el nombre del producto
 export const buscarProductoPorNombre = (nombre) => {
   return inventario.filter(p => p.nombre.toLowerCase().includes(nombre.toLowerCase()));
 };
 
-// ==================================== Agregar productos al inventario --> Con el formulario! ====================================
+// CREADOR: Recibe datos del formulario de la web y crea un objeto de la clase correcta
 export function crearNuevoProducto(tipo, datos) {
   let nuevo;
   const tipoNormalizado = tipo.toLowerCase();
@@ -225,14 +237,14 @@ export function crearNuevoProducto(tipo, datos) {
       return null;
   }
   if (nuevo) {
-    nuevo.id = datos.id || Date.now();
+    nuevo.id = datos.id || Date.now(); // Si no tiene ID, le damos uno basado en la hora actual
     //  inventario.push(nuevo); 
     return nuevo;
   }
   return null;
 }
 
-
+// FORMATEADOR DE INFO EXTRA: Decide qué mostrar según la categoría (Material, Estilo, etc.)
 export function obtenerAtributoExtra(producto) {
   // Definimos la etiqueta según el tipo de producto
   const etiquetas = {
@@ -245,8 +257,9 @@ export function obtenerAtributoExtra(producto) {
   };
 
   const etiqueta = etiquetas[producto.tipo] || 'Info';
-
   let valor = "";
+
+  // Si el objeto tiene su propia función de info, la usamos, si no, buscamos en sus propiedades
   if (typeof producto.obtenerInformacion === 'function') {
     valor = producto.obtenerInformacion() || "";
   } else {
@@ -257,15 +270,22 @@ export function obtenerAtributoExtra(producto) {
   return { etiqueta, valor };
 }
 
-//=================== FUNCIONES PARA EL CARRITO =====================
+// ========================================================================
+// GESTIÓN DEL CARRITO (LocalStorage)
+// Para que los productos no se borren al refrescar la página.
+// ========================================================================
+
+// Guarda un producto en la memoria del navegador usando su ID como clave
 export function guardarEnCarrito(producto) {
   localStorage.setItem("producto_" + producto.id, JSON.stringify(producto));
 }
 
+// Elimina un producto específico de la memoria del navegador
 export function borrarDelCarrito(productoId) {
   localStorage.removeItem("producto_" + productoId);
 }
 
+// Recupera todos los productos guardados que empiecen por "producto_"
 export const cargarCarrito = () => {
   const carrito = [];
   for (let key in localStorage) {
