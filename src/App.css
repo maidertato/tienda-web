@@ -497,18 +497,18 @@ main {
 #lista-productos {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 25px !important;
+  gap: 40px !important;
   justify-content: center;
   width: 100% !important;
-  min-height: auto;
   align-content: flex-start;
-  padding: 10px;
+  padding: 40px !important;
 }
 
 #lista-productos>div {
-  flex: 0 0 auto;
-  width: 320px;
+  flex: 0 1 auto;
+  width: auto;
   display: flex;
+  justify-content: center;
 }
 
 #lista-productos .col {
@@ -522,15 +522,17 @@ LISTA DE PRODUCTOS Y TARJETAS
  ========================= */
 
 .card-producto-tienda {
-  width: 340px !important;
-  max-width: 340px !important;
+  width: 320px !important;
+  max-width: 320px !important;
+  height: 440px !important;
   border-radius: 20px !important; 
   background-color: #fff7fc;
-  height: 500px;
   display: flex;
   flex-direction: column;
   position: relative;
   transition: transform 0.3s ease;
+  margin: 0 !important;
+  overflow: hidden;
 }
 
 .card-producto {
@@ -551,12 +553,12 @@ LISTA DE PRODUCTOS Y TARJETAS
 }
 
 .card-img-container {
-  height: 200px;
+  height: 130px !important;
   background-color: #f8f9fa; /* Fondo gris muy clarito para la foto */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 20px !important;
 }
 
 .card-img-top {
@@ -602,12 +604,6 @@ LISTA DE PRODUCTOS Y TARJETAS
   font-family: 'Quicksand', sans-serif;
   margin-bottom: 1rem;
   color: #666;
-}
-
-.row.g-4.p-3>div {
-  flex: 0 0 320px !important;
-  width: 320px !important;
-  max-width: 320px !important;
 }
 
 .btn-agregar-flotante {
