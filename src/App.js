@@ -24,6 +24,24 @@ function App() {
   const [busqueda, setBusqueda] = useState("");
   // Controla en qué página del escaparate estamos
   const [paginaActual, setPaginaActual] = useState(1);
+  // Estado para controlar la conexión
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    // Funciones para actualizar el estado
+    const actualizarEstado = () => setIsOnline(navigator.onLine);
+
+    // Escuchamos cuando el navegador cambia de estado
+    window.addEventListener('online', actualizarEstado);
+    window.addEventListener('offline', actualizarEstado);
+
+    // Limpiamos los eventos al desmontar el componente
+    return () => {
+      window.removeEventListener('online', actualizarEstado);
+      window.removeEventListener('offline', actualizarEstado);
+    };
+  }, []);
+
 
   // Función para resetear la vista al estado original
   const irAInicio = () => {
@@ -106,6 +124,13 @@ function App() {
       {/* 1. Cabecera limpia: Solo recibe el título */}
       <Cabecera titulo="🐱 🦩 Tienda de Mascotas 🐕 🐇" />
 
+      {/* Rectángulo Offline (solo se muestra si isOnline es false) */}
+      {!isOnline && (
+        <div className="badge-offline">
+          Estás offline
+        </div>
+      )}
+
       {/* MenuNavegacion: buscador y botón del carrito */}
       <MenuNavegacion
         cantidadCarrito={totalUnidades}
@@ -144,6 +169,7 @@ function App() {
           {/* Barra lateral: Formulario para crear productos nuevos */}
           <aside className="col-md-3">
             <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}
+            deshabilitado={!isOnline}
             />
           </aside>
         </div>

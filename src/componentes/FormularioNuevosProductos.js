@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FileUploader } from "react-drag-drop-files";
 import { DIVISA, crearNuevoProducto, inventario } from '../tienda/tienda.js';
 
-const FormularioNuevosProductos = ({ onAgregarProducto }) => {
+const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
 
     // Estados
@@ -45,6 +45,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (deshabilitado) return;
 
         const existe = inventario.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
         if (existe) {
@@ -107,7 +108,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
                     <select className="form-select" value={tipo}
-                        onChange={(e) => { setTipo(e.target.value); setExtra(""); }} required >
+                        onChange={(e) => { setTipo(e.target.value); setExtra(""); }} required disabled={deshabilitado}>
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
                         <option value="Cabello">Cabello</option>
@@ -122,21 +123,21 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                 <div className="mb-3">
                     <label className="form-label">Nombre del Producto</label>
                     <input type="text" className="form-control" value={nombre}
-                        onChange={(e) => setNombre(e.target.value)} placeholder="Ej: Pelota de goma" required />
+                        onChange={(e) => setNombre(e.target.value)} placeholder="Ej: Pelota de goma" required disabled={deshabilitado} />
                 </div>
 
                 {/* Precio */}
                 <div className="mb-3">
                     <label className="form-label">Precio ({DIVISA})</label>
                     <input type="number" className="form-control" value={precio}
-                        onChange={(e) => setPrecio(e.target.value)} step="0.01" min="0" placeholder="0.00" required />
+                        onChange={(e) => setPrecio(e.target.value)} step="0.01" min="0" placeholder="0.00" required disabled={deshabilitado} />
                 </div>
 
                 {/* Descripción */}
                 <div className="mb-3">
                     <label className="form-label">Descripción</label>
                     <textarea className="form-control" value={descripcion}
-                        onChange={(e) => setDescripcion(e.target.value)} placeholder="Describe tu producto..." rows="3"></textarea>
+                        onChange={(e) => setDescripcion(e.target.value)} placeholder="Describe tu producto..." rows="3" disabled={deshabilitado}></textarea>
                 </div>
 
                 {/* Campo Extra  (Solo si hay tipo) */}
@@ -151,6 +152,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                             onChange={(e) => setExtra(e.target.value)}
                             placeholder={placeholdersExtra[tipo]}
                             required
+                            disabled={deshabilitado}
                         />
                     </div>
                 )}
@@ -162,6 +164,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                         type="file"
                         className="form-control"
                         accept="image/*"
+                        disabled={deshabilitado}
                         onChange={(e) => {
                             if (e.target.files && e.target.files[0]) {
                                 setFile(e.target.files[0]);
@@ -180,39 +183,44 @@ const FormularioNuevosProductos = ({ onAgregarProducto }) => {
                         hoverTitle="Suelta aquí"
                         // CAMBIO 1: Esta clase hace que el componente ocupe todo el ancho del formulario
                         classes="w-100"
+                        disabled={deshabilitado}
                     >
                         {/* CAMBIO 2: Añadimos w-100 y estilos para que se vea largo y profesional */}
                         <div className="drop-zone-custom p-3 border rounded text-center w-100" style={{
-                            cursor: 'pointer',
+                            cursor: deshabilitado ? 'not-allowed' : 'pointer',
                             borderStyle: 'dashed',
-                            borderColor: 'rgba(255,255,255,0.7)',
-                            backgroundColor: 'rgba(255,255,255,0.1)',
+                            borderColor: deshabilitado ? '#ced4da' : 'rgba(255,255,255,0.7)',
+                            backgroundColor: deshabilitado ? '#e9ecef' : 'rgba(255,255,255,0.1)', minHeight: '80px',
                             minHeight: '80px',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            boxSizing: 'border-box'
+                            boxSizing: 'border-box',
+                            transition: 'background-color 0.3s'
                         }}>
                             {file ? (
                                 <div className="animate__animated animate__fadeIn text-center">
                                     <img
                                         src={URL.createObjectURL(file)}
                                         alt="Vista previa"
-                                        style={{ maxWidth: '80px', borderRadius: '5px' }}
+                                        style={{ maxWidth: '80px', borderRadius: '5px', opacity: deshabilitado ? 0.5 : 1 }}
                                         className="mb-2 d-block mx-auto"
                                     />
                                     <p className="text-success m-0 small fw-bold">✓ {file.name}</p>
+                                    {deshabilitado ? "Conexión perdida" : `✓ ${file.name}`}
                                 </div>
                             ) : (
-                                <p className="m-0 text-white" style={{ opacity: 0.8 }}>Arrastra tu imagen aquí</p>
+                                <p className="m-0" style={{ color: deshabilitado ? '#6c757d' : 'white', opacity: 0.8 }}>
+                                    {deshabilitado ? "Formulario deshabilitado" : "Arrastra tu imagen aquí"}
+                                </p>
                             )}
                         </div>
                     </FileUploader>
                 </div>
 
-                <button type="submit" className="btn btn-custom w-100">
-                    + Subir Producto
+                <button type="submit" className="btn btn-custom w-100" disabled={deshabilitado}>
+                    {deshabilitado ? "Sin conexión" : "+ Subir Producto"}
                 </button>
 
                 {/* Alerta de feedback */}
