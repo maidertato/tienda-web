@@ -15,18 +15,15 @@ body {
 }
 
 #contenedor {
-  width: 85%;
-  min-width: 1100px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh;   
+  width: 85%;
+  margin: 0 auto;
   background-color: rgba(255, 248, 252, 0.95);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  border-radius: 15px;
-  padding: 1rem;
-  padding-bottom: 100px !important;
-
+}
+#contenido {
+  flex: 1; 
 }
 
 /* =========================================
@@ -527,17 +524,13 @@ LISTA DE PRODUCTOS Y TARJETAS
 .card-producto-tienda {
   width: 340px !important;
   max-width: 340px !important;
-  border: none;
-  border-radius: 20px !important;
-  overflow: visible !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 20px !important; 
   background-color: #fff7fc;
+  height: 500px;
   display: flex;
   flex-direction: column;
-  margin: 0 auto !important;
   position: relative;
-  height: 500px;
+  transition: transform 0.3s ease;
 }
 
 .card-producto {
@@ -559,9 +552,7 @@ LISTA DE PRODUCTOS Y TARJETAS
 
 .card-img-container {
   height: 200px;
-  width: 100%;
-  overflow: hidden;
-  background-color: #f8f9fa;
+  background-color: #f8f9fa; /* Fondo gris muy clarito para la foto */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1042,6 +1033,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   color: white;
 }
 
+/* Vista de Carrito Vacío */
 .carrito-vacio-vista {
   display: flex;
   flex-direction: column;
@@ -1049,7 +1041,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   justify-content: center;
   height: 70%;
   text-align: center;
-  color: #f8f4ff;
+  color: #521F84; /* Cambiado a un lila oscuro para que se lea */
   padding: 2rem;
 }
 
@@ -1058,23 +1050,45 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   width: 130px;
   height: 120px;
   margin-bottom: 1.5rem;
-  color: white;
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+  color: #6A1B9A; /* Cambiado de blanco a un tono visible */
+  filter: drop-shadow(0 0 8px rgba(106, 27, 154, 0.2)); /* Sombra más sutil */
   opacity: 0.95;
 }
 
 .carrito-vacio-vista h4 {
   font-weight: 800;
-  color: white;
+  color: #521F84; /* Título oscuro */
   margin-bottom: 0.4rem;
 }
 
 .carrito-vacio-vista p {
   font-size: 0.95rem;
-  opacity: 0.9;
+  color: #666; /* Un gris oscuro para que se lea bien */
   margin-bottom: 1.5rem;
 }
 
+.btn-inicio {
+  background-color: #f8f4ff;
+  color: #521F84;
+  border: none;
+  border-radius: 20px;
+  padding: 0.6rem 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vacio-icono-home,
+.icono-casa {
+  width: 18px;
+  height: 18px;
+  color: #521F84;
+  font-size: 1.1rem;
+}
 /*////////////////////BOTON CIRCULAR PRODUCTO CARRITO //////////////////////////////
 
 /* Estilo del texto de descripción en la tarjeta */
@@ -1148,17 +1162,17 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   padding: 0.6rem 1.4rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s ease;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: none !important;
 }
 
 .btn-inicio:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  background-color: white;
+  background-color: #ddc7ff;
 }
 
 .vacio-icono-home,
@@ -1426,18 +1440,16 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 /*////////////////////////////////////////////////////////////*/
 
 footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  position: relative; 
   width: 100%;
-  z-index: 2000;
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
   background: #decbf8 !important;
   color: #4b2e83;
   font-family: 'Quicksand', sans-serif;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-  border-top: 1px solid rgba(75, 46, 131, 0.2);
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(75, 46, 131, 0.1);
+  margin-top: 2rem; 
 }
 
 .contenedor {
