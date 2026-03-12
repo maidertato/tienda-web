@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Pie = ({ contenido }) => {
+const Pie = ({ contenido, className }) => {
     return (
-        <footer className="py-3 bg-light text-center">
+        <footer className={className}>
             {contenido}
         </footer>
     );

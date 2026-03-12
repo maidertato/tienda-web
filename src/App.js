@@ -174,7 +174,7 @@ function App() {
           </aside>
         </div>
       </div>
-      {/* Footer con el nuestro nombre :) */}
+      {/* Footer con nuestro nombre :) */}
       <Pie contenido="© Dawidawe taldea" />
     </div>
   );
