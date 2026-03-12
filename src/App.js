@@ -65,27 +65,32 @@ function App() {
   );
 
   // Lógica para añadir cosas a la cesta de la compra
-  const manejarAnadirAlCarrito = (producto) => {
-    // 1. Buscamos si el producto ya está en el carrito
-    const productoExistente = carrito.find(item => item.id === producto.id);
+  const manejarAnadirAlCarrito = (productoDeClase) => {
+    // 1. "Aplanamos" el objeto de la clase a un objeto simple
+    // Esto extrae los datos usando los GETTERS de tu clase
+    const productoSimple = {
+      id: productoDeClase.id,
+      nombre: productoDeClase.nombre,
+      precio: productoDeClase.precio,
+      imagen: productoDeClase.imagen
+    };
+
+    // 2. Buscamos usando el ID del producto simple
+    const productoExistente = carrito.find(item => item.id === productoSimple.id);
 
     if (productoExistente) {
-      // 2. Si ya existe, comprobamos si ha llegado al tope de 20
-      if (productoExistente.cantidad >= 20) {
-        return; // Salimos de la función sin añadir nada
-      }
+      if (productoExistente.cantidad >= 20) return;
 
-      // 3. Si existe pero tiene menos de 20, incrementamos su cantidad
       const nuevoCarrito = carrito.map(item =>
-        item.id === producto.id
+        item.id === productoSimple.id
           ? { ...item, cantidad: item.cantidad + 1 }
           : item
       );
       setCarrito(nuevoCarrito);
       localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
     } else {
-      // 4. Si es un producto nuevo, lo añadimos con cantidad 1
-      const nuevoCarrito = [...carrito, { ...producto, cantidad: 1 }];
+      // 3. Añadimos el objeto simple con cantidad 1
+      const nuevoCarrito = [...carrito, { ...productoSimple, cantidad: 1 }];
       setCarrito(nuevoCarrito);
       localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
     }

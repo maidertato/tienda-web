@@ -3,9 +3,19 @@ import { DIVISA } from '../tienda/tienda';
 
 // cARRITO --> Panel lateral que muestra los productos elegidos
 const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, onCambiarCantidad }) => {
-  // Calculamos el total multiplicando precio por cantidad
-  // Usamos reduce para sumar el subtotal de cada producto en un acumulador (acc)
-  const total = productosCarrito.reduce((acc, prod) => acc + (prod.precio * (prod.cantidad || 1)), 0);
+  
+  // Función de ayuda para sacar los datos aunque sean privados
+  const obtenerDatos = (p) => ({
+    id: p.id || p.id,
+    nombre: p.nombre || "Producto",
+    precio: parseFloat(p.precio) || 0,
+    imagen: p.imagen || 'imagenes/productos/default.png',
+    cantidad: p.cantidad || 1
+  });
+  const total = productosCarrito.reduce((acc, p) => {
+    const datos = obtenerDatos(p);
+    return acc + (datos.precio * datos.cantidad);
+  }, 0);
 
   return (
     <>
@@ -104,12 +114,23 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
 
                     {/* Papelera: Elimina el producto por completo del carrito */}
-                    <button
-                      className="btn ms-2"
-                      style={{ color: '#ff6b6b', fontSize: '1.2rem' }}
-                      onClick={() => alEliminar(prod.id)} // Llama a la función que hace el filter
+                    <button 
+                      className="btn-eliminar-coquette" 
+                      onClick={() => alEliminar(prod.id)}
+                      title="Eliminar con amor"
                     >
-                      🗑️
+                      <svg 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="1.2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                      >
+                        <path d="M3 6h18"></path>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
                     </button>
                   </div>
                 ))}

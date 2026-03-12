@@ -980,28 +980,38 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   font-weight: 500;
 }
 
-.btn-papelera {
-  background: none;
-  border: none;
-  padding: 8px;
+.btn-eliminar-coquette {
+  /* Esto elimina cualquier rastro del cuadrado feo */
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  
+  /* Alineación */
+  padding: 5px;
   cursor: pointer;
-  color: #a0a0a0;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 10px;
+  color: #b39ddb; 
+  transition: all 0.3s ease-in-out;
 }
 
-.btn-papelera svg {
+.btn-eliminar-coquette svg {
   width: 22px;
   height: 22px;
 }
 
-.btn-papelera:hover {
-  color: #e63946;
-  background-color: #ffeeee;
-  border-radius: 50%;
-  transform: scale(1.1);
+/* Efecto mágico al pasar el ratón */
+.btn-eliminar-coquette:hover {
+  color: #7e57c2; /* Se vuelve un poco más oscuro */
+  transform: scale(1.15) rotate(-5deg); /* Se agranda y se inclina */
+}
+
+/* Evitar que se ponga azul o gris al hacer click */
+.btn-eliminar-coquette:active {
+  transform: scale(0.9);
 }
 
 .carrito-total-barra {
