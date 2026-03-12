@@ -122,7 +122,7 @@ function App() {
   return (
     <div className="contenedor">
       {/* 1. Cabecera limpia: Solo recibe el título */}
-      <Cabecera titulo="🐱 🦩 Tienda de Mascotas 🐕 🐇" />
+      <Cabecera titulo="🐈   🐦 Tienda de Mascotas 🦮   🐇" />
 
       {/* Rectángulo Offline (solo se muestra si isOnline es false) */}
       {!isOnline && (
