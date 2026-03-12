@@ -59,8 +59,8 @@ function App() {
 
       // 3. Si existe pero tiene menos de 20, incrementamos su cantidad
       const nuevoCarrito = carrito.map(item =>
-        item.id === producto.id 
-          ? { ...item, cantidad: item.cantidad + 1 } 
+        item.id === producto.id
+          ? { ...item, cantidad: item.cantidad + 1 }
           : item
       );
       setCarrito(nuevoCarrito);

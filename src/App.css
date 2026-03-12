@@ -712,7 +712,8 @@ LISTA DE PRODUCTOS Y TARJETAS
   position: absolute;
   top: -25px;
   right: 5px;
-  background-color: #d93025; /* Rojo de error */
+  background-color: #d93025;
+  /* Rojo de error */
   color: white;
   padding: 6px 12px;
   border-radius: 8px;
@@ -734,7 +735,8 @@ LISTA DE PRODUCTOS Y TARJETAS
   right: 15px;
   border-width: 5px 5px 0 5px;
   border-style: solid;
-  border-color: #d93025 transparent transparent transparent; /* Mismo rojo que el fondo */
+  border-color: #d93025 transparent transparent transparent;
+  /* Mismo rojo que el fondo */
 }
 
 /* Desvanecimiento suave al salir */
@@ -776,7 +778,8 @@ LISTA DE PRODUCTOS Y TARJETAS
 .imagen-wrapper {
   position: relative;
   width: 100%;
-  overflow: hidden; /* Para que nada sobresalga de la tarjeta */
+  overflow: hidden;
+  /* Para que nada sobresalga de la tarjeta */
 }
 
 .flecha-izq {

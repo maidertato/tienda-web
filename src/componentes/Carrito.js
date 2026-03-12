@@ -1,13 +1,15 @@
 import React from 'react';
 import { DIVISA } from '../tienda/tienda';
 
+// cARRITO --> Panel lateral que muestra los productos elegidos
 const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, onCambiarCantidad }) => {
   // Calculamos el total multiplicando precio por cantidad
+  // Usamos reduce para sumar el subtotal de cada producto en un acumulador (acc)
   const total = productosCarrito.reduce((acc, prod) => acc + (prod.precio * (prod.cantidad || 1)), 0);
 
   return (
     <>
-      {/* Fondo oscurecido con desenfoque suave */}
+      {/* Fondo oscurecido con desenfoque suave, solo se muestra cuando el estado 'show' es verdadero */}
       {show && (
         <div
           className="offcanvas-backdrop fade show"
@@ -16,6 +18,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
         ></div>
       )}
 
+      {/* Contenedor principal del carrito lateral */}
       <div
         className={`offcanvas offcanvas-start ${show ? 'show' : ''}`}
         tabIndex="-1"
@@ -34,6 +37,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
           <h5 className="offcanvas-title" style={{ fontWeight: '700', color: '#6A1B9A', fontSize: '1.5rem' }}>
             🛒 Mi Carrito
           </h5>
+          {/* Botón para cerrar el panel lateral */}
           <button
             type="button"
             className="btn-close"
@@ -42,7 +46,9 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
           ></button>
         </div>
 
+        {/* Cuerpo del carrito donde se listan los productos */}
         <div className="offcanvas-body" style={{ padding: '20px' }}>
+          {/* Si el carrito está vacío, mostramos un mensaje */}
           {productosCarrito.length === 0 ? (
             <div className="text-center mt-5">
               <p style={{ color: '#999', fontSize: '1.1rem' }}>No hay productos aún... 🐾</p>
@@ -50,22 +56,25 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
           ) : (
             <div className="d-flex flex-column h-100">
               <div className="flex-grow-1">
+                {/* Mapeamos el array de productos para crear una fila por cada uno */}
                 {productosCarrito.map((prod) => (
                   <div key={prod.id} className="d-flex justify-content-between align-items-center mb-3 p-3"
                     style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
+                    
                     {/* FOTO DEL PRODUCTO */}
                     <img
                       src={prod.imagen}
                       alt={prod.nombre}
-                      style = {{
+                      style={{
                         width: '60px',
                         height: '60px',
                         objectFit: 'cover',
                         borderRadius: '10px',
                         marginRight: '15px',
                         backgroundColor: '#f9f9f9'
-                      }}/>
-                    
+                      }} />
+
+                    {/* Información del producto (nombre y subtotal) */}
                     <div style={{ flex: 1 }}>
                       <h6 className="m-0" style={{ fontWeight: '600' }}>{prod.nombre}</h6>
                       <span style={{ color: '#6A1B9A', fontWeight: '700' }}>
@@ -75,24 +84,24 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
                     {/* Selector de cantidad: Ajusta unidad a unidad */}
                     {/* Maximo 20 unidades */}
-                    <input 
+                    <input
                       type="number"
                       value={prod.cantidad}
                       min="1"
                       max="20"
-                      onChange={(e)=> {
+                      onChange={(e) => {
                         const valor = parseInt(e.target.value);
                         if (isNaN(valor)) return; // Evita valores no numéricos
                         const cantidadActual = prod.cantidad;
                         const diferencia = valor - cantidadActual;
-                        if (valor<=20 && valor >= 1) {
+                        if (valor <= 20 && valor >= 1) {
                           onCambiarCantidad(prod.id, diferencia);
                         } else if (valor > 20) {
                           alert('No puedes añadir más de 20 unidades de este producto.');
                         }
                       }}
                     />
-                      
+
 
                     {/* Papelera: Elimina el producto por completo del carrito */}
                     <button
@@ -114,6 +123,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                   </span>
                 </div>
 
+                {/* Botón principal de compra */}
                 <button
                   className="btn w-100 mb-3"
                   style={{
@@ -129,6 +139,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                   Confirmar Pedido
                 </button>
 
+                {/* Botón para borrar todos los elementos del carrito de golpe */}
                 <button
                   className="btn btn-link w-100 text-muted"
                   style={{ textDecoration: 'none', fontSize: '0.9rem' }}
