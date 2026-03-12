@@ -68,7 +68,7 @@ const TarjetaProducto = ({ prod, setProductoSeleccionado, idAnadido, handleAnadi
 
     return (
         <div className="col d-flex justify-content-center">
-            <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
+            <div className="card shadow-sm border-0 card-producto-tienda">
                 <div className="position-relative">
                     {/* El carrusel de fotos dentro de la tarjeta */}
                     <CarruselImagen
@@ -188,37 +188,36 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
                     return (
                         <div key={prod.id} className="col d-flex justify-content-center">
-                            <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
-                                <div className="position-relative">
-                                    {/* Carrusel */}
-                                    <CarruselImagen
-                                        prod={prod}
-                                        setProductoSeleccionado={setProductoSeleccionado}
-                                        onVarianteChange={(nombre) => {
-                                            setVariantesSeleccionadas(prev => ({
-                                                ...prev,
-                                                [prod.id]: nombre
-                                            }));
-                                        }}
-                                    />
-                                    {/* Boton lateral del producto */}
-                                    <div className="btn-carrito-container">
-                                        {idAnadido === `${prod.id}-exito` && (
-                                            <div className="mensaje-exito-flotante">¡Añadido!</div>
-                                        )}
-                                        {idAnadido === `${prod.id}-error` && (
-                                            <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>
-                                                Máx. 20 unidades
-                                            </div>
-                                        )}
-                                        <button
-                                            className="btn-carrito-circular"
-                                            onClick={() => handleAnadirConTooltip(prod)}
-                                        >
-                                            🛒
-                                        </button>
-                                    </div>
+                            <div className="card shadow-sm border-0 card-producto-tienda">                                <div className="position-relative">
+                                {/* Carrusel */}
+                                <CarruselImagen
+                                    prod={prod}
+                                    setProductoSeleccionado={setProductoSeleccionado}
+                                    onVarianteChange={(nombre) => {
+                                        setVariantesSeleccionadas(prev => ({
+                                            ...prev,
+                                            [prod.id]: nombre
+                                        }));
+                                    }}
+                                />
+                                {/* Boton lateral del producto */}
+                                <div className="btn-carrito-container">
+                                    {idAnadido === `${prod.id}-exito` && (
+                                        <div className="mensaje-exito-flotante">¡Añadido!</div>
+                                    )}
+                                    {idAnadido === `${prod.id}-error` && (
+                                        <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>
+                                            Máx. 20 unidades
+                                        </div>
+                                    )}
+                                    <button
+                                        className="btn-carrito-circular"
+                                        onClick={() => handleAnadirConTooltip(prod)}
+                                    >
+                                        🛒
+                                    </button>
                                 </div>
+                            </div>
 
                                 {/* Cuerpo de la tarjeta con nombre, precio y descripción */}
                                 <div className="card-body d-flex flex-column text-start">
