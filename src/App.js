@@ -22,6 +22,8 @@ function App() {
   const [showCarrito, setShowCarrito] = useState(false);
   // El texto que el usuario escribe para filtrar productos
   const [busqueda, setBusqueda] = useState("");
+  // Añadimos la categoría por la que queremos llevar a cabo el filtrado
+  const [categoria, setCategoria] = useState("Todas"); // Nuevo estado
   // Controla en qué página del escaparate estamos
   const [paginaActual, setPaginaActual] = useState(1);
   // Estado para controlar la conexión
@@ -60,9 +62,13 @@ function App() {
   };
 
   // Filtra los productos en tiempo real según lo que escribas en el buscador
-  const productosFiltrados = productos.filter(p =>
-    p?.nombre?.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  // o con la categoria (función extra)
+  const productosFiltrados = productos.filter(p => {
+    const coincideNombre = p?.nombre?.toLowerCase().includes(busqueda.toLowerCase());
+    const coincideCategoria = categoria === "Todas" || p?.tipo?.toLowerCase()=== categoria.toLowerCase();
+    
+    return coincideNombre && coincideCategoria;
+  });
 
   // Lógica para añadir cosas a la cesta de la compra
   const manejarAnadirAlCarrito = (producto) => {

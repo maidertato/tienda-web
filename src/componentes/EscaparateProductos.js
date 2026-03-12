@@ -2,14 +2,14 @@ import React, { useState, useEffect, useMemo } from 'react';
 import DetallesProducto from './DetallesProducto';
 import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
-import Carrito from './Carrito';
 import { obtenerAtributoExtra } from '../tienda/tienda.js';
+import FiltroCategorias from './FiltroCategorias';
 
 //////////////////////////////////
 // COMPONENTE PARA GESTIONAR LAS IMÁGENES Y VARIANTES
 //////////////////////////////////
 const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => {
-    // Usamos useMemo para que el array de imágenes sea estable y no cambie en cada render
+    // Usamos useMemo para que el array de imágenes sea estable
     const imagenes = useMemo(() => {
         return prod.variantes && prod.variantes.length > 0
             ? prod.variantes
@@ -26,7 +26,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
         }
     }, [idx, imagenes, onVarianteChange]);
 
-    // Función para pasar fotos adelante o atrás sin que se cierren los detalles
+    // Función para pasar fotos adelante o atrás
     const cambiarImagen = (e, direccion) => {
         e.stopPropagation();
         if (direccion === 'next') {
@@ -38,7 +38,6 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
 
     return (
         <div className="position-relative imagen-wrapper">
-            {/* Solo mostramos flechas si hay más de una imagen disponible */}
             {imagenes.length > 1 && (
                 <>
                     <div className="flecha flecha-izq" onClick={(e) => cambiarImagen(e, 'prev')}></div>
@@ -46,7 +45,6 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
                 </>
             )}
 
-            {/* Imagen principal: Si haces clic en ella, se abre el modal de detalles */}
             <img
                 src={imagenes[idx]?.imagen || prod.imagen}
                 className="card-img-top p-3"
@@ -58,109 +56,67 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
     );
 };
 
-//////////////////////////////////
-// COMPONENTE HIJO: TARJETA INDIVIDUAL
-//////////////////////////////////
-const TarjetaProducto = ({ prod, setProductoSeleccionado, idAnadido, handleAnadirConTooltip }) => {
-    // Obtenemos la etiqueta personalizada (Material, Estilo...) según la clase del producto
-    const info = obtenerAtributoExtra(prod);
-    const [nombreVariante, setNombreVariante] = useState("");
-
-    return (
-        <div className="col d-flex justify-content-center">
-            <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
-                <div className="position-relative">
-                    {/* El carrusel de fotos dentro de la tarjeta */}
-                    <CarruselImagen
-                        prod={prod}
-                        setProductoSeleccionado={setProductoSeleccionado}
-                        onVarianteChange={setNombreVariante}
-                    />
-
-                    {/* Contenedor flotante para el botón de compra y mensajes de aviso */}
-                    <div className="btn-carrito-container">
-
-                        {/* Burbuja verde si se añade correctamente */}
-                        {idAnadido === `${prod.id}-exito` && (
-                            <div className="mensaje-exito-flotante">¡Añadido!</div>
-                        )}
-
-                        {/* Burbuja roja si intentas meter más de 20 unidades */}
-                        {idAnadido === `${prod.id}-error` && (
-                            <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>
-                                Máx. 20 unidades
-                            </div>
-                        )}
-
-                        {/* El botón circular del carrito */}
-                        <button
-                            className="btn-carrito-circular"
-                            onClick={() => handleAnadirConTooltip(prod)}
-                        >
-                            🛒
-                        </button>
-                    </div>
-                </div>
-
-                {/* Información de la tarjeta */}
-                <div className="card-body d-flex flex-column text-start">
-                    <h4 className="card-title-escaparate">
-                        {prod.nombre} {nombreVariante ? `- ${nombreVariante}` : ""}
-                    </h4>
-                    <p className="card-precio-escaparate">{prod.precio}€</p>
-                    <div className="mt-2">
-                        <p className="mb-1 text-secondary" style={{ fontSize: '0.9rem' }}>
-                            <strong>{info.etiqueta}:</strong> {info.valor}
-                        </p>
-                        <p className="description-text-card">{prod.descripcion}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
 //////////////////////////////////////
 // COMPONENTE PRINCIPAL: ESCAPARATE COMPLETO
 //////////////////////////////////////
-const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual, carrito = [] }) => {
-    // Estado para saber qué producto mostrar en la caja de detalles
+const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, categoria, setCategoria, paginaActual, setPaginaActual, carrito = [] }) => {
+    
+    // ESTADOS
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-    // Configuramos para que se vean 6 productos por página
     const [productosPerPage] = useState(6);
-    // Estado para controlar qué burbuja de mensaje (exito/error) se muestra
     const [idAnadido, setIdAnadido] = useState(null);
-    // Guardamos qué variante está seleccionada en cada producto para el título
     const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
 
-    // Si el usuario busca algo, volvemos automáticamente a la página 1
+    // 1. LÓGICA DE FILTRADO (Con limpieza de tildes para evitar fallos)
+    const productosFiltrados = useMemo(() => {
+    // Si no hay productos, devolvemos array vacío sin preguntar
+    if (!productos) return [];
+
+        return productos.filter(prod => {
+            // SEGURIDAD: Si por error un producto no tiene nombre, usamos un texto vacío
+            const nombreProd = (prod.nombre || "").toLowerCase();
+            const busquedaNormal = (busqueda || "").toLowerCase();
+            
+            const coincideBusqueda = nombreProd.includes(busquedaNormal);
+            
+            // SEGURIDAD: Si categoria es "Todas" o no existe, mostramos todo lo que coincida con búsqueda
+            if (!categoria || categoria === "Todas") {
+                return coincideBusqueda;
+            }
+
+            // SEGURIDAD: Normalizamos ambos para comparar
+            const tipoProducto = (prod.tipo || "").toLowerCase();
+            const categoriaSeleccionada = categoria.toLowerCase();
+
+            const coincideCategoria = tipoProducto === categoriaSeleccionada;
+
+            return coincideCategoria && coincideBusqueda;
+        });
+    }, [productos, categoria, busqueda]);
+    // 2. LÓGICA DE PAGINACIÓN
+    const indexOfLastProduct = paginaActual * productosPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
+    const currentProducts = productosFiltrados.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    // Volver a página 1 si cambia la búsqueda o filtro
     useEffect(() => {
         setPaginaActual(1);
-    }, [busqueda, setPaginaActual]);
+    }, [busqueda, categoria, setPaginaActual]);
 
-    // Gestiona el clic en el carrito y controla el límite de 20 unidades
+    // GESTIÓN DEL CARRITO (Límite 20 unidades)
     const handleAnadirConTooltip = (prod) => {
         const itemEnCarrito = carrito.find(item => item.id === prod.id);
         const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
 
-        // Comprobamos el límite de 20 unidades
         if (cantidadActual >= 20) {
             setIdAnadido(`${prod.id}-error`);
         } else {
             onAnadirAlCarrito(prod);
             setIdAnadido(`${prod.id}-exito`);
         }
-
-        // Limpiamos el mensaje después de 2 segundos
         setTimeout(() => setIdAnadido(null), 2000);
     };
 
-    // Lógica de paginación: calculamos qué trozo del array de productos mostrar
-    const indexOfLastProduct = paginaActual * productosPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
-    const currentProducts = productos.slice(indexOfFirstProduct, indexOfLastProduct);
-
-    // Cambia de página y sube el scroll arriba del todo
     const paginate = (pageNumber) => {
         setPaginaActual(pageNumber);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -168,89 +124,87 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
     return (
         <div className="container-fluid">
-            {/* Buscador integrado en la parte superior del escaparate */}
-            <div className="d-flex justify-content-between align-items-center px-3 mb-2" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            {/* Cabecera con Filtros y Buscador */}
+            <div className="d-flex justify-content-between align-items-center px-3 mb-4" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <h2 className="h4 text-secondary m-0">Todos los productos</h2>
-                <div style={{ width: '300px' }}>
-                    <BuscadorProductos
-                        titulo=""
-                        terminoBusqueda={busqueda}
-                        onCambio={setBusqueda}
-                    />
+                
+                <div className='d-flex gap-2 align-items-center'>
+                    <div style={{ width: '180px' }}>
+                        <FiltroCategorias
+                            categoriaActual={categoria}
+                            onCambio={setCategoria}
+                        />
+                    </div>
+                    <div style={{ width: '250px' }}>
+                        <BuscadorProductos
+                            titulo=""
+                            terminoBusqueda={busqueda}
+                            onCambio={setBusqueda}
+                        />
+                    </div>
                 </div>
             </div>
 
-            {/* Grid productos */}
-            <div className="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 p-3 justify-content-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                {currentProducts.map((prod) => {
-                    const info = obtenerAtributoExtra(prod);
-                    const nombreVariante = variantesSeleccionadas[prod.id] || "";
+            {/* Rejilla de Productos */}
+            <div className="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 p-3 justify-content-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                {currentProducts.length > 0 ? (
+                    currentProducts.map((prod) => {
+                        const info = obtenerAtributoExtra(prod);
+                        const nombreVariante = variantesSeleccionadas[prod.id] || "";
 
-                    return (
-                        <div key={prod.id} className="col d-flex justify-content-center">
-                            <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
-                                <div className="position-relative">
-                                    {/* Carrusel */}
-                                    <CarruselImagen
-                                        prod={prod}
-                                        setProductoSeleccionado={setProductoSeleccionado}
-                                        onVarianteChange={(nombre) => {
-                                            setVariantesSeleccionadas(prev => ({
-                                                ...prev,
-                                                [prod.id]: nombre
-                                            }));
-                                        }}
-                                    />
-                                    {/* Boton lateral del producto */}
-                                    <div className="btn-carrito-container">
-                                        {idAnadido === `${prod.id}-exito` && (
-                                            <div className="mensaje-exito-flotante">¡Añadido!</div>
-                                        )}
-                                        {idAnadido === `${prod.id}-error` && (
-                                            <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>
-                                                Máx. 20 unidades
-                                            </div>
-                                        )}
-                                        <button
-                                            className="btn-carrito-circular"
-                                            onClick={() => handleAnadirConTooltip(prod)}
-                                        >
-                                            🛒
-                                        </button>
+                        return (
+                            <div key={prod.id} className="col d-flex justify-content-center">
+                                <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
+                                    
+                                    {/* Imagen y Botón Carrito */}
+                                    <div className="position-relative">
+                                        <CarruselImagen
+                                            prod={prod}
+                                            setProductoSeleccionado={setProductoSeleccionado}
+                                            onVarianteChange={(nombre) => {
+                                                setVariantesSeleccionadas(prev => ({ ...prev, [prod.id]: nombre }));
+                                            }}
+                                        />
+                                        <div className="btn-carrito-container">
+                                            {idAnadido === `${prod.id}-exito` && <div className="mensaje-exito-flotante">¡Añadido!</div>}
+                                            {idAnadido === `${prod.id}-error` && <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>Máx. 20</div>}
+                                            <button className="btn-carrito-circular" onClick={() => handleAnadirConTooltip(prod)}>🛒</button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Cuerpo de la tarjeta con nombre, precio y descripción */}
-                                <div className="card-body d-flex flex-column text-start">
-                                    <h4 className="card-title-escaparate">
-                                        {prod.nombre}{nombreVariante ? ` - ${nombreVariante}` : ""}
-                                    </h4>
-                                    <p className="card-precio-escaparate">{prod.precio}€</p>
-
-                                    <div className="mt-2">
-                                        <p className="mb-1 text-secondary" style={{ fontSize: '0.9rem' }}>
-                                            <strong>{info.etiqueta}:</strong> {info.valor}
-                                        </p>
-                                        <p className="description-text-card">
-                                            {prod.descripcion}
-                                        </p>
+                                    {/* Cuerpo de la Tarjeta */}
+                                    <div className="card-body d-flex flex-column text-start">
+                                        <h4 className="card-title-escaparate">
+                                            {prod.nombre}{nombreVariante ? ` - ${nombreVariante}` : ""}
+                                        </h4>
+                                        <p className="card-precio-escaparate">{prod.precio}€</p>
+                                        <div className="mt-2">
+                                            <p className="mb-1 text-secondary" style={{ fontSize: '0.9rem' }}>
+                                                <strong>{info.etiqueta}:</strong> {info.valor}
+                                            </p>
+                                            <p className="description-text-card">{prod.descripcion}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })
+                ) : (
+                    <div className="text-center w-100 py-5">
+                        <p className="text-muted">No se encontraron productos.</p>
+                    </div>
+                )}
             </div>
 
-            {/* Componente de flechas/números de página */}
+            {/* Paginación */}
             <Paginacion
-                totalProductos={productos.length}
+                totalProductos={productosFiltrados.length}
                 productosPorPagina={productosPerPage}
                 paginaActual={paginaActual}
                 onCambiarPagina={paginate}
             />
 
-            {/* Si hay un producto clickado, mostramos la caja de detalles */}
+            {/* Modal de Detalles */}
             {productoSeleccionado && (
                 <DetallesProducto
                     producto={productoSeleccionado}
