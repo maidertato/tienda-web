@@ -71,7 +71,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                 <svg viewBox="0 0 24 24" width="20" height="20" className="icono-casa-glow" style={{ marginRight: '10px' }}>
                   <path d="M12 3L2 12H5V20H19V12H22L12 3Z" style={{ fill: '#521F84' }} />
                 </svg>
-                Volver a la tienda
+                Inicio
               </button>
             </div>
           ) : (

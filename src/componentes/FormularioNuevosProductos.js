@@ -143,13 +143,14 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                     <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} step="0.01" min="0" placeholder="0.00" required disabled={deshabilitado} />
                 </div>
 
-                {renderCampoDinamico()}
 
                 {/* Descripción */}
                 <div className="mb-3">
                     <label className="form-label">Descripción</label>
                     <textarea className="form-control" name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Describe tu producto..." rows="2" disabled={deshabilitado}></textarea>
                 </div>
+
+                {renderCampoDinamico()}
 
                 {/* Imagen / FileUploader */}
                 <div className="mb-4">
