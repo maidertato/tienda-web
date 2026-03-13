@@ -52,7 +52,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
                 className="card-img-top p-3"
                 alt={prod.nombre}
                 style={{ height: '100%', width: '100%', objectFit: 'contain', cursor: 'pointer' }}
-                onClick={() => setProductoSeleccionado(prod)}
+                onClick={() => setProductoSeleccionado({ producto: prod, variante: imagenes[idx] })}
             />
         </div>
     );
@@ -253,7 +253,8 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             {/* Si hay un producto clickado, mostramos la caja de detalles */}
             {productoSeleccionado && (
                 <DetallesProducto
-                    producto={productoSeleccionado}
+                    producto={productoSeleccionado.producto}
+                    variante={productoSeleccionado.variante}
                     onCerrar={() => setProductoSeleccionado(null)}
                 />
             )}
