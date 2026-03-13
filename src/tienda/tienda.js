@@ -204,111 +204,6 @@ export const buscarProductoPorNombre = (nombre) => {
   return inventario.filter(p => p.nombre.toLowerCase().includes(nombre.toLowerCase()));
 };
 
-// CREADOR: Recibe datos del formulario de la web y crea un objeto de la clase correcta
-export function crearNuevoProducto(tipo, datos) {
-  let nuevo;
-
-  switch (tipo) {
-    case 'mobiliario':
-      nuevo = new Mobiliario(
-        datos.nombre, 
-        datos.precio, 
-        datos.descripcion, 
-        datos.imagen, 
-        datos.material || "Madera",
-        datos.usoInterior === 'true'
-      );
-      break;
-    case 'cabello':
-      nuevo = new Cabello(
-        datos.nombre, 
-        datos.precio, 
-        datos.descripcion, 
-        datos.imagen, 
-        datos.estilo,
-        datos.tamaño || "Pequeño",
-        datos.tipoMascota || "Perro",
-        datos.color || "Azul"
-      );
-      break;
-    case 'juguete':
-      nuevo = new Juguete(
-        datos.nombre, 
-        datos.precio, 
-        datos.descripcion, 
-        datos.imagen, 
-        datos.tipo || "Pelota",
-        datos.tamano || "Mediano",
-        datos.esInteractivo === 'true'
-      );
-      break;
-    case 'merchandising':
-      nuevo = new Merchandising(
-        datos.nombre, 
-        datos.precio, 
-        datos.descripcion, 
-        datos.imagen, 
-        datos.parteDelCuerpo || "Cabeza",
-        datos.talla || "M",
-        datos.color || "Azul"
-      );
-      break;
-    case 'alimentacion':
-      nuevo = new Alimentacion(
-        datos.nombre, 
-        datos.precio, 
-        datos.descripcion, 
-        datos.imagen, 
-        datos.tipoAlimento || "Seco",
-        datos.tipoMascota || "Perro"
-      );
-      break;
-    case 'accesorios':
-      nuevo = new Accesorios(
-        datos.nombre, 
-        datos.precio, 
-        datos.descripcion, 
-        datos.imagen, 
-        datos.tipoMascota || "Perro",
-        datos.talla || "M",
-        datos.color || "Azul"
-      );
-      break;
-    default:
-      return false; // No reconoce el tipo
-  }
-  if (nuevo) {
-    nuevo.id = datos.id || Date.now();
-    if (!inventario.find(p => p.id === nuevo.id)) {
-        inventario.push(nuevo);
-        return true; // añadido correctamente
-    } else {
-        return false; // duplicado
-    }
-  }
-  return false;
-} 
-
-
-export const obtenerAtributoExtra = (producto) => {
-    switch (producto.tipo) {
-        case 'Mobiliario':
-            return { etiqueta: 'Material', valor: producto.material || '' };
-        case 'Cabello':
-            return { etiqueta: 'Estilo', valor: producto.estilo || '' };
-        case 'Alimentacion':
-            return { etiqueta: 'Tipo de Alimento', valor: producto.tipoAlimento || '' };
-        case 'Juguete':
-            return { etiqueta: 'Tipo de Juguete', valor: producto.tipoJuguete || '' };
-        case 'Merchandising':
-            return { etiqueta: 'Parte del cuerpo', valor: producto.parteCuerpo || '' };
-        case 'Accesorios':
-            return { etiqueta: 'Tipo de Mascota', valor: producto.tipoMascota || '' };
-        default:
-            return { etiqueta: 'Extra', valor: '' };
-    }
-};
-
 // ========================================================================
 // GESTIÓN DEL CARRITO (LocalStorage)
 // Para que los productos no se borren al refrescar la página.
@@ -339,6 +234,7 @@ export function borrarDelCarrito(productoId) {
 // Recupera todos los productos guardados que empiecen por "producto_"
 export const cargarCarrito = () => {
   const carrito = [];
+
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key.startsWith("producto_")) {
@@ -348,11 +244,111 @@ export const cargarCarrito = () => {
       const productoConClase = crearNuevoProducto(datosRaw.tipo, datosRaw);
       
       if (productoConClase) {
-        // Le devolvemos su ID original para que no genere uno nuevo
-        productoConClase.id = datosRaw.id; 
         carrito.push(productoConClase);
       }
     }
   }
   return carrito;
+};
+// CREADOR: Recibe datos del formulario de la web y crea un objeto de la clase correcta
+export function crearNuevoProducto(tipo, datos) {
+  let nuevo;
+
+  switch (tipo) {
+    case 'Mobiliario':
+      nuevo = new Mobiliario(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.material || "Madera",
+        datos.usoInterior === 'true'
+      );
+      break;
+    case 'Cabello':
+      nuevo = new Cabello(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.estilo,
+        datos.tamaño || "Pequeño",
+        datos.tipoMascota || "Perro",
+        datos.color || "Azul"
+      );
+      break;
+    case 'Juguete':
+      nuevo = new Juguete(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.tipoJuguete || "Pelota",
+        datos.tamano || "Mediano",
+        datos.esInteractivo === 'true'
+      );
+      break;
+    case 'Merchandising':
+      nuevo = new Merchandising(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.parteDelCuerpo || "Cabeza",
+        datos.talla || "M",
+        datos.color || "Azul"
+      );
+      break;
+    case 'Alimentacion':
+      nuevo = new Alimentacion(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.tipoAlimento || "Seco",
+        datos.tipoMascota || "Perro"
+      );
+      break;
+    case 'Accesorios':
+      nuevo = new Accesorios(
+        datos.nombre, 
+        datos.precio, 
+        datos.descripcion, 
+        datos.imagen, 
+        datos.tipoMascota || "Perro",
+        datos.talla || "M",
+        datos.color || "Azul"
+      );
+      break;
+    default:
+      return false; // No reconoce el tipo
+  }
+  if(inventario.find(p => p.name === Number(nuevo.nombre))) {
+    return false; // Ya existe un producto con ese ID, no lo añadimos
+  }
+  const existe = inventario.some(p => p.id === nuevo.id);
+  if (!existe) {
+      inventario.push(nuevo);// Lo añadimos al inventario para que esté disponible en la tienda
+    return nuevo; // Devolvemos el nuevo producto para que se pueda usar en el carrito
+  }
+} 
+
+
+export const obtenerAtributoExtra = (producto) => {
+    switch (producto.tipo) {
+        case 'Mobiliario':
+            return { etiqueta: 'Material', valor: producto.material || '' };
+        case 'Cabello':
+            return { etiqueta: 'Estilo', valor: producto.estilo || '' };
+        case 'Alimentacion':
+            return { etiqueta: 'Tipo de Alimento', valor: producto.tipoAlimento || '' };
+        case 'Juguete':
+            return { etiqueta: 'Tipo de Juguete', valor: producto.tipoJuguete || '' };
+        case 'Merchandising':
+            return { etiqueta: 'Parte del cuerpo', valor: producto.parteCuerpo || '' };
+        case 'Accesorios':
+            return { etiqueta: 'Tipo de Mascota', valor: producto.tipoMascota || '' };
+        default:
+            return { etiqueta: 'Extra', valor: '' };
+    }
 };

@@ -4,89 +4,104 @@ import { DIVISA, crearNuevoProducto } from '../tienda/tienda.js';
 
 const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
-
-    // Estados
+    
+    // 1. Estado con todo lo necesario
     const [formData, setFormData] = useState({
         tipo: '',
         nombre: '',
         precio: '',
         descripcion: '',
-        extra: ''
+        material: '',
+        tipoJuguete: '',
+        tipoAlimento: '',
+        tipoAccesorio: '',
+        categoria: '',
+        estilo: ''
     });
     const [file, setFile] = useState(null);
-
-    // Alertas
     const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" });
-    const mostrarAlerta = (texto, tipo) => {
-        setAlerta({ visible: true, texto, tipo });
-        setTimeout(() => setAlerta({ visible: false, texto: "", tipo: "" }), 3000);
-    };
 
-    // HandleChange unificado
+    // 2. HandleChange directo (sin diccionarios externos, más rápido)
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-
-    const extraFieldsMap = {
-        Mobiliario: { material: formData.extra },
-        Cabello: { estilo: formData.extra },
-        Juguete: { tipoJuguete: formData.extra },
-        Merchandising: { parteCuerpo: formData.extra },
-        Alimentacion: { sabor: formData.extra },
-        Accesorios: { tipoMascota: formData.extra }
+    const mostrarAlerta = (texto, tipo) => {
+        setAlerta({ visible: true, texto, tipo });
+        setTimeout(() => setAlerta({ visible: false, texto: "", tipo: "" }), 3000);
     };
 
-    const placeholdersExtra = {
-        Mobiliario: "ej: Madera",
-        Alimentacion: "ej: Sabor Pollo",
-        Cabello: "ej: Rizado",
-        Juguete: "ej: Peluche",
-        Merchandising: "ej: Cabeza",
-        Accesorios: "ej: Perro"
-    };
+    // 3. Función para saber qué campo mostrar según el tipo
+    const renderCampoDinamico = () => {
+        // Mapeo de qué campo mostrar según el tipo elegido
+        const configExtra = {
+            'Mobiliario': { label: 'Material', name: 'material', ph: 'Ej: Madera, Roble...' },
+            'Juguete': { label: 'Tipo de Juguete', name: 'tipoJuguete', ph: 'Ej: Peluche, Cuerda...' },
+            'Alimentacion': { label: 'Categoría Alimento', name: 'tipoAlimento', ph: 'Ej: Snack, Pienso...' },
+            'Accesorios': { label: 'Estilo', name: 'estilo', ph: 'Ej: Vintage, Moderno...' },
+            'Cabello': { label: 'Categoría', name: 'categoria', ph: 'Ej: Champú, Tinte...' },
+            'Merchandising': { label: 'Tipo Accesorio', name: 'tipoAccesorio', ph: 'Ej: Llavero, Taza...' }
+        };
 
-    const titulosExtra = {
-        Mobiliario: "Material",
-        Alimentacion: "Tipo de Alimento",
-        Cabello: "Estilo",
-        Juguete: "Tipo de Juguete",
-        Merchandising: "Parte del cuerpo",
-        Accesorios: "Tipo de Mascota"
+        const config = configExtra[formData.tipo];
+        if (!config) return null;
+
+        return (
+            <div className="mb-3 animate__animated animate__fadeIn">
+                <label className="form-label fw-bold">{config.label}</label>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    name={config.name} // IMPORTANTE: que coincida con el estado
+                    value={formData[config.name]} 
+                    onChange={handleChange} 
+                    placeholder={config.ph} 
+                    required 
+                    disabled={deshabilitado} 
+                />
+            </div>
+        );
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (deshabilitado) return;
+        console.log("1. Formulario enviado");
 
-        if (!formData.tipo) return mostrarAlerta("Debes escoger un tipo de producto", "danger");
-        
+        if (deshabilitado) {
+            console.warn("Abortado: El formulario está deshabilitado");
+            return;
+        }
+
+        if (!formData.tipo) {
+            mostrarAlerta("Debes escoger un tipo", "danger");
+            return;
+        }
+
+        console.log("Tipo enviado:", formData.tipo);  // ← AÑADE ESTO AQUÍ
+
         const precioNum = parseFloat(formData.precio);
-        if (isNaN(precioNum) || precioNum <= 0) return mostrarAlerta("Introduce un precio válido", "danger");
-
         const nuevoProducto = {
             id: "prod-" + Date.now(),
-            nombre: formData.nombre,
-            precio: precioNum,
-            descripcion: formData.descripcion,
-            tipo: formData.tipo, // sin toLowerCase
-            ...extraFieldsMap[formData.tipo]
+            ...formData,
+            precio: precioNum
         };
 
+        console.log("2. Intentando instanciar con tipo:", formData.tipo);
+
         try {
-            // Pasamos tipo en minúsculas para que el switch de tienda.js no falle
             const productoInstanciado = crearNuevoProducto(formData.tipo, nuevoProducto);
             if (productoInstanciado) {
+                console.log("3. Éxito: Producto creado", productoInstanciado);
                 onAgregarProducto(formData.tipo, productoInstanciado);
-                mostrarAlerta("¡Producto añadido con éxito!", "success");
-                setFormData({ tipo: '', nombre: '', precio: '', descripcion: '', extra: '' });
-                setFile(null);
+                mostrarAlerta("¡Producto añadido!", "success");
+                // Reset...
             } else {
+                console.error("4. Error: crearNuevoProducto devolvió null o undefined");
                 mostrarAlerta("Error: No se pudo crear el producto", "danger");
             }
         } catch (error) {
-            console.error(error);
+            console.error("5. Error catastrófico:", error);
             mostrarAlerta("Error al añadir el producto", "danger");
         }
     };
@@ -96,16 +111,10 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             <h3 className="text-center mb-3">Añadir Productos</h3>
             <form id="form-producto" onSubmit={handleSubmit}>
                 
+                {/* Tipo de Producto */}
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
-                    <select
-                        name="tipo"
-                        className="form-select"
-                        value={formData.tipo}
-                        onChange={(e) => { handleChange(e); setFormData(prev => ({ ...prev, extra: '' })); }}
-                        required
-                        disabled={deshabilitado}
-                    >
+                    <select name="tipo" className="form-select" value={formData.tipo} onChange={handleChange} required disabled={deshabilitado}>
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
                         <option value="Cabello">Cabello</option>
@@ -116,71 +125,37 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                     </select>
                 </div>
 
+                {/* Nombre */}
                 <div className="mb-3">
                     <label className="form-label">Nombre del Producto</label>
                     <input type="text" className="form-control" name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Ej: Pelota de goma" required disabled={deshabilitado} />
                 </div>
 
+                {/* Precio */}
                 <div className="mb-3">
                     <label className="form-label">Precio ({DIVISA})</label>
-                    <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} onKeyDown={(e) => { if (["e","E","+","-"].includes(e.key)) e.preventDefault(); }} step="0.01" min="0" placeholder="0.00" required disabled={deshabilitado} />
+                    <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} step="0.01" min="0" placeholder="0.00" required disabled={deshabilitado} />
                 </div>
 
+                {/* AQUÍ ESTÁ EL CAMBIO: El campo dinámico ya no se llama "extra" */}
+                {renderCampoDinamico()}
+
+                {/* Descripción */}
                 <div className="mb-3">
                     <label className="form-label">Descripción</label>
-                    <textarea className="form-control" name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Describe tu producto..." rows="3" disabled={deshabilitado}></textarea>
+                    <textarea className="form-control" name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Describe tu producto..." rows="2" disabled={deshabilitado}></textarea>
                 </div>
 
-                {formData.tipo && placeholdersExtra[formData.tipo] && (
-                    <div className="mb-3 animate__animated animate__fadeIn">
-                        <label className="form-label fw-bold">{titulosExtra[formData.tipo]}</label>
-                        <input type="text" className="form-control" name="extra" value={formData.extra} onChange={handleChange} placeholder={placeholdersExtra[formData.tipo]} required disabled={deshabilitado} />
-                    </div>
-                )}
-
-                <div className="mb-3">
-                    <label className="form-label text-white">Imagen del Producto</label>
-                    <input type="file" className="form-control" accept="image/*" disabled={deshabilitado} onChange={(e) => e.target.files && setFile(e.target.files[0])} />
-                </div>
-
+                {/* Imagen / FileUploader */}
                 <div className="mb-4">
-                    <label className="form-label d-block text-white">O arrastra la imagen aquí</label>
-                    <FileUploader
-                        handleChange={(file) => setFile(file)}
-                        name="file"
-                        types={fileTypes}
-                        hoverTitle="Suelta aquí"
-                        classes="w-100"
-                        disabled={deshabilitado}
-                    >
+                    <label className="form-label d-block text-white">Imagen del Producto</label>
+                    <FileUploader handleChange={(file) => setFile(file)} name="file" types={fileTypes} disabled={deshabilitado}>
                         <div className="drop-zone-custom p-3 border rounded text-center w-100" style={{
                             cursor: deshabilitado ? 'not-allowed' : 'pointer',
                             borderStyle: 'dashed',
-                            borderColor: deshabilitado ? '#ced4da' : 'rgba(255,255,255,0.7)',
-                            backgroundColor: deshabilitado ? '#e9ecef' : 'rgba(255,255,255,0.1)',
-                            minHeight: '80px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            boxSizing: 'border-box',
-                            transition: 'background-color 0.3s'
+                            backgroundColor: 'rgba(255,255,255,0.1)'
                         }}>
-                            {file ? (
-                                <div className="animate__animated animate__fadeIn text-center">
-                                    <img
-                                        src={URL.createObjectURL(file)}
-                                        alt="Vista previa"
-                                        style={{ maxWidth: '80px', borderRadius: '5px', opacity: deshabilitado ? 0.5 : 1 }}
-                                        className="mb-2 d-block mx-auto"
-                                    />
-                                    <p className="text-success m-0 small fw-bold">{deshabilitado ? "Conexión perdida" : `✓ ${file.name}`}</p>
-                                </div>
-                            ) : (
-                                <p className="m-0" style={{ color: deshabilitado ? '#6c757d' : 'white', opacity: 0.8 }}>
-                                    {deshabilitado ? "Formulario deshabilitado" : "Arrastra tu imagen aquí"}
-                                </p>
-                            )}
+                            {file ? <span className="text-success">✓ {file.name}</span> : "Arrastra o haz clic para subir imagen"}
                         </div>
                     </FileUploader>
                 </div>
@@ -190,9 +165,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 </button>
 
                 {alerta.visible && (
-                    <div className={`alert alert-${alerta.tipo} mt-3 animate__animated animate__fadeIn`}>
-                        {alerta.texto}
-                    </div>
+                    <div className={`alert alert-${alerta.tipo} mt-3`}>{alerta.texto}</div>
                 )}
             </form>
         </div>

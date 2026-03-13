@@ -24,7 +24,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
         if (onVarianteChange && imagenes[idx]) {
             onVarianteChange(imagenes[idx].nombre || "");
         }
-    }, [idx, imagenes, onVarianteChange]);
+    }, [idx, imagenes]);
 
     // Función para pasar fotos adelante o atrás sin que se cierren los detalles
     const cambiarImagen = (e, direccion) => {
@@ -136,7 +136,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
     // Si el usuario busca algo, volvemos automáticamente a la página 1
     useEffect(() => {
         setPaginaActual(1);
-    }, [busqueda, setPaginaActual]);
+    }, [busqueda]);
 
     // Gestiona el clic en el carrito y controla el límite de 20 unidades
     const handleAnadirConTooltip = (prod) => {
