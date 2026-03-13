@@ -51,7 +51,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
                 src={imagenes[idx]?.imagen || prod.imagen}
                 className="card-img-top p-3"
                 alt={prod.nombre}
-                style={{ height: '100%', width: '100%', objectFit: 'cover', cursor: 'pointer' }}
+                style={{ height: '100%', width: '100%', objectFit: 'contain', cursor: 'pointer' }}
                 onClick={() => setProductoSeleccionado(prod)}
             />
         </div>
@@ -104,7 +104,7 @@ const TarjetaProducto = ({ prod, setProductoSeleccionado, idAnadido, handleAnadi
 
                 {/* Información de la tarjeta */}
                 <div className="card-body d-flex flex-column text-start">
-                    <h4 className="card-title-escaparate">
+                    <h4 className="card-title-escaparate" >
                         {prod.nombre} {nombreVariante ? `- ${nombreVariante}` : ""}
                     </h4>
                     <p className="card-precio-escaparate">{prod.precio}€</p>
@@ -126,7 +126,7 @@ const TarjetaProducto = ({ prod, setProductoSeleccionado, idAnadido, handleAnadi
 const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, paginaActual, setPaginaActual, carrito = [] }) => {
     // Estado para saber qué producto mostrar en la caja de detalles
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-    // Configuramos para que se vean 6 productos por página
+    // 6 productos para que sean filas de 3
     const [productosPerPage] = useState(6);
     // Estado para controlar qué burbuja de mensaje (exito/error) se muestra
     const [idAnadido, setIdAnadido] = useState(null);
@@ -180,15 +180,14 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 </div>
             </div>
 
-            {/* Grid productos */}
-            <div id="lista-productos">
+            <div id="lista-productos" className="row row-cols-1 row-cols-md-3 g-4 px-3" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 {currentProducts.map((prod) => {
                     const info = obtenerAtributoExtra(prod);
                     const nombreVariante = variantesSeleccionadas[prod.id] || "";
 
                     return (
-                        <div key={prod.id} className="contenedor-tarjeta-individual">
-                            <div className="card-producto-tienda">
+                        <div key={prod.id} className="col d-flex justify-content-center">
+                            <div className="card-producto-tienda w-100 h-100 shadow-sm border-0">
                                 <div className="position-relative">
                                     <CarruselImagen
                                         prod={prod}
@@ -220,13 +219,13 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                     </div>
                                 </div>
 
-                                <div className="card-body">
+                                <div className="card-body d-flex flex-column">
                                     <h4 className="card-title">
                                         {prod.nombre}{nombreVariante ? ` - ${nombreVariante}` : ""}
                                     </h4>
                                     <p className="card-precio-estilo">{prod.precio}€</p>
 
-                                    <div className="mt-2">
+                                    <div className="mt-auto">
                                         <p className="mb-1 text-secondary" style={{ fontSize: '0.85rem' }}>
                                             <strong>{info.etiqueta}:</strong> {info.valor}
                                         </p>
@@ -242,12 +241,14 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             </div>
 
             {/* Componente de flechas/números de página */}
-            <Paginacion
-                totalProductos={productos.length}
-                productosPorPagina={productosPerPage}
-                paginaActual={paginaActual}
-                onCambiarPagina={paginate}
-            />
+            <div className="mt-4">
+                <Paginacion
+                    totalProductos={productos.length}
+                    productosPorPagina={productosPerPage}
+                    paginaActual={paginaActual}
+                    onCambiarPagina={paginate}
+                />
+            </div>
 
             {/* Si hay un producto clickado, mostramos la caja de detalles */}
             {productoSeleccionado && (

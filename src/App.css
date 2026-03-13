@@ -522,17 +522,18 @@ LISTA DE PRODUCTOS Y TARJETAS
  ========================= */
 
 .card-producto-tienda {
-  width: 320px !important;
+  width: 300px !important;
   max-width: 320px !important;
   height: 440px !important;
   border-radius: 20px !important; 
-  background-color: #fff7fc;
+  border: 1px solid #eee;
+  background-color: #fff7fc !important;
   display: flex;
   flex-direction: column;
   position: relative;
   transition: transform 0.3s ease;
   margin: 0 !important;
-  overflow: hidden;
+  overflow: visible !important;
 }
 
 .card-producto {
@@ -550,19 +551,32 @@ LISTA DE PRODUCTOS Y TARJETAS
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  padding: 15px !important;
+  background: transparent !important;
+}
+
+#lista-productos div.card-producto-tienda {
+    background-color: #fff7fc !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    border: 1px solid #eee !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 .card-img-container {
-  height: 130px !important;
-  background-color: #f8f9fa; /* Fondo gris muy clarito para la foto */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px !important;
+  background-color: #ffffff !important;
+    border-bottom: 2px solid #f0f0f0 !important; 
+    height: 210px !important; 
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1px !important;
+    position: relative !important;
 }
 
 .card-img-top {
-  max-height: 100%;
+  max-height: 100% !important;
   max-width: 100%;
   object-fit: contain;
   width: auto;
@@ -578,7 +592,7 @@ LISTA DE PRODUCTOS Y TARJETAS
   font-weight: 500;
   height: 1.4em;
   margin-bottom: 0.5rem;
-  color: #521F84;
+  color: #702cb4;
 }
 
 .card-text {
@@ -663,7 +677,7 @@ LISTA DE PRODUCTOS Y TARJETAS
 
 .mensaje-exito-flotante {
   position: absolute;
-  top: -25px;
+  top: -15px;
   right: 5px;
   background-color: #521F84;
   color: white;
@@ -698,7 +712,7 @@ LISTA DE PRODUCTOS Y TARJETAS
 /* Estilo para el mensaje de error */
 .mensaje-error-flotante {
   position: absolute;
-  top: -25px;
+  top: -15px;
   right: 5px;
   background-color: #d93025;
   /* Rojo de error */
