@@ -51,7 +51,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
                 src={imagenes[idx]?.imagen || prod.imagen}
                 className="card-img-top p-3"
                 alt={prod.nombre}
-                style={{ height: '100%', width: '100%', objectFit: 'contain', cursor: 'pointer' }}
+                style={{ height: '100%', width: '100%', objectFit: 'cover', cursor: 'pointer' }}
                 onClick={() => setProductoSeleccionado(prod)}
             />
         </div>
