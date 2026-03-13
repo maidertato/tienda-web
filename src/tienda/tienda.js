@@ -323,8 +323,8 @@ export function crearNuevoProducto(tipo, datos) {
     default:
       return false; // No reconoce el tipo
   }
-  if(inventario.find(p => p.name === Number(nuevo.nombre))) {
-    return false; // Ya existe un producto con ese ID, no lo añadimos
+  if(inventario.find(p => p.name === nuevo.nombre)) {
+    return false; // Ya existe un producto con ese nombre, no lo añadimos
   }
   const existe = inventario.some(p => p.id === nuevo.id);
   if (!existe) {

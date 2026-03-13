@@ -27,7 +27,10 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
 
     const mostrarAlerta = (texto, tipo) => {
         setAlerta({ visible: true, texto, tipo });
-        setTimeout(() => setAlerta({ visible: false, texto: "", tipo: "" }), 3000);
+        setTimeout(() => 
+            setAlerta({ 
+                visible: false, texto: "", tipo: "" 
+            }), 3000);
     };
 
     const renderCampoDinamico = () => {
