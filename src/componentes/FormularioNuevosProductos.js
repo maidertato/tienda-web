@@ -5,7 +5,6 @@ import { DIVISA, crearNuevoProducto } from '../tienda/tienda.js';
 const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
     
-    // 1. Estado con todo lo necesario
     const [formData, setFormData] = useState({
         tipo: '',
         nombre: '',
@@ -21,7 +20,6 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     const [file, setFile] = useState(null);
     const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" });
 
-    // 2. HandleChange directo (sin diccionarios externos, más rápido)
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -32,9 +30,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         setTimeout(() => setAlerta({ visible: false, texto: "", tipo: "" }), 3000);
     };
 
-    // 3. Función para saber qué campo mostrar según el tipo
     const renderCampoDinamico = () => {
-        // Mapeo de qué campo mostrar según el tipo elegido
         const configExtra = {
             'Mobiliario': { label: 'Material', name: 'material', ph: 'Ej: Madera, Roble...' },
             'Juguete': { label: 'Tipo de Juguete', name: 'tipoJuguete', ph: 'Ej: Peluche, Cuerda...' },
@@ -53,7 +49,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 <input 
                     type="text" 
                     className="form-control" 
-                    name={config.name} // IMPORTANTE: que coincida con el estado
+                    name={config.name} 
                     value={formData[config.name]} 
                     onChange={handleChange} 
                     placeholder={config.ph} 
@@ -66,19 +62,16 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("1. Formulario enviado");
-
+        //Offline
         if (deshabilitado) {
-            console.warn("Abortado: El formulario está deshabilitado");
+            mostrarAlerta("El formulario está deshabilitado", "danger");
             return;
         }
 
         if (!formData.tipo) {
-            mostrarAlerta("Debes escoger un tipo", "danger");
+            mostrarAlerta("Escoge un tipo", "danger");
             return;
         }
-
-        console.log("Tipo enviado:", formData.tipo);  // ← AÑADE ESTO AQUÍ
 
         const precioNum = parseFloat(formData.precio);
         const nuevoProducto = {
@@ -87,21 +80,34 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             precio: precioNum
         };
 
-        console.log("2. Intentando instanciar con tipo:", formData.tipo);
-
         try {
             const productoInstanciado = crearNuevoProducto(formData.tipo, nuevoProducto);
             if (productoInstanciado) {
-                console.log("3. Éxito: Producto creado", productoInstanciado);
                 onAgregarProducto(formData.tipo, productoInstanciado);
                 mostrarAlerta("¡Producto añadido!", "success");
-                // Reset...
+
+                // Reset del formulario
+                setFormData({
+                    tipo: '',
+                    nombre: '',
+                    precio: '',
+                    descripcion: '',
+                    material: '',
+                    tipoJuguete: '',
+                    tipoAlimento: '',
+                    tipoAccesorio: '',
+                    categoria: '',
+                    estilo: ''
+                });
+                setFile(null);
+
+                const primerInput = document.querySelector('#form-producto [name="tipo"]');
+                if (primerInput) primerInput.focus();
+
             } else {
-                console.error("4. Error: crearNuevoProducto devolvió null o undefined");
-                mostrarAlerta("Error: No se pudo crear el producto", "danger");
+                mostrarAlerta("Error. No se pudo crear el producto", "danger");
             }
         } catch (error) {
-            console.error("5. Error catastrófico:", error);
             mostrarAlerta("Error al añadir el producto", "danger");
         }
     };
@@ -137,7 +143,6 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                     <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} step="0.01" min="0" placeholder="0.00" required disabled={deshabilitado} />
                 </div>
 
-                {/* AQUÍ ESTÁ EL CAMBIO: El campo dinámico ya no se llama "extra" */}
                 {renderCampoDinamico()}
 
                 {/* Descripción */}
