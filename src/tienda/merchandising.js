@@ -13,8 +13,12 @@ export default class Merchandising extends Producto {
         this.#color = color;
     }
 
-    get parteDelCuerpo() { return this.#parteDelCuerpo; }
-    set parteDelCuerpo(v) { this.#parteDelCuerpo = v; }
+    get parteDelCuerpo() { 
+        return this.#parteDelCuerpo; 
+    }
+    set parteDelCuerpo(v) { 
+        this.#parteDelCuerpo = v; 
+    }
 
     get talla() { return this.#talla; }
     set talla(v) { this.#talla = v; }

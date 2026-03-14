@@ -60,8 +60,8 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
         <div className="offcanvas-body" style={{ padding: '20px' }}>
           {/* Si el carrito está vacío, mostramos un mensaje */}
           {productosCarrito.length === 0 ? (
-            <div class="carrito-vacio-vista animate__animated animate__fadeIn">
-              <svg class="vacio-icono-cart" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <div className="carrito-vacio-vista animate__animated animate__fadeIn">
+              <svg className="vacio-icono-cart" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path fill="currentColor"
                   d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                   <circle cx="9" cy="21" r="1"/>
@@ -70,8 +70,8 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
               <h4>No hay productos en tu carrito</h4>
               <p>¡Vuelve al inicio y empieza a comprar!</p>
               
-              <button class="btn-inicio" onClick={alCerrar}>
-                  <svg class="vacio-icono-home" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+              <button className="btn-inicio" onClick={alCerrar}>
+                  <svg className="vacio-icono-home" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                   <path fill="currentColor"
                       d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2z"/>
                   </svg>

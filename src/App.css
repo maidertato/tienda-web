@@ -331,7 +331,7 @@ aside button:hover {
 }
 
 .drop-zone-style {
-  border: 2px dashed #aaa;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
   border-radius: 8px;
   padding: 20px;
   text-align: center;
@@ -341,9 +341,10 @@ aside button:hover {
 
 .drop-zone-style.hover {
   border-color: #e0d7ff;
-  background-color: rgba(224, 215, 255, 0.2);
+  background-color: rgba(224, 215, 255, 0.3);
   color: #e0d7ff;
-  box-shadow: 0 0 12px 3px rgba(224, 215, 255, 0.5);
+  box-shadow: 0 0 15px rgba(224, 215, 255, 0.4);
+  transform: translateY(-1px);
 }
 
 .drop-zone-active {
@@ -361,11 +362,10 @@ aside button:hover {
   transition: background-color 0.3s;
 }
 
-/* Estado sin conexión: Fondo gris claro */
-.custom-drag-drop.offline-mode {
-  background-color: #e9ecef !important;
-  /* Gris claro conforme a Bootstrap */
-  border-color: #ced4da;
+.drop-zone-style.offline-mode {
+  background-color: rgba(200, 200, 200, 0.2) !important;
+  border-color: #999 !important;
+  color: #ccc !important;
   cursor: not-allowed;
 }
 
@@ -377,15 +377,18 @@ aside button:hover {
 }
 
 .drop-zone-custom {
+  width: 100% !important;
   border: 2px dashed #ccc;
   border-radius: 8px;
   padding: 30px 10px;
   text-align: center;
   color: #666;
   transition: all 0.3s ease;
+  pointer-events: auto;
 }
 
 .drop-zone-custom:hover {
+  pointer-events: none;
   border-color: #8e29b6;
   color: #8e29b6;
 }
@@ -396,7 +399,7 @@ aside button:hover {
 }
 
 /* =========================
-   MAIN / PRODUCTOS
+  MAIN / PRODUCTOS
    ========================= */
 main {
   flex: 1 !important;

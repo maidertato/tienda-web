@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FileUploader } from "react-drag-drop-files";
 import { DIVISA, crearNuevoProducto } from '../tienda/tienda.js';
 
@@ -19,6 +19,8 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     });
     const [file, setFile] = useState(null);
     const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" });
+    const [isDragging, setIsDragging] = useState(false);
+    const fileInputRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -40,7 +42,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             'Alimentacion': { label: 'Categoría Alimento', name: 'tipoAlimento', ph: 'Ej: Snack, Pienso...' },
             'Accesorios': { label: 'Estilo', name: 'estilo', ph: 'Ej: Vintage, Moderno...' },
             'Cabello': { label: 'Categoría', name: 'categoria', ph: 'Ej: Champú, Tinte...' },
-            'Merchandising': { label: 'Tipo Accesorio', name: 'tipoAccesorio', ph: 'Ej: Llavero, Taza...' }
+            'Merchandising': { label: 'Parte del Cuerpo', name: 'parteDelCuerpo', ph: 'Ej: Cabeza, Patas...' }
         };
 
         const config = configExtra[formData.tipo];
@@ -71,16 +73,25 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             return;
         }
 
+
+        
+
         if (!formData.tipo) {
             mostrarAlerta("Escoge un tipo", "danger");
             return;
+        }
+
+        let imagenUrl = null;
+        if (file) {
+            imagenUrl = URL.createObjectURL(file); // Esto crea una ruta tipo blob:http://...
         }
 
         const precioNum = parseFloat(formData.precio);
         const nuevoProducto = {
             id: "prod-" + Date.now(),
             ...formData,
-            precio: precioNum
+            precio: precioNum,
+            imagen: imagenUrl
         };
 
         try {
@@ -103,6 +114,10 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                     estilo: ''
                 });
                 setFile(null);
+
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = ""; 
+                }
 
                 const primerInput = document.querySelector('#form-producto [name="tipo"]');
                 if (primerInput) primerInput.focus();
@@ -143,7 +158,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 {/* Precio */}
                 <div className="mb-3">
                     <label className="form-label">Precio ({DIVISA})</label>
-                    <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} step="0.01" min="0" placeholder="0.00" required disabled={deshabilitado} />
+                    <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} onKeyDown={(e) => { if (["e","E","+","-"].includes(e.key)) e.preventDefault(); }} step="0.01" min="0" placeholder="0.00" required disabled={deshabilitado} />
                 </div>
 
 
@@ -155,20 +170,53 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
 
                 {renderCampoDinamico()}
 
-                {/* Imagen / FileUploader */}
+                {/* Imagen upload */}
+                <div className="mb-3">
+                    <label className="form-label text-white">Imagen del Producto</label>
+                    <input type="file" ref={fileInputRef} className="form-control" accept="image/*" disabled={deshabilitado} onChange={(e) => e.target.files && setFile(e.target.files[0])} />
+                </div>
+
+                {/* Imagen D&D */}
                 <div className="mb-4">
-                    <label className="form-label d-block text-white">Imagen del Producto</label>
-                    <FileUploader handleChange={(file) => setFile(file)} name="file" types={fileTypes} disabled={deshabilitado}>
-                        <div className="drop-zone-custom p-3 border rounded text-center w-100" style={{
-                            cursor: deshabilitado ? 'not-allowed' : 'pointer',
-                            borderStyle: 'dashed',
-                            backgroundColor: 'rgba(255,255,255,0.1)'
-                        }}>
-                            {file ? <span className="text-success">✓ {file.name}</span> : "Arrastra o haz clic para subir imagen"}
+                    <label className="form-label">O arrastra la imagen aquí</label>
+
+                    <FileUploader
+                        handleChange={(file) => setFile(file)}
+                        name="file"
+                        types={fileTypes}
+                        disabled={deshabilitado}
+                        onDraggingStateChange={setIsDragging}
+                        hoverTitle=" "
+                        dropMessageStyle={{ display: 'none' }}
+                        classes="w-100" // Esto asegura que la librería ocupe el 100%
+                    >
+                        <div
+                            /* Combinamos tus clases dinámicamente */
+                            className={`drop-zone-style ${isDragging ? "hover" : ""} ${file ? "drop-zone-active" : ""} ${deshabilitado ? "offline-mode" : ""}`}
+                            style={{
+                                width: "100%",
+                                minHeight: "100px",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                cursor: deshabilitado ? "not-allowed" : "pointer"
+                            }}
+                        >
+                            {file ? (
+                                <span className="success-message">✓ {file.name}</span>
+                            ) : (
+                                <p className="m-0" style={{ pointerEvents: 'none' }}>
+                                    {deshabilitado 
+                                        ? "Subida deshabilitada (Sin conexión)" 
+                                        : (isDragging ? "¡Suelta la imagen!" : "Arrastra o haz clic para subir imagen")
+                                    }
+                                </p>
+                            )}
                         </div>
                     </FileUploader>
                 </div>
-
+                {/* Submit Button */}
                 <button type="submit" className="btn btn-custom w-100" disabled={deshabilitado}>
                     {deshabilitado ? "Sin conexión" : "+ Subir Producto"}
                 </button>
