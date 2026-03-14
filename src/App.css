@@ -21,11 +21,12 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* Para que se quede pegado abajo */
   background-color: rgba(255, 248, 252, 0.95);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 1rem;
+  padding-bottom: 100px !important;
+
 }
 
 /* =========================================
@@ -183,7 +184,7 @@ main .pagination-wrapper {
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  margin-bottom: 4rem;
+  margin-bottom: 8rem !important; 
 }
 
 #info-paginacion {
@@ -979,28 +980,38 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   font-weight: 500;
 }
 
-.btn-papelera {
-  background: none;
-  border: none;
-  padding: 8px;
+.btn-eliminar-coquette {
+  /* Esto elimina cualquier rastro del cuadrado feo */
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  
+  /* Alineación */
+  padding: 5px;
   cursor: pointer;
-  color: #a0a0a0;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 10px;
+  color: #b39ddb; 
+  transition: all 0.3s ease-in-out;
 }
 
-.btn-papelera svg {
+.btn-eliminar-coquette svg {
   width: 22px;
   height: 22px;
 }
 
-.btn-papelera:hover {
-  color: #e63946;
-  background-color: #ffeeee;
-  border-radius: 50%;
-  transform: scale(1.1);
+/* Efecto mágico al pasar el ratón */
+.btn-eliminar-coquette:hover {
+  color: #7e57c2; /* Se vuelve un poco más oscuro */
+  transform: scale(1.15) rotate(-5deg); /* Se agranda y se inclina */
+}
+
+/* Evitar que se ponga azul o gris al hacer click */
+.btn-eliminar-coquette:active {
+  transform: scale(0.9);
 }
 
 .carrito-total-barra {
@@ -1414,23 +1425,23 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 
 /*////////////////////////////////////////////////////////////*/
 
-/* =========================
-   FOOTER
-   ========================= */
 footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
   text-align: center;
   padding: 1rem;
-  background-color: #4b2e83;
-  background: linear-gradient(90deg, #d0b4f5);
+  background: #decbf8 !important;
   color: #4b2e83;
-  margin-top: auto;
-  border-radius: 0 0 15px 15px;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
   font-family: 'Quicksand', sans-serif;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(75, 46, 131, 0.2);
 }
 
-.imagen-producto {
-  cursor: pointer;
+.contenedor {
+  padding-bottom: 80px;
 }
 
 /* =========================
@@ -1438,21 +1449,21 @@ footer {
   ========================== */
 
 .badge-offline {
-  position: fixed; /* Cambiado de absolute a fixed */
+  position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #ff0000 !important; /* Rojo puro */
+  background-color: #ff0000 !important;
   color: white !important;
   padding: 10px 20px;
   border: 2px solid white;
   border-radius: 8px;
   font-weight: bold;
-  z-index: 9999; /* Un número muy alto para que vuele sobre todo */
+  z-index: 9999;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  pointer-events: none; /* Para que no moleste si quieres hacer clic debajo */
+  pointer-events: none; 
 }
 
-/* Zona Drag & Drop Personalizada - Requisito 3.1 */
+/* Zona Drag & Drop Personalizada */
 .custom-dropzone {
   border: 2px dashed #007bff;
   padding: 20px;

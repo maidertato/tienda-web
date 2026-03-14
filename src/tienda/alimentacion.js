@@ -1,12 +1,20 @@
 import Producto from './producto.js';
 
 export default class Alimentacion extends Producto {
-    constructor(n, p, d, i, tipoAlimento, tipoMascota) {
-        super(n, p, d, i, 'Alimentación');
-        this.tipoAlimento = tipoAlimento;
-        this.tipoMascota = tipoMascota;
+    #tipoAlimento;
+    #tipoMascota;
+
+    constructor(n, p, d, i, tipoAlimento, tipoMascota ) {
+        super(n, p, d, i, 'Alimentación'); 
+        
+        this.#tipoMascota = tipoMascota;
+        this.#tipoAlimento = tipoAlimento;
     }
-    obtenerInformacion() {
-        return this.tipoAlimento;
-    }
+
+    get tipoAlimento() { return this.#tipoAlimento; }
+    set tipoAlimento(v) { this.#tipoAlimento = v; }
+
+    get tipoMascota() { return this.#tipoMascota; }
+    set tipoMascota(v) { this.#tipoMascota = v; }
+
 }
