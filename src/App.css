@@ -1051,7 +1051,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   justify-content: center;
   height: 70%;
   text-align: center;
-  color: #521F84; /* Cambiado a un lila oscuro para que se lea */
+  color: #f8f4ff;
   padding: 2rem;
 }
 
@@ -1060,20 +1060,20 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   width: 130px;
   height: 120px;
   margin-bottom: 1.5rem;
-  color: #6A1B9A; /* Cambiado de blanco a un tono visible */
-  filter: drop-shadow(0 0 8px rgba(106, 27, 154, 0.2)); /* Sombra más sutil */
+  color: white;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
   opacity: 0.95;
 }
 
 .carrito-vacio-vista h4 {
   font-weight: 800;
-  color: #521F84; /* Título oscuro */
+  color: white;
   margin-bottom: 0.4rem;
 }
 
 .carrito-vacio-vista p {
   font-size: 0.95rem;
-  color: #666; /* Un gris oscuro para que se lea bien */
+  opacity: 0.9;
   margin-bottom: 1.5rem;
 }
 
