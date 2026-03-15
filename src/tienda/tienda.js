@@ -264,7 +264,7 @@ export function crearNuevoProducto(tipo, datos) {
         datos.precio, 
         datos.descripcion, 
         datos.imagen, 
-        datos.estilo,
+        datos.categoria,
         datos.tamaño || "Pequeño",
         datos.tipoMascota || "Perro",
         datos.color || "Azul"
@@ -276,7 +276,7 @@ export function crearNuevoProducto(tipo, datos) {
         datos.precio, 
         datos.descripcion, 
         datos.imagen, 
-        datos.tipoJuguete || "Pelota",
+        datos.tipoJuguete,
         datos.tamano || "Mediano",
         datos.esInteractivo === 'true'
       );
@@ -287,7 +287,7 @@ export function crearNuevoProducto(tipo, datos) {
         datos.precio, 
         datos.descripcion, 
         datos.imagen, 
-        datos.parteDelCuerpo || "Cabeza",
+        datos.parteDelCuerpo,
         datos.talla || "M",
         datos.color || "Azul"
       );
@@ -340,10 +340,10 @@ export const obtenerAtributoExtra = (producto) => {
               etiqueta: 'Tipo de Alimento', valor: producto.tipoAlimento || '' };
         case 'Juguete':
             return { 
-              etiqueta: 'Tipo de Juguete', valor: producto.tipoJuguete || '' };
+            etiqueta: 'Tipo de Juguete', valor: producto.categoriajuguete || producto.tipo || '' };
         case 'Merchandising':
             return { 
-              etiqueta: 'Parte del cuerpo', valor: producto.parteCuerpo || '' };
+              etiqueta: 'Parte del cuerpo', valor: producto.parteDelCuerpo || '' };
         case 'Accesorios':
             return { 
               etiqueta: 'Tipo de Mascota', valor: producto.tipoMascota || '' };

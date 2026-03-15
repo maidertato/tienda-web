@@ -37,7 +37,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
           display: 'block',
           width: '400px',
           borderRight: 'none',
-          backgroundColor: '#e8b5fd', 
+          backgroundColor: '#9c61d6', 
           boxShadow: '10px 0 30px rgba(0,0,0,0.1)',
           borderRadius: '0 20px 20px 0' // Bordes redondeados a la derecha
         }}
@@ -45,7 +45,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
         {/* Cabecera personalizada */}
         <div className="offcanvas-header" style={{ borderBottom: '1px solid #d1a7eb', padding: '20px' }}>
           <h5 className="offcanvas-title" style={{ fontWeight: '700', color: '#6A1B9A', fontSize: '1.5rem' }}>
-            Mi Carrito
+            Carrito de la compra
           </h5>
           {/* Botón para cerrar el panel lateral */}
           <button
@@ -60,19 +60,24 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
         <div className="offcanvas-body" style={{ padding: '20px' }}>
           {/* Si el carrito está vacío, mostramos un mensaje */}
           {productosCarrito.length === 0 ? (
-            <div className="carrito-vacio-vista">
-              {/* Aquí pones tu icono, puede ser un emoji grande o un SVG */}
-              
-              
-              <h4>¡Tu carrito está vacío!</h4>
-              <p>Parece que aún no has elegido nada para tu mascota.</p>
+            <div className="carrito-vacio-vista animate__animated animate__fadeIn">
+              <svg className="vacio-icono-cart" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="currentColor"
+                  d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+              </svg>
+              <h4>No hay productos en tu carrito</h4>
+              <p>¡Vuelve al inicio y empieza a comprar!</p>
               
               <button className="btn-inicio" onClick={alCerrar}>
-                <svg viewBox="0 0 24 24" width="20" height="20" className="icono-casa-glow" style={{ marginRight: '10px' }}>
-                  <path d="M12 3L2 12H5V20H19V12H22L12 3Z" style={{ fill: '#521F84' }} />
-                </svg>
-                Inicio
+                  <svg className="vacio-icono-home" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="currentColor"
+                      d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2z"/>
+                  </svg>
+                  Inicio
               </button>
+
             </div>
           ) : (
             <div className="d-flex flex-column h-100">
@@ -149,32 +154,24 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
               {/* Sección de Total y Botones inferior */}
               <div className="mt-auto pt-4" style={{ borderTop: '2px dashed #E6D5F7' }}>
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                  <span style={{ fontSize: '1.2rem', fontWeight: '600', color: '#666' }}>Total:</span>
-                  <span style={{ fontSize: '1.8rem', fontWeight: '800', color: '#6A1B9A' }}>
+                  <span style={{ fontSize: '1.2rem', fontWeight: '600', color: 'white' }}>Total:</span>
+                  <span style={{ fontSize: '1.8rem', fontWeight: '800', color: 'white' }}>
                     {total.toFixed(2)}{DIVISA}
                   </span>
                 </div>
 
-                {/* Botón principal de compra */}
+                {/* Botón para borrar todos los elementos del carrito de golpe */}
                 <button
                   className="btn w-100 mb-3"
                   style={{
-                    backgroundColor: '#6A1B9A',
-                    color: 'white',
+                    backgroundColor: 'white',
+                    color: 'black',
                     padding: '12px',
                     borderRadius: '12px',
                     fontWeight: '700',
                     fontSize: '1.1rem',
                     boxShadow: '0 4px 15px rgba(106, 27, 154, 0.3)'
                   }}
-                >
-                  Confirmar Pedido
-                </button>
-
-                {/* Botón para borrar todos los elementos del carrito de golpe */}
-                <button
-                  className="btn btn-link w-100 text-muted"
-                  style={{ textDecoration: 'none', fontSize: '0.9rem' }}
                   onClick={alVaciar}
                 >
                   Vaciar todo

@@ -1,24 +1,24 @@
 import Producto from './producto.js';
 
 export default class Juguete extends Producto {
-    #tipo;
+    #categoriajuguete;
     #tamano;
     #esInteractivo;
 
     constructor(n, p, d, i, tipo, tamano, interactivo) {
         super(n, p, d, i, 'Juguete');
 
-        this.#tipo = tipo;
+        this.#categoriajuguete = tipo;
         this.#tamano = tamano;
         this.#esInteractivo = interactivo;
     }
 
-    get tipo() { 
-        return this.#tipo; 
+    get categoriajuguete() { 
+        return this.#categoriajuguete; 
     }
 
-    set tipo(v) { 
-        this.#tipo = v; 
+    set categoriajuguete(v) { 
+        this.#categoriajuguete = v; 
     }
 
     get tamano() { 
