@@ -9,24 +9,20 @@ import FiltroCategorias from './FiltroCategorias';
 // COMPONENTE PARA GESTIONAR LAS IMÁGENES Y VARIANTES
 //////////////////////////////////
 const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => {
-    // Usamos useMemo para que el array de imágenes sea estable
     const imagenes = useMemo(() => {
         return prod.variantes && prod.variantes.length > 0
             ? prod.variantes
             : [{ nombre: '', imagen: prod.imagen }];
     }, [prod.variantes, prod.imagen]);
 
-    // Índice para saber qué foto del carrusel estamos viendo
     const [idx, setIdx] = useState(0);
 
-    // Sincronizar el nombre de la variante cada vez que se cambie de imagen
     useEffect(() => {
         if (onVarianteChange && imagenes[idx]) {
             onVarianteChange(imagenes[idx].nombre || "");
         }
     }, [idx, imagenes, onVarianteChange]);
 
-    // Función para pasar fotos adelante o atrás
     const cambiarImagen = (e, direccion) => {
         e.stopPropagation();
         if (direccion === 'next') {
@@ -37,7 +33,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
     };
 
     return (
-        <div className="position-relative imagen-wrapper">
+        <div className="card-img-container position-relative imagen-wrapper">
             {imagenes.length > 1 && (
                 <>
                     <div className="flecha flecha-izq" onClick={(e) => cambiarImagen(e, 'prev')}></div>
@@ -49,8 +45,8 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
                 src={imagenes[idx]?.imagen || prod.imagen}
                 className="card-img-top p-3"
                 alt={prod.nombre}
-                style={{ height: '220px', objectFit: 'contain', cursor: 'pointer' }}
-                onClick={() => setProductoSeleccionado(prod)}
+                style={{ height: '100%', width: '100%', objectFit: 'contain', cursor: 'pointer' }}
+                onClick={() => setProductoSeleccionado({ producto: prod, variante: imagenes[idx] })}
             />
         </div>
     );
@@ -61,49 +57,54 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
 //////////////////////////////////////
 const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, categoria, setCategoria, paginaActual, setPaginaActual, carrito = [] }) => {
     
-    // ESTADOS
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [productosPerPage] = useState(6);
     const [idAnadido, setIdAnadido] = useState(null);
     const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
 
-    // 1. LÓGICA DE FILTRADO (Con limpieza de tildes para evitar fallos)
+    // 1. LÓGICA DE FILTRADO
     const productosFiltrados = useMemo(() => {
-    // Si no hay productos, devolvemos array vacío sin preguntar
-    if (!productos) return [];
+            if (!productos) return [];
 
-        return productos.filter(prod => {
-            // SEGURIDAD: Si por error un producto no tiene nombre, usamos un texto vacío
-            const nombreProd = (prod.nombre || "").toLowerCase();
-            const busquedaNormal = (busqueda || "").toLowerCase();
-            
-            const coincideBusqueda = nombreProd.includes(busquedaNormal);
-            
-            // SEGURIDAD: Si categoria es "Todas" o no existe, mostramos todo lo que coincida con búsqueda
-            if (!categoria || categoria === "Todas") {
-                return coincideBusqueda;
-            }
+            return productos.filter(prod => {
+                const nombreProd = (prod.nombre || "").toLowerCase();
+                const busquedaNormal = (busqueda || "").toLowerCase();
+                const coincideBusqueda = nombreProd.includes(busquedaNormal);
+                
+                if (!categoria || categoria === "Todas") {
+                    return coincideBusqueda;
+                }
 
-            // SEGURIDAD: Normalizamos ambos para comparar
-            const tipoProducto = (prod.tipo || "").toLowerCase();
-            const categoriaSeleccionada = categoria.toLowerCase();
+                // Función para quitar tildes y poner en minúsculas
+                const normalizar = (texto) => 
+                    texto.toString()
+                        .toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "");
 
-            const coincideCategoria = tipoProducto === categoriaSeleccionada;
+                const tipoProducto = normalizar(prod.tipo || "");
+                const categoriaSeleccionada = normalizar(categoria);
 
-            return coincideCategoria && coincideBusqueda;
-        });
-    }, [productos, categoria, busqueda]);
+                // Ahora comparamos "alimentacion" con "alimentacion"
+                const coincideCategoria = tipoProducto === categoriaSeleccionada;
+                // -------------------------------
+
+                return coincideCategoria && coincideBusqueda;
+            });
+        }, [productos, categoria, busqueda]);
+
+
+
+
     // 2. LÓGICA DE PAGINACIÓN
     const indexOfLastProduct = paginaActual * productosPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
     const currentProducts = productosFiltrados.slice(indexOfFirstProduct, indexOfLastProduct);
 
-    // Volver a página 1 si cambia la búsqueda o filtro
     useEffect(() => {
         setPaginaActual(1);
     }, [busqueda, categoria, setPaginaActual]);
 
-    // GESTIÓN DEL CARRITO (Límite 20 unidades)
     const handleAnadirConTooltip = (prod) => {
         const itemEnCarrito = carrito.find(item => item.id === prod.id);
         const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
@@ -124,28 +125,18 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
     return (
         <div className="container-fluid">
-            {/* Cabecera con Filtros y Buscador */}
             <div className="d-flex justify-content-between align-items-center px-3 mb-4" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <h2 className="h4 text-secondary m-0">Todos los productos</h2>
-                
                 <div className='d-flex gap-2 align-items-center'>
                     <div style={{ width: '180px' }}>
-                        <FiltroCategorias
-                            categoriaActual={categoria}
-                            onCambio={setCategoria}
-                        />
+                        <FiltroCategorias categoriaActual={categoria} onCambio={setCategoria} />
                     </div>
                     <div style={{ width: '250px' }}>
-                        <BuscadorProductos
-                            titulo=""
-                            terminoBusqueda={busqueda}
-                            onCambio={setBusqueda}
-                        />
+                        <BuscadorProductos titulo="" terminoBusqueda={busqueda} onCambio={setBusqueda} />
                     </div>
                 </div>
             </div>
 
-            {/* Rejilla de Productos */}
             <div className="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 p-3 justify-content-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 {currentProducts.length > 0 ? (
                     currentProducts.map((prod) => {
@@ -155,8 +146,6 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                         return (
                             <div key={prod.id} className="col d-flex justify-content-center">
                                 <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
-                                    
-                                    {/* Imagen y Botón Carrito */}
                                     <div className="position-relative">
                                         <CarruselImagen
                                             prod={prod}
@@ -172,7 +161,6 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                         </div>
                                     </div>
 
-                                    {/* Cuerpo de la Tarjeta */}
                                     <div className="card-body d-flex flex-column text-start">
                                         <h4 className="card-title-escaparate">
                                             {prod.nombre}{nombreVariante ? ` - ${nombreVariante}` : ""}
@@ -196,7 +184,6 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 )}
             </div>
 
-            {/* Paginación */}
             <Paginacion
                 totalProductos={productosFiltrados.length}
                 productosPorPagina={productosPerPage}
@@ -204,10 +191,10 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 onCambiarPagina={paginate}
             />
 
-            {/* Modal de Detalles */}
             {productoSeleccionado && (
                 <DetallesProducto
-                    producto={productoSeleccionado}
+                    producto={productoSeleccionado.producto}
+                    variante={productoSeleccionado.variante}
                     onCerrar={() => setProductoSeleccionado(null)}
                 />
             )}

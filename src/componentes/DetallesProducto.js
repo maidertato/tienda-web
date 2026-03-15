@@ -4,12 +4,17 @@ import { DIVISA } from '../tienda/tienda.js';
 //Detalles producto es una ventana modal 
 // (pop-up) que muestra la información 
 // detallada de un producto.
-const DetallesProducto = ({ producto, onCerrar }) => {
+const DetallesProducto = ({ producto, variante, onCerrar }) => {
     // - producto: el objeto con los datos (nombre, precio...)
+    // - variante: la variante del producto seleccionada
     // - onCerrar: la función para quitar el modal de la pantalla
 
+    
     //Si no hay producto seleccionado, no hace nada
     if (!producto) return null;
+
+    const nombre = variante?.nombre || producto.nombre;
+    const imagen = variante?.imagen || producto.imagen;
 
     return (
         // Fondo oscuro y borroso que cubre toda la pantalla
@@ -27,7 +32,7 @@ const DetallesProducto = ({ producto, onCerrar }) => {
 
                     {/*Columna izquierda --> imagen del producto*/}
                     <div className="modal-left-column">
-                        <img src={producto.imagen} alt={producto.nombre} className="modal-img" />
+                        <img src={imagen} alt={nombre} className="modal-img" />
                     </div>
 
                     {/* Columna derecha --> información del producto */}
@@ -35,7 +40,7 @@ const DetallesProducto = ({ producto, onCerrar }) => {
 
                         {/* Título del producto */}
                         <div className="modal-title-box">
-                            {producto.nombre}
+                            {producto.nombre}{variante?.nombre ? ` - ${variante.nombre}` : ""}
                         </div>
 
                         {/* Precio del producto */}

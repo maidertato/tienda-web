@@ -7,8 +7,8 @@ export default class Producto {
     #tipo;
 
     constructor(nombre, precio, descripcion, imagen, tipo = 'general') {
+        
         this.#id = btoa(nombre + Date.now() + Math.random()).substring(0, 12);
-
         this.#nombre = nombre;
         this.#precio = precio;
         this.#descripcion = descripcion;
@@ -16,20 +16,44 @@ export default class Producto {
         this.#tipo = tipo;
     }
 
-    get id() { return this.#id; }
+    get id() { 
+        return this.#id; 
+    }
 
-    get nombre() { return this.#nombre; }
-    set nombre(v) { this.#nombre = v; }
+    get nombre() { 
+        return this.#nombre; 
+    }
 
-    get precio() { return this.#precio; }
-    set precio(v) { this.#precio = v; }
+    set nombre(v) { 
+        this.#nombre = v; 
+    }
 
-    get descripcion() { return this.#descripcion; }
-    set descripcion(v) { this.#descripcion = v; }
+    get precio() { 
+        return this.#precio; 
+    }
 
-    get imagen() { return this.#imagen; }
-    set imagen(v) { this.#imagen = v; }
+    set precio(v) { 
+        this.#precio = v; 
+    }
 
-    get tipo() { return this.#tipo; }
-    set tipo(v) { this.#tipo = v; }
+    get descripcion() { 
+        return this.#descripcion; 
+    }
+
+    set descripcion(v) { 
+        this.#descripcion = v; 
+    }
+
+    get imagen() { 
+        return this.#imagen; 
+    }
+
+    set imagen(v) { 
+        this.#imagen = v; 
+    }
+
+    get tipo() { 
+        return this.#tipo; 
+    }
+
 }
