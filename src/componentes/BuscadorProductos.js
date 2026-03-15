@@ -16,7 +16,6 @@ const BuscadorProductos = ({
 
             <div className='input-group'>
                 <span className="input-group-text bg-transparent border-end-0">
-                    🔍
                 </span>
                 <input
                     type="text"

@@ -179,7 +179,7 @@ function App() {
           <main className="col-md-8">
             {/* 2. EscaparateProductos ahora recibe la lógica de búsqueda */}
             <EscaparateProductos
-              productos={productosFiltrados}
+              productos={productos}
               onAnadirAlCarrito={manejarAnadirAlCarrito}
               carrito={carrito}
               busqueda={busqueda}

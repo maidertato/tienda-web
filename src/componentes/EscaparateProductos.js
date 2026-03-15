@@ -2,27 +2,31 @@ import React, { useState, useEffect, useMemo } from 'react';
 import DetallesProducto from './DetallesProducto';
 import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
-import { obtenerAtributoExtra } from '../tienda/tienda.js';
 import FiltroCategorias from './FiltroCategorias';
+import { obtenerAtributoExtra } from '../tienda/tienda.js';
 
 //////////////////////////////////
 // COMPONENTE PARA GESTIONAR LAS IMÁGENES Y VARIANTES
 //////////////////////////////////
 const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => {
+    // Usamos useMemo para que el array de imágenes sea estable y no cambie en cada render
     const imagenes = useMemo(() => {
         return prod.variantes && prod.variantes.length > 0
             ? prod.variantes
             : [{ nombre: '', imagen: prod.imagen }];
     }, [prod.variantes, prod.imagen]);
 
+    // Índice para saber qué foto del carrusel estamos viendo
     const [idx, setIdx] = useState(0);
 
+    // Sincronizar el nombre de la variante cada vez que se cambie de imagen
     useEffect(() => {
         if (onVarianteChange && imagenes[idx]) {
             onVarianteChange(imagenes[idx].nombre || "");
         }
-    }, [idx, imagenes]);
+    }, [idx, imagenes, onVarianteChange]);
 
+    // Función para pasar fotos adelante o atrás sin que se cierren los detalles
     const cambiarImagen = (e, direccion) => {
         e.stopPropagation();
         if (direccion === 'next') {
@@ -34,6 +38,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
 
     return (
         <div className="card-img-container position-relative imagen-wrapper">
+            {/* Solo mostramos flechas si hay más de una imagen disponible */}
             {imagenes.length > 1 && (
                 <>
                     <div className="flecha flecha-izq" onClick={(e) => cambiarImagen(e, 'prev')}></div>
@@ -41,12 +46,13 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
                 </>
             )}
 
+            {/* Imagen principal: Si haces clic en ella, se abre el modal de detalles */}
             <img
                 src={imagenes[idx]?.imagen || prod.imagen}
                 className="card-img-top p-3"
                 alt={prod.nombre}
                 style={{ height: '100%', width: '100%', objectFit: 'contain', cursor: 'pointer' }}
-                onClick={() => setProductoSeleccionado({ producto: prod, variante: imagenes[idx] })}
+                onClick={() => setProductoSeleccionado(prod)}
             />
         </div>
     );
@@ -56,66 +62,64 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
 // COMPONENTE PRINCIPAL: ESCAPARATE COMPLETO
 //////////////////////////////////////
 const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, categoria, setCategoria, precioMax, setPrecioMax, paginaActual, setPaginaActual, carrito = [] }) => {
-    
+    // Estado para saber qué producto mostrar en la caja de detalles
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+    // 6 productos para que sean filas de 3
     const [productosPerPage] = useState(6);
+    // Estado para controlar qué burbuja de mensaje (exito/error) se muestra
     const [idAnadido, setIdAnadido] = useState(null);
+    // Guardamos qué variante está seleccionada en cada producto para el título
     const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
     
-    // Estado para controlar la visibilidad del botón de filtros
     const [showFiltros, setShowFiltros] = useState(false);
 
-    // 1. LÓGICA DE FILTRADO
     const productosFiltrados = useMemo(() => {
-            if (!productos) return [];
+        if (!productos) return [];
+        return productos.filter(prod => {
+            const nombreProd = (prod.nombre || "").toLowerCase();
+            const busquedaNormal = (busqueda || "").toLowerCase();
+            const coincideBusqueda = nombreProd.includes(busquedaNormal);
+            const coincidePrecio = prod.precio <= precioMax;
 
-            return productos.filter(prod => {
-                const nombreProd = (prod.nombre || "").toLowerCase();
-                const busquedaNormal = (busqueda || "").toLowerCase();
-                const coincideBusqueda = nombreProd.includes(busquedaNormal);
-                const coincidePrecio = prod.precio <= precioMax;
+            if (!categoria || categoria === "Todas") {
+                return coincideBusqueda && coincidePrecio;
+            }
 
-                if (!categoria || categoria === "Todas") {
-                    return coincideBusqueda && coincidePrecio;
-                }
+            const normalizar = (texto) => 
+                texto.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            
+            return normalizar(prod.tipo || "") === normalizar(categoria) && coincideBusqueda && coincidePrecio;
+        });
+    }, [productos, categoria, busqueda, precioMax]);
 
-                const normalizar = (texto) => 
-                    texto.toString()
-                        .toLowerCase()
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "");
-
-                const tipoProducto = normalizar(prod.tipo || "");
-                const categoriaSeleccionada = normalizar(categoria);
-
-                const coincideCategoria = tipoProducto === categoriaSeleccionada;
-
-                return coincideCategoria && coincideBusqueda && coincidePrecio;
-            });
-        }, [productos, categoria, busqueda, precioMax]);
-
-    // 2. LÓGICA DE PAGINACIÓN
-    const indexOfLastProduct = paginaActual * productosPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
-    const currentProducts = productosFiltrados.slice(indexOfFirstProduct, indexOfLastProduct);
-
+    // Si el usuario busca algo, volvemos automáticamente a la página 1
     useEffect(() => {
         setPaginaActual(1);
     }, [busqueda, categoria, precioMax, setPaginaActual]);
 
+    // Gestiona el clic en el carrito y controla el límite de 20 unidades
     const handleAnadirConTooltip = (prod) => {
         const itemEnCarrito = carrito.find(item => item.id === prod.id);
         const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
 
+        // Comprobamos el límite de 20 unidades
         if (cantidadActual >= 20) {
             setIdAnadido(`${prod.id}-error`);
         } else {
             onAnadirAlCarrito(prod);
             setIdAnadido(`${prod.id}-exito`);
         }
+
+        // Limpiamos el mensaje después de 2 segundos
         setTimeout(() => setIdAnadido(null), 2000);
     };
 
+    // Lógica de paginación: calculamos qué trozo del array de productos mostrar
+    const indexOfLastProduct = paginaActual * productosPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
+    const currentProducts = productosFiltrados.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    // Cambia de página y sube el scroll arriba del todo
     const paginate = (pageNumber) => {
         setPaginaActual(pageNumber);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -123,28 +127,25 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
     return (
         <div className="container-fluid">
-            <div className="d-flex justify-content-between align-items-center px-3 mb-4" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            {/* Buscador integrado en la parte superior del escaparate */}
+            <div className="d-flex justify-content-between align-items-center px-3 mb-2" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <h2 className="h4 text-secondary m-0">Todos los productos</h2>
-                <div className='d-flex gap-2 align-items-center position-relative'>
-                    
+                <div className="d-flex gap-2 align-items-center position-relative">
                     <div style={{ width: '250px' }}>
-                        <BuscadorProductos titulo="" terminoBusqueda={busqueda} onCambio={setBusqueda} />
+                        <BuscadorProductos
+                            titulo=""
+                            terminoBusqueda={busqueda}
+                            onCambio={setBusqueda}
+                        />
                     </div>
 
-                    {/* Botón Morado con icono de niveles (Sliders) */}
                     <button 
                         onClick={() => setShowFiltros(!showFiltros)}
+                        className="btn-filtros-toggle"
                         style={{ 
-                            backgroundColor: '#8e24aa', 
-                            border: 'none',
-                            borderRadius: '12px',
-                            width: '45px',
-                            height: '45px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            color: 'white'
+                            backgroundColor: '#8e24aa', border: 'none', borderRadius: '12px',
+                            width: '45px', height: '45px', color: 'white', display: 'flex',
+                            alignItems: 'center', justifyContent: 'center'
                         }}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
@@ -152,94 +153,98 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                         </svg>
                     </button>
 
-                    {/* Popover que contiene TODO el menú de FiltroCategorias */}
                     {showFiltros && (
-                        <div className="shadow" style={{
-                            position: 'absolute',
-                            top: '100%',
-                            right: 0,
-                            zIndex: 1050,
-                            backgroundColor: 'white',
-                            borderRadius: '15px',
-                            marginTop: '10px',
-                            border: '1px solid #eee',
-                            minWidth: '220px'
+                        <div className="shadow-lg p-3" style={{
+                            position: 'absolute', top: '100%', right: 0, zIndex: 1050,
+                            backgroundColor: 'white', borderRadius: '15px', marginTop: '10px', minWidth: '250px'
                         }}>
                             <FiltroCategorias 
                                 categoriaActual={categoria} 
                                 onCambio={(cat) => { setCategoria(cat); setShowFiltros(false); }} 
                                 precioMax={precioMax} 
                                 onCambioPrecio={setPrecioMax}
-                                alLimpiar={() => {
-                                    setCategoria("Todas");
-                                    setPrecioMax(100);
-                                    setBusqueda("");
-                                    setShowFiltros(false);
-                                }}
+                                alLimpiar={() => { setCategoria("Todas"); setPrecioMax(100); setBusqueda(""); setShowFiltros(false); }}
                             />
                         </div>
                     )}
                 </div>
             </div>
 
-            <div className="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 p-3 justify-content-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                {currentProducts.length > 0 ? (
-                    currentProducts.map((prod) => {
-                        const info = obtenerAtributoExtra(prod);
-                        const nombreVariante = variantesSeleccionadas[prod.id] || "";
+            {/* Ajuste de rejilla para asegurar 3 productos en pantallas grandes y medianas */}
+            <div id="lista-productos" className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-3 px-3" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                {currentProducts.map((prod) => {
+                    const info = obtenerAtributoExtra(prod);
+                    const nombreVariante = variantesSeleccionadas[prod.id] || "";
 
-                        return (
-                            <div key={prod.id} className="col d-flex justify-content-center">
-                                <div className="card shadow-sm border-0 card-producto-tienda" style={{ width: '320px', minHeight: '480px' }}>
-                                    <div className="position-relative">
-                                        <CarruselImagen
-                                            prod={prod}
-                                            setProductoSeleccionado={setProductoSeleccionado}
-                                            onVarianteChange={(nombre) => {
-                                                setVariantesSeleccionadas(prev => ({ ...prev, [prod.id]: nombre }));
-                                            }}
-                                        />
-                                        <div className="btn-carrito-container">
-                                            {idAnadido === `${prod.id}-exito` && <div className="mensaje-exito-flotante">¡Añadido!</div>}
-                                            {idAnadido === `${prod.id}-error` && <div className="mensaje-error-flotante" style={{ backgroundColor: '#d93025' }}>Máx. 20</div>}
-                                            <button className="btn-carrito-circular" onClick={() => handleAnadirConTooltip(prod)}>🛒</button>
-                                        </div>
+                    return (
+                        <div key={prod.id} className="col d-flex justify-content-center">
+                            <div className="card-producto-tienda w-100 h-100 shadow-sm border-0">
+                                <div className="position-relative">
+                                    <CarruselImagen
+                                        prod={prod}
+                                        setProductoSeleccionado={setProductoSeleccionado}
+                                        onVarianteChange={(nombre) => {
+                                            setVariantesSeleccionadas(prev => ({
+                                                ...prev,
+                                                [prod.id]: nombre
+                                            }));
+                                        }}
+                                    />
+
+                                    {/* Boton lateral del producto */}
+                                    <div className="btn-carrito-container">
+                                        {idAnadido === `${prod.id}-exito` && (
+                                            <div className="mensaje-exito-flotante">¡Añadido!</div>
+                                        )}
+                                        {idAnadido === `${prod.id}-error` && (
+                                            <div className="mensaje-error-flotante">
+                                                Máx. 20 unidades
+                                            </div>
+                                        )}
+                                        <button
+                                            className="btn-agregar-flotante"
+                                            onClick={() => handleAnadirConTooltip(prod)}
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '20px' }}><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+                                        </button>
                                     </div>
+                                </div>
 
-                                    <div className="card-body d-flex flex-column text-start">
-                                        <h4 className="card-title-escaparate">
-                                            {prod.nombre}{nombreVariante ? ` - ${nombreVariante}` : ""}
-                                        </h4>
-                                        <p className="card-precio-escaparate">{prod.precio}€</p>
-                                        <div className="mt-2">
-                                            <p className="mb-1 text-secondary" style={{ fontSize: '0.9rem' }}>
-                                                <strong>{info.etiqueta}:</strong> {info.valor}
-                                            </p>
-                                            <p className="description-text-card">{prod.descripcion}</p>
-                                        </div>
+                                <div className="card-body d-flex flex-column">
+                                    <h4 className="card-title">
+                                        {prod.nombre}{nombreVariante ? ` - ${nombreVariante}` : ""}
+                                    </h4>
+                                    <p className="card-precio-estilo">{prod.precio}€</p>
+
+                                    <div className="mt-auto">
+                                        <p className="mb-1 text-secondary" style={{ fontSize: '0.85rem' }}>
+                                            <strong>{info.etiqueta}:</strong> {info.valor}
+                                        </p>
+                                        <p className="descripcion-producto">
+                                            {prod.descripcion}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                        );
-                    })
-                ) : (
-                    <div className="text-center w-100 py-5">
-                        <p className="text-muted">No se encontraron productos.</p>
-                    </div>
-                )}
+                        </div>
+                    );
+                })}
             </div>
 
-            <Paginacion
-                totalProductos={productosFiltrados.length}
-                productosPorPagina={productosPerPage}
-                paginaActual={paginaActual}
-                onCambiarPagina={paginate}
-            />
+            {/* Componente de flechas/números de página */}
+            <div className="mt-4">
+                <Paginacion
+                    totalProductos={productosFiltrados.length}
+                    productosPorPagina={productosPerPage}
+                    paginaActual={paginaActual}
+                    onCambiarPagina={paginate}
+                />
+            </div>
 
+            {/* Si hay un producto clickado, mostramos la caja de detalles */}
             {productoSeleccionado && (
                 <DetallesProducto
-                    producto={productoSeleccionado.producto}
-                    variante={productoSeleccionado.variante}
+                    producto={productoSeleccionado}
                     onCerrar={() => setProductoSeleccionado(null)}
                 />
             )}
