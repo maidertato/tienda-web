@@ -216,13 +216,14 @@ main .pagination-wrapper {
   ========================================= */
 aside {
   background-color: #9C66D4;
-  padding: 1.5rem;
+  padding: 1.2rem;
   border-radius: 20px;
   align-self: flex-start;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 260px;
   top: 2rem;
   font-family: 'Quicksand', sans-serif;
+  flex-shrink: 0;
 }
 
 aside h3 {

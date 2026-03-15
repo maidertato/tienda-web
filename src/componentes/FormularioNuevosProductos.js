@@ -3,7 +3,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { DIVISA, crearNuevoProducto } from '../tienda/tienda.js';
 
 const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
-    const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
+    const fileTypes = ["jpg", "png", "jpeg"];
     
     const [formData, setFormData] = useState({
         tipo: '',
@@ -33,6 +33,26 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             setAlerta({ 
                 visible: false, texto: "", tipo: "" 
             }), 3000);
+    };
+
+    const handleFile = (archivo) => {
+        if (!archivo) return;
+        // Si ya hay imagen
+        if (file) {
+            mostrarAlerta("Ya hay una imagen seleccionada. No puedes subir otra.", "danger");
+            return;
+        }
+        // Validar formato
+        const formatosPermitidos = ["jpg", "jpeg", "png", "gif"];
+        const extension = archivo.name.split(".").pop().toLowerCase();
+        if (!formatosPermitidos.includes(extension)) {
+            mostrarAlerta(
+                "Formato no válido. La imagen debe ser JPG, JPEG, PNG o GIF.",
+                "danger"
+            );
+            return;
+        }
+        setFile(archivo);
     };
 
     const renderCampoDinamico = () => {
@@ -173,7 +193,15 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 {/* Imagen upload */}
                 <div className="mb-3">
                     <label className="form-label text-white">Imagen del Producto</label>
-                    <input type="file" ref={fileInputRef} className="form-control" accept="image/*" disabled={deshabilitado} onChange={(e) => e.target.files && setFile(e.target.files[0])} />
+                    <input type="file" ref={fileInputRef} className="form-control" accept="image/*" disabled={deshabilitado} onChange={(e) => {
+                                                    const archivos = e.target.files;
+                                                    if (!archivos || archivos.length === 0) return;
+                                                    if (archivos.length > 1) {
+                                                        mostrarAlerta("Solo puedes subir un archivo", "danger");
+                                                        return;
+                                                    }
+                                                    handleFile(archivos[0]);
+                                                }} />
                 </div>
 
                 {/* Imagen D&D */}
@@ -181,14 +209,17 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                     <label className="form-label">O arrastra la imagen aquí</label>
 
                     <FileUploader
-                        handleChange={(file) => setFile(file)}
+                        handleChange={(file) => handleFile(file)}
                         name="file"
                         types={fileTypes}
                         disabled={deshabilitado}
                         onDraggingStateChange={setIsDragging}
+                        onTypeError={() =>
+                            mostrarAlerta("Formato no válido. La imagen debe ser JPG, JPEG, PNG o GIF.", "danger")
+                        }
                         hoverTitle=" "
                         dropMessageStyle={{ display: 'none' }}
-                        classes="w-100" // Esto asegura que la librería ocupe el 100%
+                        classes="w-100"
                     >
                         <div
                             /* Combinamos tus clases dinámicamente */
