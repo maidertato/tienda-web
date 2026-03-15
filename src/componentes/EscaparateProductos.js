@@ -55,7 +55,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
 //////////////////////////////////////
 // COMPONENTE PRINCIPAL: ESCAPARATE COMPLETO
 //////////////////////////////////////
-const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, categoria, setCategoria, paginaActual, setPaginaActual, carrito = [] }) => {
+const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, categoria, setCategoria, precioMax, setPrecioMax, paginaActual, setPaginaActual, carrito = [] }) => {
     
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [productosPerPage] = useState(6);
@@ -70,7 +70,8 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 const nombreProd = (prod.nombre || "").toLowerCase();
                 const busquedaNormal = (busqueda || "").toLowerCase();
                 const coincideBusqueda = nombreProd.includes(busquedaNormal);
-                
+                const coincidePrecio = prod.precio <= precioMax;
+
                 if (!categoria || categoria === "Todas") {
                     return coincideBusqueda;
                 }
@@ -89,9 +90,9 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 const coincideCategoria = tipoProducto === categoriaSeleccionada;
                 // -------------------------------
 
-                return coincideCategoria && coincideBusqueda;
+                return coincideCategoria && coincideBusqueda && coincidePrecio;
             });
-        }, [productos, categoria, busqueda]);
+        }, [productos, categoria, busqueda, precioMax]);
 
 
 
@@ -129,7 +130,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 <h2 className="h4 text-secondary m-0">Todos los productos</h2>
                 <div className='d-flex gap-2 align-items-center'>
                     <div style={{ width: '180px' }}>
-                        <FiltroCategorias categoriaActual={categoria} onCambio={setCategoria} />
+                        <FiltroCategorias categoriaActual={categoria} onCambio={setCategoria} precioMax={precioMax} onCambioPrecio={setPrecioMax}/>
                     </div>
                     <div style={{ width: '250px' }}>
                         <BuscadorProductos titulo="" terminoBusqueda={busqueda} onCambio={setBusqueda} />

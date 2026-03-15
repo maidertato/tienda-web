@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { inventario as inventarioInicial, crearNuevoProducto, guardarEnCarrito, cargarCarrito } from './tienda/tienda';
 import './App.css';
 
-// importo de los componentees que pide y que he creado 
+// import de los componentees que pide y que he creado 
 import Cabecera from './componentes/Cabecera';
 import MenuNavegacion from './componentes/MenuNavegacion';
 import EscaparateProductos from './componentes/EscaparateProductos';
@@ -22,12 +22,14 @@ function App() {
   const [showCarrito, setShowCarrito] = useState(false);
   // El texto que el usuario escribe para filtrar productos
   const [busqueda, setBusqueda] = useState("");
-  // Añadimos la categoría por la que queremos llevar a cabo el filtrado
-  const [categoria, setCategoria] = useState("Todas"); // Nuevo estado
+  // Realizar busqueda / filtrado por categorias
+  const [categoria, setCategoria] = useState("Todas");
   // Controla en qué página del escaparate estamos
   const [paginaActual, setPaginaActual] = useState(1);
   // Estado para controlar la conexión
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // Controlamos el precio máximo para después aplicar el filtro
+  const [precioMax, setPrecioMax] = useState(100);
 
   useEffect(() => {
     // Funciones para actualizar el estado
@@ -62,18 +64,28 @@ function App() {
   };
 
   // Filtra los productos en tiempo real según lo que escribas en el buscador
-  // o con la categoria (función extra)
-  const productosFiltrados = productos.filter(p => {
-    const coincideNombre = p?.nombre?.toLowerCase().includes(busqueda.toLowerCase());
-    const coincideCategoria = categoria === "Todas" || p?.tipo?.toLowerCase()=== categoria.toLowerCase();
-    
-    return coincideNombre && coincideCategoria;
-  });
+  const productosFiltrados = useMemo(() => {
+    return productos.filter(p => {
+      // Función interna para quitar tildes y pasar a minúsculas
+      const normalizar = (texto) => 
+        texto?.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") || "";
+
+      const nombreProd = normalizar(p.nombre);
+      const busquedaNormal = normalizar(busqueda);
+      const tipoProducto = normalizar(p.tipo);
+      const categoriaSeleccionada = normalizar(categoria);
+
+      const coincideNombre = nombreProd.includes(busquedaNormal);
+      const coincideCategoria = categoria === "Todas" || tipoProducto === categoriaSeleccionada;
+      
+      return coincideNombre && coincideCategoria;
+    });
+  }, [productos, busqueda, categoria]);
 
   // Lógica para añadir cosas a la cesta de la compra
   const manejarAnadirAlCarrito = (productoDeClase) => {
     // 1. "Aplanamos" el objeto de la clase a un objeto simple
-    // Esto extrae los datos usando los GETTERS de tu clase
+    // Esto extrae los datos usando los GETTERS de la clase
     const productoSimple = {
       id: productoDeClase.id,
       nombre: productoDeClase.nombre,
@@ -172,6 +184,10 @@ function App() {
               carrito={carrito}
               busqueda={busqueda}
               setBusqueda={setBusqueda}
+              categoria={categoria}
+              setCategoria={setCategoria}
+              precioMax={precioMax}
+              setPrecioMax={setPrecioMax}
               paginaActual={paginaActual}
               setPaginaActual={setPaginaActual}
             />
