@@ -129,7 +129,14 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
         <div className="container-fluid">
             {/* Buscador integrado en la parte superior del escaparate */}
             <div className="d-flex justify-content-between align-items-center px-3 mb-2" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                <h2 className="h4 text-secondary m-0">Todos los productos</h2>
+                {/*Título dinámico según la búsqueda */}
+                <h2 className="h4 text-secondary m-0">
+                    {busqueda 
+                        ? `Buscando por: "${busqueda}"` 
+                        : (categoria && categoria !== "Todas" ? `Categoría: ${categoria}` : "Todos los productos")
+                    }
+                    
+                </h2>
                 <div className="d-flex gap-2 align-items-center position-relative">
                     <div style={{ width: '250px' }}>
                         <BuscadorProductos
