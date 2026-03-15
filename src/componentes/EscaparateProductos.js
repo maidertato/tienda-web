@@ -21,7 +21,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
         if (onVarianteChange && imagenes[idx]) {
             onVarianteChange(imagenes[idx].nombre || "");
         }
-    }, [idx, imagenes, onVarianteChange]);
+    }, [idx, imagenes]);
 
     const cambiarImagen = (e, direccion) => {
         e.stopPropagation();

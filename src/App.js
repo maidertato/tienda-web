@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { inventario as inventarioInicial, crearNuevoProducto, guardarEnCarrito, cargarCarrito } from './tienda/tienda';
+import { inventario as inventarioInicial, crearNuevoProducto, cargarCarrito } from './tienda/tienda';
 import './App.css';
 
 // import de los componentees que pide y que he creado 
