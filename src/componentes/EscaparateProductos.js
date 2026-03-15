@@ -61,6 +61,9 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
     const [productosPerPage] = useState(6);
     const [idAnadido, setIdAnadido] = useState(null);
     const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
+    
+    // Estado para controlar la visibilidad del botón de filtros
+    const [showFiltros, setShowFiltros] = useState(false);
 
     // 1. LÓGICA DE FILTRADO
     const productosFiltrados = useMemo(() => {
@@ -73,10 +76,9 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 const coincidePrecio = prod.precio <= precioMax;
 
                 if (!categoria || categoria === "Todas") {
-                    return coincideBusqueda;
+                    return coincideBusqueda && coincidePrecio;
                 }
 
-                // Función para quitar tildes y poner en minúsculas
                 const normalizar = (texto) => 
                     texto.toString()
                         .toLowerCase()
@@ -86,16 +88,11 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 const tipoProducto = normalizar(prod.tipo || "");
                 const categoriaSeleccionada = normalizar(categoria);
 
-                // Ahora comparamos "alimentacion" con "alimentacion"
                 const coincideCategoria = tipoProducto === categoriaSeleccionada;
-                // -------------------------------
 
                 return coincideCategoria && coincideBusqueda && coincidePrecio;
             });
         }, [productos, categoria, busqueda, precioMax]);
-
-
-
 
     // 2. LÓGICA DE PAGINACIÓN
     const indexOfLastProduct = paginaActual * productosPerPage;
@@ -104,7 +101,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
     useEffect(() => {
         setPaginaActual(1);
-    }, [busqueda, categoria, setPaginaActual]);
+    }, [busqueda, categoria, precioMax, setPaginaActual]);
 
     const handleAnadirConTooltip = (prod) => {
         const itemEnCarrito = carrito.find(item => item.id === prod.id);
@@ -128,13 +125,60 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
         <div className="container-fluid">
             <div className="d-flex justify-content-between align-items-center px-3 mb-4" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <h2 className="h4 text-secondary m-0">Todos los productos</h2>
-                <div className='d-flex gap-2 align-items-center'>
-                    <div style={{ width: '180px' }}>
-                        <FiltroCategorias categoriaActual={categoria} onCambio={setCategoria} precioMax={precioMax} onCambioPrecio={setPrecioMax}/>
-                    </div>
+                <div className='d-flex gap-2 align-items-center position-relative'>
+                    
                     <div style={{ width: '250px' }}>
                         <BuscadorProductos titulo="" terminoBusqueda={busqueda} onCambio={setBusqueda} />
                     </div>
+
+                    {/* Botón Morado con icono de niveles (Sliders) */}
+                    <button 
+                        onClick={() => setShowFiltros(!showFiltros)}
+                        style={{ 
+                            backgroundColor: '#8e24aa', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            width: '45px',
+                            height: '45px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: 'white'
+                        }}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"/>
+                        </svg>
+                    </button>
+
+                    {/* Popover que contiene TODO el menú de FiltroCategorias */}
+                    {showFiltros && (
+                        <div className="shadow" style={{
+                            position: 'absolute',
+                            top: '100%',
+                            right: 0,
+                            zIndex: 1050,
+                            backgroundColor: 'white',
+                            borderRadius: '15px',
+                            marginTop: '10px',
+                            border: '1px solid #eee',
+                            minWidth: '220px'
+                        }}>
+                            <FiltroCategorias 
+                                categoriaActual={categoria} 
+                                onCambio={(cat) => { setCategoria(cat); setShowFiltros(false); }} 
+                                precioMax={precioMax} 
+                                onCambioPrecio={setPrecioMax}
+                                alLimpiar={() => {
+                                    setCategoria("Todas");
+                                    setPrecioMax(100);
+                                    setBusqueda("");
+                                    setShowFiltros(false);
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
 

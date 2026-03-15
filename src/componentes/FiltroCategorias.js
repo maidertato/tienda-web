@@ -1,45 +1,44 @@
 import React from "react";
 
-const FiltroCategorias = ({ categoriaActual, onCambio, precioMax, onCambioPrecio }) => {
+const FiltroCategorias = ({ categoriaActual, onCambio, precioMax, onCambioPrecio, alLimpiar }) => {
     const categorias = ["Todas", "Mobiliario", "Cabello", "Juguete", "Merchandising", "Alimentación", "Accesorios"];
 
     return (
-        <div className="d-flex flex-column gap-3">
-            {/* Selector de Categorías */}
-            <div className="form-group">
-                <label className="small fw-bold text-secondary mb-1">Categoría</label>
-                <select 
-                    className="form-select border-lila" 
-                    value={categoriaActual || "Todas"} 
-                    onChange={(e) => onCambio(e.target.value)} 
-                    style={{ borderRadius: '20px', borderColor: '#d1b3ff', cursor: 'pointer' }}
-                >
-                    {categorias.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                </select>
+        <div className="p-3" style={{ minWidth: '220px' }}>
+            <label className="fw-bold mb-2 small text-secondary">Categoría</label>
+            <div className="d-flex flex-column gap-1 mb-3">
+                {categorias.map(cat => (
+                    <button
+                        key={cat}
+                        className={`btn btn-sm text-start ${categoriaActual === cat ? 'fw-bold text-primary' : 'text-dark'}`}
+                        onClick={() => onCambio(cat)}
+                        style={{ border: 'none', background: categoriaActual === cat ? '#f3ebff' : 'transparent', borderRadius: '8px' }}
+                    >
+                        {cat}
+                    </button>
+                ))}
             </div>
 
-            {/* Selector de Precio */}
-            <div className="form-group">
-                <label className="small fw-bold text-secondary mb-1">
-                    Precio máx: <span className="text-dark">{precioMax}€</span>
-                </label>
-                <input 
-                    type="range" 
-                    className="form-range custom-range-lila" 
-                    min="0" 
-                    max="100" 
-                    step="1"
-                    value={precioMax} 
-                    onChange={(e) => onCambioPrecio(Number(e.target.value))}
-                    style={{ accentColor: '#d1b3ff' }}
-                />
-                <div className="d-flex justify-content-between x-small text-muted" style={{ fontSize: '0.7rem' }}>
-                    <span>0€</span>
-                    <span>100€</span>
-                </div>
-            </div>
+            <hr className="my-2" />
+
+            <label className="fw-bold mb-1 small text-secondary">Precio máximo: {precioMax}€</label>
+            <input
+                type="range"
+                className="form-range"
+                min="0"
+                max="100"
+                value={precioMax}
+                onChange={(e) => onCambioPrecio(Number(e.target.value))}
+                style={{ accentColor: '#d1b3ff' }}
+            />
+
+            <button 
+                className="btn btn-sm w-100 mt-3" 
+                onClick={alLimpiar}
+                style={{ borderRadius: '10px', backgroundColor: '#fee2e2', color: '#991b1b', border: 'none', fontWeight: '500' }}
+            >
+                Borrar Filtros
+            </button>
         </div>
     );
 };
