@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { inventario as inventarioInicial, crearNuevoProducto, cargarCarrito } from './tienda/tienda';
+import { inventario as inventarioInicial, cargarCarrito } from './tienda/tienda';
 import './App.css';
 
 // import de los componentees que pide y que he creado 
@@ -55,12 +55,15 @@ function App() {
 
   // Crea un producto nuevo desde el formulario y lo mete en la lista
   const manejarNuevoProducto = (tipo, datos) => {
-    const nuevo = crearNuevoProducto(tipo, datos);
-    if (nuevo) {
-      // Añadimos el nuevo al final de la lista de productos
-      setProductos(prevProductos => [...prevProductos, nuevo]);
-      setBusqueda("");
-    }
+    setProductos(prevProductos => {
+      if (prevProductos.find(p => p.id === datos.id)) {
+        return prevProductos; 
+      }
+      return [...prevProductos, datos];
+    });
+    
+    setBusqueda("");
+    setCategoria("Todas");
   };
 
   // Filtra los productos en tiempo real según lo que escribas en el buscador

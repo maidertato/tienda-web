@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { FileUploader } from "react-drag-drop-files";
-import { DIVISA, crearNuevoProducto } from '../tienda/tienda.js';
+import { DIVISA } from '../tienda/tienda.js';
 
 const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     const fileTypes = ["jpg", "png", "jpeg"];
-    
     const [formData, setFormData] = useState({
         tipo: '',
         nombre: '',
@@ -43,9 +42,8 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             return;
         }
         // Validar formato
-        const formatosPermitidos = ["jpg", "jpeg", "png", "gif"];
         const extension = archivo.name.split(".").pop().toLowerCase();
-        if (!formatosPermitidos.includes(extension)) {
+        if (!fileTypes.includes(extension)) {
             mostrarAlerta(
                 "Formato no válido. La imagen debe ser JPG, JPEG, PNG o GIF.",
                 "danger"
@@ -93,9 +91,6 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             return;
         }
 
-
-        
-
         if (!formData.tipo) {
             mostrarAlerta("Escoge un tipo", "danger");
             return;
@@ -103,7 +98,9 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
 
         let imagenUrl = null;
         if (file) {
-            imagenUrl = URL.createObjectURL(file); // Esto crea una ruta tipo blob:http://...
+            imagenUrl = URL.createObjectURL(file); 
+        } else {
+            imagenUrl = "/imagenes/productos/default.png"; 
         }
 
         const precioNum = parseFloat(formData.precio);
@@ -114,40 +111,29 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             imagen: imagenUrl
         };
 
-        try {
-            const productoInstanciado = crearNuevoProducto(formData.tipo, nuevoProducto);
-            if (productoInstanciado) {
-                onAgregarProducto(formData.tipo, productoInstanciado);
-                mostrarAlerta("¡Producto añadido!", "success");
+        onAgregarProducto(formData.tipo, nuevoProducto);
+        mostrarAlerta("¡Producto añadido!", "success");
+        // Reset del formulario
+        setFormData({
+            tipo: '',
+            nombre: '',
+            precio: '',
+            descripcion: '',
+            material: '',
+            tipoJuguete: '',
+            tipoAlimento: '',
+            tipoAccesorio: '',
+            categoria: '',
+            estilo: ''
+        });
+        setFile(null);
 
-                // Reset del formulario
-                setFormData({
-                    tipo: '',
-                    nombre: '',
-                    precio: '',
-                    descripcion: '',
-                    material: '',
-                    tipoJuguete: '',
-                    tipoAlimento: '',
-                    tipoAccesorio: '',
-                    categoria: '',
-                    estilo: ''
-                });
-                setFile(null);
-
-                if (fileInputRef.current) {
-                    fileInputRef.current.value = ""; 
-                }
-
-                const primerInput = document.querySelector('#form-producto [name="tipo"]');
-                if (primerInput) primerInput.focus();
-
-            } else {
-                mostrarAlerta("Error. No se pudo crear el producto", "danger");
-            }
-        } catch (error) {
-            mostrarAlerta("Error al añadir el producto", "danger");
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ""; 
         }
+
+        const primerInput = document.querySelector('#form-producto [name="tipo"]');
+        if (primerInput) primerInput.focus();
     };
 
     return (
