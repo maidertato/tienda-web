@@ -213,7 +213,7 @@ export function guardarEnCarrito(producto) {
     imagen: producto.imagen,
     tipo: producto.tipo,
     // Guardamos el atributo extra según el tipo
-    extra: producto.tipoAlimento || producto.tipoMascota || producto.material || producto.estilo || ""
+    extra: producto.tipoAlimento || producto.tipoMascota || producto.material || producto.estilo || producto.tipoJuguete || producto.parteDelCuerpo || ""
   };
   
   localStorage.setItem("producto_" + producto.id, JSON.stringify(datosParaGuardar));
@@ -340,7 +340,7 @@ export const obtenerAtributoExtra = (producto) => {
               etiqueta: 'Tipo de Alimento', valor: producto.tipoAlimento || '' };
         case 'Juguete':
             return { 
-            etiqueta: 'Tipo de Juguete', valor: producto.categoriajuguete || producto.tipo || '' };
+            etiqueta: 'Tipo de Juguete', valor: producto.tipoJuguete || '' };
         case 'Merchandising':
             return { 
               etiqueta: 'Parte del cuerpo', valor: producto.parteDelCuerpo || '' };
