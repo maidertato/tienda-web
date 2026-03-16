@@ -56,10 +56,10 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     const renderCampoDinamico = () => {
         const configExtra = {
             'Mobiliario': { label: 'Material', name: 'material', ph: 'Ej: Madera, Roble...' },
-            'Juguete': { label: 'Tipo de Juguete', name: 'tipoJuguete', ph: 'Ej: Peluche, Cuerda...' },
+            'Juguete': { label: 'Tipo de Juguete', name: 'categoriajuguete', ph: 'Ej: Peluche, Cuerda...' },
             'Alimentacion': { label: 'Tipo Alimento', name: 'tipoAlimento', ph: 'Ej: Snack, Pienso...' },
             'Accesorios': { label: 'Tipo de Mascota', name: 'estilo', ph: 'Ej: Perro, Gato...' },
-            'Cabello': { label: 'Estilo', name: 'categoria', ph: 'Ej: Pop, Moderno...' },
+            'Cabello': { label: 'Estilo', name: 'estilo', ph: 'Ej: Pop, Moderno...' },
             'Merchandising': { label: 'Parte del Cuerpo', name: 'parteDelCuerpo', ph: 'Ej: Cabeza, Patas...' }
         };
 
