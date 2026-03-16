@@ -423,8 +423,8 @@ main {
 
 .buscador-custom {
   max-width: 260px;
-  border-radius: 12px;
-  border: 2px solid #9b5cff;
+  border-radius: 12px !important;
+  border: 2px solid #9b5cff !important;
   transition: all 0.25s ease;
   background-color: #f8f3ff;
   font-weight: 500;
@@ -433,13 +433,14 @@ main {
 }
 
 .buscador-custom:hover {
-  border-color: #7b2ff7;
+  border-color: #7b2ff7 !important;
 }
 
 .buscador-custom:focus {
   border-color: #c77dff;
-  box-shadow: 0 0 12px rgba(155, 92, 255, 0.6);
+  box-shadow: 0 0 12px rgba(155, 92, 255, 0.6) !important;
   background-color: #f2e9ff;
+  outline: none;
 }
 
 .buscador-custom::placeholder {
