@@ -113,6 +113,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
         };
     }, []);
 
+
     // Gestiona el clic en el carrito y controla el límite de 20 unidades
     const handleAnadirConTooltip = (prod) => {
         const itemEnCarrito = carrito.find(item => item.id === prod.id);

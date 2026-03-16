@@ -46,12 +46,15 @@ function App() {
     };
   }, []);
 
-
   // Función para resetear la vista al estado original
   const irAInicio = () => {
     setBusqueda("");      // Limpia el buscador
     setPaginaActual(1);   // Vuelve a la página 1
+    setCategoria("Todas"); // Cambia el filtro a todas
+    setPrecioMax(100); // Pone a 100 el filtro del precio
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+  
 
   // Crea un producto nuevo desde el formulario y lo mete en la lista
   const manejarNuevoProducto = (tipo, datos) => {
