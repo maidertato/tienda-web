@@ -17,13 +17,14 @@ body {
 #contenedor {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;   
+  min-height: 100vh;
   width: 85%;
   margin: 0 auto;
   background-color: rgba(255, 248, 252, 0.95);
 }
+
 #contenido {
-  flex: 1; 
+  flex: 1;
 }
 
 /* =========================================
@@ -181,7 +182,7 @@ main .pagination-wrapper {
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  margin-bottom: 8rem !important; 
+  margin-bottom: 8rem !important;
 }
 
 #info-paginacion {
@@ -529,7 +530,7 @@ LISTA DE PRODUCTOS Y TARJETAS
   width: 300px !important;
   max-width: 320px !important;
   height: 440px !important;
-  border-radius: 20px !important; 
+  border-radius: 20px !important;
   border: 1px solid #eee;
   background-color: #fff7fc !important;
   display: flex;
@@ -560,23 +561,23 @@ LISTA DE PRODUCTOS Y TARJETAS
 }
 
 #lista-productos div.card-producto-tienda {
-    background-color: #fff7fc !important;
-    border-radius: 20px !important;
-    overflow: hidden !important;
-    border: 1px solid #eee !important;
-    display: flex !important;
-    flex-direction: column !important;
+  background-color: #fff7fc !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  border: 1px solid #eee !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .card-img-container {
   background-color: #ffffff !important;
-    border-bottom: 2px solid #f0f0f0 !important; 
-    height: 210px !important; 
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 1px !important;
-    position: relative !important;
+  border-bottom: 2px solid #f0f0f0 !important;
+  height: 210px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1px !important;
+  position: relative !important;
 }
 
 .card-img-top {
@@ -991,7 +992,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
-  
+
   /* Alineación */
   padding: 5px;
   cursor: pointer;
@@ -999,7 +1000,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   align-items: center;
   justify-content: center;
   margin-left: 10px;
-  color: #b39ddb; 
+  color: #b39ddb;
   transition: all 0.3s ease-in-out;
 }
 
@@ -1010,8 +1011,10 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 
 /* Efecto mágico al pasar el ratón */
 .btn-eliminar-coquette:hover {
-  color: #7e57c2; /* Se vuelve un poco más oscuro */
-  transform: scale(1.15) rotate(-5deg); /* Se agranda y se inclina */
+  color: #7e57c2;
+  /* Se vuelve un poco más oscuro */
+  transform: scale(1.15) rotate(-5deg);
+  /* Se agranda y se inclina */
 }
 
 /* Evitar que se ponga azul o gris al hacer click */
@@ -1351,9 +1354,43 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 
 .modal-right-column {
   flex: 1;
-  padding: 60px 40px;
+  padding: 40px 40px;
   display: flex;
   flex-direction: column;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.modal-separator {
+  border: none;
+  /* Quitamos el borde por defecto */
+  border-top: 1px solid #000000;
+  /* Gris clarito y elegante */
+  width: 100%;
+  /* Que ocupe todo el ancho */
+  margin: 10px 0;
+  /* Poco espacio arriba y abajo para que esté "pegado" */
+  display: block;
+}
+
+/* Ajuste para que la descripción esté pegada a la raya */
+.modal-description-section {
+  margin-top: 0px;
+}
+
+.modal-right-column::-webkit-scrollbar {
+  width: 12px;
+}
+
+.modal-right-column::-webkit-scrollbar-thumb {
+  background: #a362bc;
+  border-radius: 10px;
+  border: 4px solid transparent;
+  background-clip: padding-box;
+}
+
+.modal-right-column::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
 
 /* Caja del título Morada */
@@ -1376,6 +1413,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   margin-bottom: 15px;
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .purple-light {
@@ -1412,10 +1450,11 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 
 .description-scroll {
   max-height: 200px;
-  overflow-y: auto;
   color: #666;
   line-height: 1.6;
   padding-right: 10px;
+  max-height: 60vh;
+
 }
 
 /* Botón cerrar X */
@@ -1456,7 +1495,7 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 /*////////////////////////////////////////////////////////////*/
 
 footer {
-  position: relative; 
+  position: relative;
   width: 100%;
   text-align: center;
   padding: 1.5rem;
@@ -1465,7 +1504,7 @@ footer {
   font-family: 'Quicksand', sans-serif;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
   border-top: 1px solid rgba(75, 46, 131, 0.1);
-  margin-top: 2rem; 
+  margin-top: 2rem;
 }
 
 .contenedor {
@@ -1488,7 +1527,7 @@ footer {
   font-weight: bold;
   z-index: 9999;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 /* Zona Drag & Drop Personalizada */
