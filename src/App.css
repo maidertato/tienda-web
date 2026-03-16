@@ -1363,17 +1363,12 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 
 .modal-separator {
   border: none;
-  /* Quitamos el borde por defecto */
   border-top: 1px solid #000000;
-  /* Gris clarito y elegante */
   width: 100%;
-  /* Que ocupe todo el ancho */
   margin: 10px 0;
-  /* Poco espacio arriba y abajo para que esté "pegado" */
   display: block;
 }
 
-/* Ajuste para que la descripción esté pegada a la raya */
 .modal-description-section {
   margin-top: 0px;
 }

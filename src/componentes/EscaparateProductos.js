@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import DetallesProducto from './DetallesProducto';
 import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
@@ -70,6 +70,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
     const [idAnadido, setIdAnadido] = useState(null);
     // Guardamos qué variante está seleccionada en cada producto para el título
     const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
+    const refFiltros = useRef(null);
 
     const [showFiltros, setShowFiltros] = useState(false);
 
@@ -96,6 +97,21 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
     useEffect(() => {
         setPaginaActual(1);
     }, [busqueda, categoria, precioMax, setPaginaActual]);
+
+    // click fuera
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (refFiltros.current && !refFiltros.current.contains(event.target)) {
+                setShowFiltros(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     // Gestiona el clic en el carrito y controla el límite de 20 unidades
     const handleAnadirConTooltip = (prod) => {
@@ -137,7 +153,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                     }
 
                 </h2>
-                <div className="d-flex gap-2 align-items-center position-relative">
+                <div className="d-flex gap-2 align-items-center">
                     <div style={{ width: '250px' }}>
                         <BuscadorProductos
                             titulo=""
@@ -146,66 +162,69 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                         />
                     </div>
 
-                    <button
-                        onClick={() => setShowFiltros(!showFiltros)}
-                        className="btn-filtros-toggle"
-                        style={{
-                            backgroundColor: '#8e24aa', border: 'none', borderRadius: '12px',
-                            width: '45px', height: '45px', color: 'white', display: 'flex',
-                            alignItems: 'center', justifyContent: 'center'
-                        }}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
-                        </svg>
-                    </button>
+                    <div ref={refFiltros} style={{ position: "relative" }}>
 
-                    {showFiltros && (
-                        <div className="shadow-lg p-3" style={{
-                            position: 'absolute', top: '100%', right: 0, zIndex: 1050,
-                            backgroundColor: 'white', borderRadius: '15px', marginTop: '10px', minWidth: '250px'
-                        }}>
-                            <label className="fw-bold mb-2 small text-secondary">Categoría</label>
-                            <div className="d-flex flex-column gap-1 mb-3">
-                                {categorias.map(cat => (
-                                    <button
-                                        key={cat}
-                                        className={`btn btn-sm text-start ${categoria === cat ? 'fw-bold' : 'text-dark'}`}
-                                        onClick={() => { setCategoria(cat); setShowFiltros(false); }}
-                                        style={{
-                                            border: 'none',
-                                            background: categoria === cat ? '#f3ebff' : 'transparent',
-                                            color: categoria === cat ? '#8e24aa' : '#333',
-                                            borderRadius: '8px'
-                                        }}
-                                    >
-                                        {cat}
-                                    </button>
-                                ))}
+                        <button
+                            onClick={() => setShowFiltros(!showFiltros)}
+                            className="btn-filtros-toggle"
+                            style={{
+                                backgroundColor: '#8e24aa', border: 'none', borderRadius: '12px',
+                                width: '45px', height: '45px', color: 'white', display: 'flex',
+                                alignItems: 'center', justifyContent: 'center'
+                            }}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
+                            </svg>
+                        </button>
+
+                        {showFiltros && (
+                            <div className="shadow-lg p-3" style={{
+                                position: 'absolute', top: '100%', right: 0, zIndex: 1050,
+                                backgroundColor: 'white', borderRadius: '15px', marginTop: '10px', minWidth: '250px'
+                            }}>
+                                <label className="fw-bold mb-2 small text-secondary">Categoría</label>
+                                <div className="d-flex flex-column gap-1 mb-3">
+                                    {categorias.map(cat => (
+                                        <button
+                                            key={cat}
+                                            className={`btn btn-sm text-start ${categoria === cat ? 'fw-bold' : 'text-dark'}`}
+                                            onClick={() => { setCategoria(cat); setShowFiltros(false); }}
+                                            style={{
+                                                border: 'none',
+                                                background: categoria === cat ? '#f3ebff' : 'transparent',
+                                                color: categoria === cat ? '#8e24aa' : '#333',
+                                                borderRadius: '8px'
+                                            }}
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <hr className="my-2" />
+
+                                <label className="fw-bold mb-1 small text-secondary">Precio máximo: {precioMax}€</label>
+                                <input
+                                    type="range"
+                                    className="form-range"
+                                    min="0"
+                                    max="100"
+                                    value={precioMax}
+                                    onChange={(e) => setPrecioMax(Number(e.target.value))}
+                                    style={{ accentColor: '#8e24aa' }}
+                                />
+
+                                <button
+                                    className="btn btn-sm w-100 mt-3"
+                                    onClick={() => { setCategoria("Todas"); setPrecioMax(100); setBusqueda(""); setShowFiltros(false); }}
+                                    style={{ borderRadius: '10px', backgroundColor: '#fee2e2', color: '#991b1b', border: 'none', fontWeight: '500' }}
+                                >
+                                    Borrar Filtros
+                                </button>
                             </div>
-
-                            <hr className="my-2" />
-
-                            <label className="fw-bold mb-1 small text-secondary">Precio máximo: {precioMax}€</label>
-                            <input
-                                type="range"
-                                className="form-range"
-                                min="0"
-                                max="100"
-                                value={precioMax}
-                                onChange={(e) => setPrecioMax(Number(e.target.value))}
-                                style={{ accentColor: '#8e24aa' }}
-                            />
-
-                            <button
-                                className="btn btn-sm w-100 mt-3"
-                                onClick={() => { setCategoria("Todas"); setPrecioMax(100); setBusqueda(""); setShowFiltros(false); }}
-                                style={{ borderRadius: '10px', backgroundColor: '#fee2e2', color: '#991b1b', border: 'none', fontWeight: '500' }}
-                            >
-                                Borrar Filtros
-                            </button>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
 
