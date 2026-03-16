@@ -1,5 +1,6 @@
 import React from 'react';
-import { DIVISA } from '../tienda/tienda.js';
+import { DIVISA, obtenerAtributoExtra } from '../tienda/tienda.js';
+
 
 //Detalles producto es una ventana modal 
 // (pop-up) que muestra la información 
@@ -15,7 +16,7 @@ const DetallesProducto = ({ producto, variante, onCerrar }) => {
 
     const nombre = variante?.nombre || producto.nombre;
     const imagen = variante?.imagen || producto.imagen;
-
+    const extra = obtenerAtributoExtra(producto);
     return (
         // Fondo oscuro y borroso que cubre toda la pantalla
         <div className="modal-overlay-custom" onClick={onCerrar}>
@@ -52,17 +53,15 @@ const DetallesProducto = ({ producto, variante, onCerrar }) => {
                         {/* Categoría del producto: Si no tiene tipo, por defecto es 'Peluche' */}
                         <div className="modal-info-row gray-light">
                             <span className="label">Tipo:</span>
-                            <span className="value">{producto.tipo || 'Peluche'}</span>
+                            <span className="value">{extra.valor}</span>
                         </div>
 
                         {/* Línea horizontal para separar los datos de la descripción */}
-                        <hr className="modal-separator" />
+                        <div style={{ width: '100%', minHeight: '1px', backgroundColor: '#e0e0e0', margin: '20px 0', display: 'block', clear: 'both' }}></div>
 
                         {/* Sección de texto detallado */}
-                        <div className="modal-description-section">
-
+                        <div className="modal-description-section" >
                             <h6 className="description-title">Descripción:</h6>
-
                             {/* Bloque con scroll por si la descripción es muy larga */}
                             <div className="description-scroll">
                                 {producto.descripcion}
