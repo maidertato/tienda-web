@@ -2,9 +2,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import DetallesProducto from './DetallesProducto';
 import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
-import FiltroCategorias from './FiltroCategorias';
 import { obtenerAtributoExtra } from '../tienda/tienda.js';
 
+const categorias = ["Todas", "Mobiliario", "Cabello", "Juguete", "Merchandising", "Alimentación", "Accesorios"];
 //////////////////////////////////
 // COMPONENTE PARA GESTIONAR LAS IMÁGENES Y VARIANTES
 //////////////////////////////////
@@ -24,7 +24,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
         if (onVarianteChange && imagenes[idx]) {
             onVarianteChange(imagenes[idx].nombre || "");
         }
-    }, [idx, imagenes, onVarianteChange]);
+    }, [idx, imagenes]);
 
     // Función para pasar fotos adelante o atrás sin que se cierren los detalles
     const cambiarImagen = (e, direccion) => {
@@ -52,7 +52,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
                 className="card-img-top p-3"
                 alt={prod.nombre}
                 style={{ height: '100%', width: '100%', objectFit: 'contain', cursor: 'pointer' }}
-                onClick={() => setProductoSeleccionado(prod)}
+                onClick={() => setProductoSeleccionado({ producto: prod, variante: imagenes[idx] })}
             />
         </div>
     );
@@ -70,7 +70,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
     const [idAnadido, setIdAnadido] = useState(null);
     // Guardamos qué variante está seleccionada en cada producto para el título
     const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
-    
+
     const [showFiltros, setShowFiltros] = useState(false);
 
     const productosFiltrados = useMemo(() => {
@@ -85,9 +85,9 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 return coincideBusqueda && coincidePrecio;
             }
 
-            const normalizar = (texto) => 
+            const normalizar = (texto) =>
                 texto.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            
+
             return normalizar(prod.tipo || "") === normalizar(categoria) && coincideBusqueda && coincidePrecio;
         });
     }, [productos, categoria, busqueda, precioMax]);
@@ -131,11 +131,11 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             <div className="d-flex justify-content-between align-items-center px-3 mb-2" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 {/*Título dinámico según la búsqueda */}
                 <h2 className="h4 text-secondary m-0">
-                    {busqueda 
-                        ? `Buscando por: "${busqueda}"` 
+                    {busqueda
+                        ? `Buscando por: "${busqueda}"`
                         : (categoria && categoria !== "Todas" ? `Categoría: ${categoria}` : "Todos los productos")
                     }
-                    
+
                 </h2>
                 <div className="d-flex gap-2 align-items-center position-relative">
                     <div style={{ width: '250px' }}>
@@ -146,17 +146,17 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                         />
                     </div>
 
-                    <button 
+                    <button
                         onClick={() => setShowFiltros(!showFiltros)}
                         className="btn-filtros-toggle"
-                        style={{ 
+                        style={{
                             backgroundColor: '#8e24aa', border: 'none', borderRadius: '12px',
                             width: '45px', height: '45px', color: 'white', display: 'flex',
                             alignItems: 'center', justifyContent: 'center'
                         }}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"/>
+                            <path d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
                         </svg>
                     </button>
 
@@ -165,13 +165,45 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                             position: 'absolute', top: '100%', right: 0, zIndex: 1050,
                             backgroundColor: 'white', borderRadius: '15px', marginTop: '10px', minWidth: '250px'
                         }}>
-                            <FiltroCategorias 
-                                categoriaActual={categoria} 
-                                onCambio={(cat) => { setCategoria(cat); setShowFiltros(false); }} 
-                                precioMax={precioMax} 
-                                onCambioPrecio={setPrecioMax}
-                                alLimpiar={() => { setCategoria("Todas"); setPrecioMax(100); setBusqueda(""); setShowFiltros(false); }}
+                            <label className="fw-bold mb-2 small text-secondary">Categoría</label>
+                            <div className="d-flex flex-column gap-1 mb-3">
+                                {categorias.map(cat => (
+                                    <button
+                                        key={cat}
+                                        className={`btn btn-sm text-start ${categoria === cat ? 'fw-bold' : 'text-dark'}`}
+                                        onClick={() => { setCategoria(cat); setShowFiltros(false); }}
+                                        style={{
+                                            border: 'none',
+                                            background: categoria === cat ? '#f3ebff' : 'transparent',
+                                            color: categoria === cat ? '#8e24aa' : '#333',
+                                            borderRadius: '8px'
+                                        }}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <hr className="my-2" />
+
+                            <label className="fw-bold mb-1 small text-secondary">Precio máximo: {precioMax}€</label>
+                            <input
+                                type="range"
+                                className="form-range"
+                                min="0"
+                                max="100"
+                                value={precioMax}
+                                onChange={(e) => setPrecioMax(Number(e.target.value))}
+                                style={{ accentColor: '#8e24aa' }}
                             />
+
+                            <button
+                                className="btn btn-sm w-100 mt-3"
+                                onClick={() => { setCategoria("Todas"); setPrecioMax(100); setBusqueda(""); setShowFiltros(false); }}
+                                style={{ borderRadius: '10px', backgroundColor: '#fee2e2', color: '#991b1b', border: 'none', fontWeight: '500' }}
+                            >
+                                Borrar Filtros
+                            </button>
                         </div>
                     )}
                 </div>
@@ -251,7 +283,8 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             {/* Si hay un producto clickado, mostramos la caja de detalles */}
             {productoSeleccionado && (
                 <DetallesProducto
-                    producto={productoSeleccionado}
+                    producto={productoSeleccionado.producto}
+                    variante={productoSeleccionado.variante}
                     onCerrar={() => setProductoSeleccionado(null)}
                 />
             )}
