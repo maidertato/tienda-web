@@ -340,7 +340,7 @@ export const obtenerAtributoExtra = (producto) => {
               etiqueta: 'Tipo de Alimento', valor: producto.tipoAlimento || '' };
         case 'Juguete':
             return { 
-            etiqueta: 'Tipo de Juguete', valor: producto.tipo || '' };
+            etiqueta: 'Tipo de Juguete', valor: producto.tipoJuguete || '' };
         case 'Merchandising':
             return { 
               etiqueta: 'Parte del cuerpo', valor: producto.parteDelCuerpo || '' };
