@@ -257,7 +257,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                         )}
                                         {idAnadido === `${prod.id}-error` && (
                                             <div className="mensaje-error-flotante">
-                                                Máx. 20 unidades
+                                                Max. 20 unidades
                                             </div>
                                         )}
                                         <button

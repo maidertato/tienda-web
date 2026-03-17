@@ -34,12 +34,13 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
         tabIndex="-1"
         style={{
           visibility: show ? 'visible' : 'hidden',
-          display: 'block',
           width: '400px',
           borderRight: 'none',
           backgroundColor: '#9c61d6', 
           boxShadow: '10px 0 30px rgba(0,0,0,0.1)',
-          borderRadius: '0 20px 20px 0' // Bordes redondeados a la derecha
+          borderRadius: '0 20px 20px 0', // Bordes redondeados a la derecha
+          transition: 'transform 0.3s ease-in-out',
+          transform: show ? 'translateX(0)' : 'translateX(-100%)'
         }}
       >
         {/* Cabecera personalizada */}
