@@ -50,7 +50,6 @@ const DetallesProducto = ({ producto, variante, onCerrar }) => {
                             <span className="value">{producto.precio}{DIVISA}</span>
                         </div>
 
-                        {/* Categoría del producto: Si no tiene tipo, por defecto es 'Peluche' */}
                         <div className="modal-info-row gray-light">
                             <span className="label">Tipo:</span>
                             <span className="value">{extra.valor}</span>
