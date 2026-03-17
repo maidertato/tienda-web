@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DIVISA } from '../tienda/tienda';
 
-// cARRITO --> Panel lateral que muestra los productos elegidos
+// CARRITO --> Panel lateral que muestra los productos elegidos
 const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, onCambiarCantidad }) => {
   
   // Función de ayuda para sacar los datos aunque sean privados
@@ -16,6 +16,8 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
     const datos = obtenerDatos(p);
     return acc + (datos.precio * datos.cantidad);
   }, 0);
+
+  const [errorMaxId, setErrorMaxId] = useState(null);
 
   return (
     <>
@@ -111,23 +113,43 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
                     {/* Selector de cantidad: Ajusta unidad a unidad */}
                     {/* Maximo 20 unidades */}
-                    <input
-                      type="number"
-                      value={prod.cantidad}
-                      min="1"
-                      max="20"
-                      onChange={(e) => {
-                        const valor = parseInt(e.target.value);
-                        if (isNaN(valor)) return; // Evita valores no numéricos
-                        const cantidadActual = prod.cantidad;
-                        const diferencia = valor - cantidadActual;
-                        if (valor <= 20 && valor >= 1) {
-                          onCambiarCantidad(prod.id, diferencia);
-                        } else if (valor > 20) {
-                          alert('No puedes añadir más de 20 unidades de este producto.');
-                        }
-                      }}
-                    />
+                    <div className="contenedor-controles">
+                      <input
+                        type="number"
+                        value={prod.cantidad}
+                        min="1"
+                        max="20"
+                        className="form-control form-control-sm"
+                        style={{ width: '60px', textAlign: 'center' }}
+                        onClick={(e)=> {
+                          if (prod.cantidad === 20) {
+                            setErrorMaxId(prod.id);
+                            setTimeout(() => setErrorMaxId(null), 2000);
+                          }
+                        }}
+                        onChange={(e) => {
+                          const valor = parseInt(e.target.value);
+                          if (isNaN(valor)) return;
+
+                          if (valor <= 20) {
+                            setErrorMaxId(null); // Quitamos error si es válido
+                            const diferencia = valor - prod.cantidad;
+                            onCambiarCantidad(prod.id, diferencia);
+                          } else {
+                            // Si intenta pasarse de 20
+                            setErrorMaxId(prod.id);
+                            // Opcional: ocultar el mensaje tras 2 segundos
+                            setTimeout(() => setErrorMaxId(null), 2000);
+                          }
+                        }}
+                      />
+                      {/* Mensaje de error si se supera el máximo permitido */}
+                      {errorMaxId === prod.id && (
+                        <span className="mensaje-error">
+                          Max. 20 uds
+                        </span>
+                      )}
+                    </div>
 
 
                     {/* Papelera: Elimina el producto por completo del carrito */}

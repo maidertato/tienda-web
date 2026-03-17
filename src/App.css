@@ -975,17 +975,28 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   border-color: #9C66D4;
   outline: none;
 }
+.contenedor-controles {
+  position: relative; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-.aviso-maximo {
-  width: 100%;
-  background-color: #f8d7da;
-  color: #842029;
-  border: 1px solid #f5c2c7;
-  padding: 10px 12px;
-  margin-top: 8px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
+.mensaje-error {
+  color: #d32f2f; 
+  font-size: 10px;
+  font-weight: 800;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background-color: #ffebee;
+  padding: 2px 6px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top: 5px;
+  z-index: 100;
 }
 
 .btn-eliminar-coquette {
