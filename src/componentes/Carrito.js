@@ -63,7 +63,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
         <div className="offcanvas-body" style={{ padding: '20px' }}>
           {/* Si el carrito está vacío, mostramos un mensaje */}
           {productosCarrito.length === 0 ? (
-            <div className="carrito-vacio-vista animate__animated animate__fadeIn">
+            <div className="carrito-vacio-vista animate_animated animate_fadeIn">
               <svg className="vacio-icono-cart" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path fill="currentColor"
                   d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -86,93 +86,120 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
             <div className="d-flex flex-column h-100">
               <div className="flex-grow-1">
                 {/* Mapeamos el array de productos para crear una fila por cada uno */}
-                {productosCarrito.map((prod) => (
-                  <div key={prod.id} className="d-flex justify-content-between align-items-center mb-3 p-3"
-                    style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
+                {productosCarrito.map((prod) => {
+                  const datos = obtenerDatos(prod);
+                  return (  
+                    <div key={datos.id} className="d-flex justify-content-between align-items-center mb-3 p-3"
+                      style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
                     
-                    {/* FOTO DEL PRODUCTO */}
-                    <img
-                      src={prod.imagen}
-                      alt={prod.nombre}
-                      style={{
-                        width: '60px',
-                        height: '60px',
-                        objectFit: 'cover',
-                        borderRadius: '10px',
-                        marginRight: '15px',
-                        backgroundColor: '#f9f9f9'
-                      }} />
+                      {/* FOTO DEL PRODUCTO */}
+                      <img
+                        src={datos.imagen}
+                        alt={datos.nombre}
+                        style={{
+                          width: '60px',
+                          height: '60px',
+                          objectFit: 'cover',
+                          borderRadius: '10px',
+                          marginRight: '15px',
+                          backgroundColor: '#f9f9f9'
+                        }} />
 
-                    {/* Información del producto (nombre y subtotal) */}
-                    <div style={{ flex: 1 }}>
-                      <h6 className="m-0" style={{ fontWeight: '600' }}>{prod.nombre}</h6>
-                      <span style={{ color: '#6A1B9A', fontWeight: '700' }}>
-                        {(prod.precio * (prod.cantidad || 1)).toFixed(2)}{DIVISA}
-                      </span>
+                      {/* Información del producto (nombre y subtotal) */}
+                      <div style={{ flex: 1}}>
+                        <h6 className="m-0" style={{ fontWeight: '600' }}>{datos.nombre}</h6>
+                      
+                      {/* Contenedor de precio, input y resultado*/}
+                        <div className='d-flex flex-column'>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="text-muted" style={{ fontSize: '0.8rem' }}>
+                              {datos.precio.toFixed(2)}{DIVISA} x
+                            </span>
+
+                            <input
+                              type="number"
+                              value={datos.cantidad}
+                              min="1"
+                              max="20"
+                              className="form-control form-control-sm px-1"
+                              style={{ 
+                                width: '60px', 
+                                textAlign: 'center' }}
+                              onClick={()=> {
+                                if (datos.cantidad >= 20) {
+                                  setErrorMaxId(datos.id);
+                                  setTimeout(() => setErrorMaxId(null), 2000);
+                                }
+                              }}
+                              onChange={(e) => {
+                                const valor = parseInt(e.target.value);
+                                if (isNaN(valor)) return;
+
+                                if (valor <= 20) {
+                                  setErrorMaxId(null); // Quitamos error si es válido
+                                  const diferencia = valor - datos.cantidad;
+                                  onCambiarCantidad(datos.id, diferencia);
+                                } else {
+                                  // Si intenta pasarse de 20
+                                  setErrorMaxId(prod.id);
+                                  // Opcional: ocultar el mensaje tras 2 segundos
+                                  setTimeout(() => setErrorMaxId(null), 2000);
+                                }
+                              }}
+                            />
+                            <span style={{ 
+                              fontWeight: '700', 
+                              fontSize: '1rem', 
+                              color: '#6A1B9A',
+                              whiteSpace: 'nowrap' 
+                            }}>
+                              = {(datos.precio * datos.cantidad).toFixed(2)}{DIVISA}
+                            </span>
+                          </div>
+                          {/* Mensaje de error si se supera el máximo permitido */}
+                          {/* Lo colocamos debajo del producto y su cantidad*/}
+                          {errorMaxId === prod.id && (
+                            <div className="animate_animated animate_fadeIn" style={{
+                              backgroundColor: '#fff1f0', // Un rojo muy clarito/rosado
+                              border: '1px solid #ffa39e',
+                              color: '#cf1322',
+                              fontSize: '0.85rem',
+                              padding: '8px',
+                              borderRadius: '8px',
+                              marginTop: '12px',
+                              textAlign: 'center',
+                              fontWeight: '500'
+                            }}>
+                              No se permiten más de 20 copias.
+                            </div>
+                          )}  
+                        </div>
                     </div>
-
-                    {/* Selector de cantidad: Ajusta unidad a unidad */}
-                    {/* Maximo 20 unidades */}
-                    <div className="contenedor-controles">
-                      <input
-                        type="number"
-                        value={prod.cantidad}
-                        min="1"
-                        max="20"
-                        className="form-control form-control-sm"
-                        style={{ width: '60px', textAlign: 'center' }}
-                        onClick={(e)=> {
-                          if (prod.cantidad === 20) {
-                            setErrorMaxId(prod.id);
-                            setTimeout(() => setErrorMaxId(null), 2000);
-                          }
-                        }}
-                        onChange={(e) => {
-                          const valor = parseInt(e.target.value);
-                          if (isNaN(valor)) return;
-
-                          if (valor <= 20) {
-                            setErrorMaxId(null); // Quitamos error si es válido
-                            const diferencia = valor - prod.cantidad;
-                            onCambiarCantidad(prod.id, diferencia);
-                          } else {
-                            // Si intenta pasarse de 20
-                            setErrorMaxId(prod.id);
-                            // Opcional: ocultar el mensaje tras 2 segundos
-                            setTimeout(() => setErrorMaxId(null), 2000);
-                          }
-                        }}
-                      />
-                      {/* Mensaje de error si se supera el máximo permitido */}
-                      {errorMaxId === prod.id && (
-                        <span className="mensaje-error">
-                          Max. 20 uds
-                        </span>
-                      )}
-                    </div>
-
+                      
+                  
 
                     {/* Papelera: Elimina el producto por completo del carrito */}
-                    <button 
-                      className="btn-eliminar-coquette" 
-                      onClick={() => alEliminar(prod.id)}
-                      title="Eliminar con amor"
-                    >
-                      <svg 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="1.2" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round"
+                      <button 
+                        className="btn-eliminar-coquette" 
+                        onClick={() => alEliminar(prod.id)}
+                        title="Eliminar con amor"
                       >
-                        <path d="M3 6h18"></path>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
-                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                      </svg>
-                    </button>
-                  </div>
-                ))}
+                        <svg 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                         stroke="currentColor" 
+                          strokeWidth="1.2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <path d="M3 6h18"></path>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
               {/* Sección de Total y Botones inferior */}
               <div className="mt-auto pt-4" style={{ borderTop: '2px dashed #E6D5F7' }}>
@@ -180,7 +207,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                   <span style={{ fontSize: '1.2rem', fontWeight: '600', color: 'white' }}>Total:</span>
                   <span style={{ fontSize: '1.8rem', fontWeight: '800', color: 'white' }}>
                     {total.toFixed(2)}{DIVISA}
-                  </span>
+                 </span>
                 </div>
 
                 {/* Botón para borrar todos los elementos del carrito de golpe */}
