@@ -364,6 +364,8 @@ aside button:hover {
   transition: background-color 0.3s;
 }
 
+aside .form-control:disabled, 
+aside .form-select:disabled,
 .drop-zone-style.offline-mode {
   background-color: rgba(200, 200, 200, 0.2) !important;
   border-color: #999 !important;

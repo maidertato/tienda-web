@@ -137,14 +137,14 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     };
 
     return (
-        <div className="formulario-wrapper">
+        <div className={`formulario-wrapper ${deshabilitado ? "offline-mode" : ""}`}> {/* cuando deshabilitado = true --> se ponen todos gris (heredan todos)*/}
             <h3 className="text-center mb-3">Añadir Productos</h3>
             <form id="form-producto" onSubmit={handleSubmit}>
                 
                 {/* Tipo de Producto */}
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
-                    <select name="tipo" className="form-select" value={formData.tipo} onChange={handleChange} required disabled={deshabilitado}>
+                    <select name="tipo" className="form-select" value={formData.tipo} onChange={handleChange} required disabled={deshabilitado} >
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
                         <option value="Cabello">Cabello</option>
@@ -158,20 +158,21 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 {/* Nombre */}
                 <div className="mb-3">
                     <label className="form-label">Nombre del Producto</label>
-                    <input type="text" className="form-control" name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Ej: Pelota de goma" required disabled={deshabilitado} />
+                    <input type="text" className="form-control"  name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Ej: Pelota de goma" required disabled={deshabilitado} />
                 </div>
 
                 {/* Precio */}
                 <div className="mb-3">
                     <label className="form-label">Precio ({DIVISA})</label>
-                    <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} onKeyDown={(e) => { if (["e","E","+","-"].includes(e.key)) e.preventDefault(); }} step="0.01" min="0" placeholder="0.00" required disabled={deshabilitado} />
+                    <input type="number" className="form-control"  name="precio" value={formData.precio} onChange={handleChange} required disabled={deshabilitado} 
+                        onKeyDown={(e) => { if (["e","E","+","-"].includes(e.key)) e.preventDefault(); }} step="0.01" min="0" placeholder="0.00" /> {/* Para que no permita las e ni nada de eso + que empiece en 0 y que incremente centimo a centimo si usas las flechas */}
                 </div>
 
 
                 {/* Descripción */}
                 <div className="mb-3">
                     <label className="form-label">Descripción</label>
-                    <textarea className="form-control" name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Describe tu producto..." rows="2" disabled={deshabilitado}></textarea>
+                    <textarea className="form-control"  disabled={deshabilitado} name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Describe tu producto..." rows="2"></textarea>
                 </div>
 
                 {renderCampoDinamico()}
@@ -180,20 +181,20 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 <div className="mb-3">
                     <label className="form-label text-white">Imagen del Producto</label>
                     <input type="file" ref={fileInputRef} className="form-control" accept="image/*" disabled={deshabilitado} onChange={(e) => {
-                                                    const archivos = e.target.files;
-                                                    if (!archivos || archivos.length === 0) return;
-                                                    if (archivos.length > 1) {
-                                                        mostrarAlerta("Solo puedes subir un archivo", "danger");
-                                                        return;
-                                                    }
-                                                    handleFile(archivos[0]);
-                                                }} />
+                        const archivos = e.target.files;
+                            if (!archivos || archivos.length === 0) return;
+                                if (archivos.length > 1) {
+                                    mostrarAlerta("Solo puedes subir un archivo", "danger");
+                                    return;
+                                }
+                                handleFile(archivos[0]);
+                                }} 
+                    />
                 </div>
 
                 {/* Imagen D&D */}
                 <div className="mb-4">
                     <label className="form-label">O arrastra la imagen aquí</label>
-
                     <FileUploader
                         handleChange={(file) => handleFile(file)}
                         name="file"
@@ -203,39 +204,38 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                         onTypeError={() =>
                             mostrarAlerta("Formato no válido. La imagen debe ser JPG, JPEG, PNG o GIF.", "danger")
                         }
-                        hoverTitle=" "
+                        /* Limpiamos textos por defecto de la librería */
+                        hoverTitle=" " 
                         dropMessageStyle={{ display: 'none' }}
                         classes="w-100"
                     >
                         <div
-                            /* Combinamos tus clases dinámicamente */
-                            className={`drop-zone-style ${isDragging ? "hover" : ""} ${file ? "drop-zone-active" : ""} ${deshabilitado ? "offline-mode" : ""}`}
+                            className={`drop-zone-style ${isDragging ? "is-dragging" : ""} ${file ? "drop-zone-active" : ""} ${deshabilitado ? "offline-mode" : ""}`}
                             style={{
                                 width: "100%",
                                 minHeight: "100px",
                                 display: "flex",
-                                flexDirection: "column",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                cursor: deshabilitado ? "not-allowed" : "pointer"
+                                cursor: deshabilitado ? "not-allowed" : "pointer",
+                                border: "2px dashed #ccc" // Asegúrate de mantener un diseño similar al anterior aquí
                             }}
                         >
-                            {file ? (
+                            {isDragging ? (
+                                <p className="m-0">Suelta la imagen</p>
+                            ) : file ? (
                                 <span className="success-message">✓ {file.name}</span>
-                            ) : (
-                                <p className="m-0" style={{ pointerEvents: 'none' }}>
-                                    {deshabilitado 
-                                        ? "Subida deshabilitada (Sin conexión)" 
-                                        : (isDragging ? "¡Suelta la imagen!" : "Arrastra o haz clic para subir imagen")
-                                    }
-                                </p>
-                            )}
+                            ) : deshabilitado ? (
+                                <p className="m-0">Estas sin conexión</p>
+                            ) : null 
+                            }
                         </div>
                     </FileUploader>
                 </div>
+
                 {/* Submit Button */}
                 <button type="submit" className="btn btn-custom w-100" disabled={deshabilitado}>
-                    {deshabilitado ? "Sin conexión" : "+ Subir Producto"}
+                    {deshabilitado ? "+ SUBIR PRODUCTO" : "+ Subir Producto"}
                 </button>
 
                 {alerta.visible && (
