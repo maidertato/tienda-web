@@ -276,7 +276,7 @@ export function crearNuevoProducto(tipo, datos) {
         datos.precio, 
         datos.descripcion, 
         datos.imagen, 
-        datos.tipoJuguete,
+        datos.categoriajuguete,
         datos.tamano || "Mediano",
         datos.esInteractivo === 'true'
       );
