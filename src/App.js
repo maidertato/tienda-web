@@ -96,7 +96,8 @@ function App() {
       id: productoDeClase.id,
       nombre: productoDeClase.nombre,
       precio: productoDeClase.precio,
-      imagen: productoDeClase.imagen
+      imagen: productoDeClase.imagen,
+      varianteNombre: productoDeClase.varianteNombre
     };
 
     // 2. Buscamos usando el ID del producto simple
@@ -185,7 +186,7 @@ function App() {
           <main className="col-md-8">
             {/* 2. EscaparateProductos ahora recibe la lógica de búsqueda */}
             <EscaparateProductos
-              productos={productos}
+              productos={productosFiltrados}
               onAnadirAlCarrito={manejarAnadirAlCarrito}
               carrito={carrito}
               busqueda={busqueda}

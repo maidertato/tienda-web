@@ -24,7 +24,7 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
         if (onVarianteChange && imagenes[idx]) {
             onVarianteChange(imagenes[idx].nombre || "");
         }
-    }, [idx, imagenes]);
+    }, [idx, imagenes, onVarianteChange]);
 
     // Función para pasar fotos adelante o atrás sin que se cierren los detalles
     const cambiarImagen = (e, direccion) => {
@@ -115,15 +115,23 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
 
     // Gestiona el clic en el carrito y controla el límite de 20 unidades
-    const handleAnadirConTooltip = (prod) => {
-        const itemEnCarrito = carrito.find(item => item.id === prod.id);
+    const handleAnadirConTooltip = (prod, varianteSeleccionada) => {
+        const itemEnCarrito = carrito.find(item => item.id === prod.id + "_" + (varianteSeleccionada?.nombre || "default"));
         const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
 
         // Comprobamos el límite de 20 unidades
         if (cantidadActual >= 20) {
             setIdAnadido(`${prod.id}-error`);
         } else {
-            onAnadirAlCarrito(prod);
+            const item = {
+                id: prod.id + "_" + (varianteSeleccionada?.nombre || "default"),
+                nombre: prod.nombre,
+                precio: prod.precio,
+                imagen: varianteSeleccionada?.imagen || prod.imagen,
+                varianteNombre: varianteSeleccionada?.nombre || "",
+                cantidad: 1
+                };
+            onAnadirAlCarrito(item);
             setIdAnadido(`${prod.id}-exito`);
         }
 
@@ -235,6 +243,11 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                     const info = obtenerAtributoExtra(prod);
                     const nombreVariante = variantesSeleccionadas[prod.id] || "";
 
+                    const varianteSeleccionada = prod.variantes?.find(
+                        v => v.nombre === nombreVariante
+                    ) || (prod.variantes && prod.variantes.length > 0 ? prod.variantes[0] : { nombre: "", imagen: prod.imagen });
+
+                    const varianteReal = varianteSeleccionada || { nombre: "", imagen: prod.imagen };
                     return (
                         <div key={prod.id} className="col d-flex justify-content-center">
                             <div className="card-producto-tienda w-100 h-100 shadow-sm border-0">
@@ -262,7 +275,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                         )}
                                         <button
                                             className="btn-agregar-flotante"
-                                            onClick={() => handleAnadirConTooltip(prod)}
+                                            onClick={() => handleAnadirConTooltip(prod, varianteReal)}
                                         >
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '20px' }}><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
                                         </button>

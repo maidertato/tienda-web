@@ -10,8 +10,10 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
     nombre: p.nombre || "Producto",
     precio: parseFloat(p.precio) || 0,
     imagen: p.imagen || 'imagenes/productos/default.png',
-    cantidad: p.cantidad || 1
+    cantidad: p.cantidad || 1,
+    varianteNombre: p.varianteNombre || (p.variante ? p.variante.nombre : "")
   });
+
   const total = productosCarrito.reduce((acc, p) => {
     const datos = obtenerDatos(p);
     return acc + (datos.precio * datos.cantidad);
@@ -107,7 +109,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
                       {/* Información del producto (nombre y subtotal) */}
                       <div style={{ flex: 1}}>
-                        <h6 className="m-0" style={{ fontWeight: '600' }}>{datos.nombre}</h6>
+                        <h6 className="m-0" style={{ fontWeight: '600' }}>{datos.nombre} {datos.varianteNombre && ` - ${datos.varianteNombre}`}</h6>
                       
                       {/* Contenedor de precio, input y resultado*/}
                         <div className='d-flex flex-column'>
@@ -151,7 +153,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                                   onCambiarCantidad(datos.id, diferencia);
                                 } else if (valorN > 20) {
                                   // Si intenta pasarse de 20
-                                  setErrorMaxId(prod.id);
+                                  setErrorMaxId(datos.id);
                                   e.target.value = 20;
                                   // Opcional: ocultar el mensaje tras 2 segundos
                                   setTimeout(() => setErrorMaxId(null), 2000);
@@ -174,7 +176,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                           </div>
                           {/* Mensaje de error si se supera el máximo permitido */}
                           {/* Lo colocamos debajo del producto y su cantidad*/}
-                          {errorMaxId === prod.id && (
+                          {errorMaxId === datos.id && (
                             <div className="animate_animated animate_fadeIn" style={{
                               backgroundColor: '#fff1f0', // Un rojo muy clarito/rosado
                               border: '1px solid #ffa39e',
@@ -197,13 +199,13 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                     {/* Papelera: Elimina el producto por completo del carrito */}
                       <button 
                         className="btn-eliminar-coquette" 
-                        onClick={() => alEliminar(prod.id)}
+                        onClick={() => alEliminar(datos.id)}
                         title="Eliminar con amor"
                       >
                         <svg 
                           viewBox="0 0 24 24" 
                           fill="none" 
-                         stroke="currentColor" 
+                          stroke="currentColor" 
                           strokeWidth="1.2" 
                           strokeLinecap="round" 
                           strokeLinejoin="round"
@@ -223,7 +225,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                   <span style={{ fontSize: '1.2rem', fontWeight: '600', color: 'white' }}>Total:</span>
                   <span style={{ fontSize: '1.8rem', fontWeight: '800', color: 'white' }}>
                     {total.toFixed(2)}{DIVISA}
-                 </span>
+                  </span>
                 </div>
 
                 {/* Botón para borrar todos los elementos del carrito de golpe */}
