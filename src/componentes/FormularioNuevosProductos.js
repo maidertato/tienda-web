@@ -218,7 +218,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                                 alignItems: "center",
                                 justifyContent: "center",
                                 cursor: deshabilitado ? "not-allowed" : "pointer",
-                                border: "2px dashed #ccc" // Asegúrate de mantener un diseño similar al anterior aquí
+                                border: "2px dashed #ccc" 
                             }}
                         >
                             {isDragging ? (

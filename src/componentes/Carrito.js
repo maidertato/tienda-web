@@ -118,13 +118,15 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
                             <input
                               type="number"
-                              value={datos.cantidad}
-                              min="1"
+                              key={`input-${datos.id}-${datos.cantidad}`}
+                              defaultValue={datos.cantidad}
+                              min="0"
                               max="20"
                               className="form-control form-control-sm px-1"
                               style={{ 
                                 width: '60px', 
                                 textAlign: 'center' }}
+
                               onClick={()=> {
                                 if (datos.cantidad >= 20) {
                                   setErrorMaxId(datos.id);
@@ -132,18 +134,32 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                                 }
                               }}
                               onChange={(e) => {
-                                const valor = parseInt(e.target.value);
-                                if (isNaN(valor)) return;
+                                const valorS = e.target.value;
+                                
+                                if (valorS === "") return;
 
-                                if (valor <= 20) {
+                                const valorN = parseInt(valorS);
+                                
+                                if (valorN === 0) {
+                                  alEliminar(datos.id);
+                                  return;
+                                }
+
+                                if (valorN > 0 && valorN <= 20) {
                                   setErrorMaxId(null); // Quitamos error si es válido
-                                  const diferencia = valor - datos.cantidad;
+                                  const diferencia = valorN - datos.cantidad;
                                   onCambiarCantidad(datos.id, diferencia);
-                                } else {
+                                } else if (valorN > 20) {
                                   // Si intenta pasarse de 20
                                   setErrorMaxId(prod.id);
+                                  e.target.value = 20;
                                   // Opcional: ocultar el mensaje tras 2 segundos
                                   setTimeout(() => setErrorMaxId(null), 2000);
+                                }
+                              }}
+                              onBlur={(e) => {
+                                if (e.target.value === "" || e.target.value === "0") {
+                                  alEliminar(datos.id);
                                 }
                               }}
                             />
