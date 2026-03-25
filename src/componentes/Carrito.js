@@ -120,8 +120,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
                             <input
                               type="number"
-                              key={`input-${datos.id}-${datos.cantidad}`}
-                              defaultValue={datos.cantidad}
+                              value={datos.cantidad}
                               min="0"
                               max="20"
                               className="form-control form-control-sm px-1"
@@ -136,18 +135,14 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                                 }
                               }}
                               onChange={(e) => {
-                                const valorS = e.target.value;
-                                
-                                if (valorS === "") return;
-
-                                const valorN = parseInt(valorS);
-                                
-                                if (valorN === 0) {
-                                  alEliminar(datos.id);
+                                const valor = parseInt(e.target.value);
+                                // si el usuario borra el numero o el numero es 0
+                                if (isNaN(valor) || valor <= 0){
+                                  alEliminar(DOMMatrixReadOnly.id);
                                   return;
-                                }
-
-                                if (valorN > 0 && valorN <= 20) {
+                                } 
+                                // si el valor es correcto --> entre 1 y 20
+                                if (valor <= 20) {
                                   setErrorMaxId(null); // Quitamos error si es válido
                                   const diferencia = valorN - datos.cantidad;
                                   onCambiarCantidad(datos.id, diferencia);
