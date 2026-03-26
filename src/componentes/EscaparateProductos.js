@@ -313,7 +313,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 })}
             </div>
 
-            {/* Componente de flechas/números de página */}
+            {/* Paginación */}
             <div className="mt-4">
                 <Paginacion
                     totalProductos={productosFiltrados.length}
