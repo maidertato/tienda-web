@@ -29,7 +29,7 @@ function App() {
   // Estado para controlar la conexión
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   // Controlamos el precio máximo para después aplicar el filtro
-  const [precioMax, setPrecioMax] = useState(100);
+  const [precioMax, setPrecioMax] = useState(200);
 
   useEffect(() => {
     // Funciones para actualizar el estado
