@@ -97,7 +97,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         }
 
         if(formData.precio > 200){
-        mostrarAlerta("No se permite añadir un producto que supere los 200€", "danger");
+        mostrarAlerta("No se permite añadir un producto que supere los 200€.", "danger");
         return; 
         }
 
