@@ -76,20 +76,30 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
     const productosFiltrados = useMemo(() => {
         if (!productos) return [];
+
+        // función para quitar tildes
+        const quitarTildes = (texto) =>
+            texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
         return productos.filter(prod => {
+            // normalizamos el nombre del producto y lo que escribe el usuario
+            /*
             const nombreProd = (prod.nombre || "").toLowerCase();
             const busquedaNormal = (busqueda || "").toLowerCase();
+            */
+            const nombreProd = quitarTildes(prod.nombre || "");
+            const busquedaNormal = quitarTildes(busqueda || "");
             const coincideBusqueda = nombreProd.includes(busquedaNormal);
             const coincidePrecio = prod.precio <= precioMax;
+            
+
 
             if (!categoria || categoria === "Todas") {
                 return coincideBusqueda && coincidePrecio;
             }
 
-            const normalizar = (texto) =>
-                texto.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-            return normalizar(prod.tipo || "") === normalizar(categoria) && coincideBusqueda && coincidePrecio;
+            const coincideCategoria = quitarTildes(prod.tipo || "") === quitarTildes(categoria);
+            return coincideCategoria && coincideBusqueda && coincidePrecio;
         });
     }, [productos, categoria, busqueda, precioMax]);
 

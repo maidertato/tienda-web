@@ -91,7 +91,8 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                 {productosCarrito.map((prod) => {
                   const datos = obtenerDatos(prod);
                   return (  
-                    <div key={datos.id} className="d-flex justify-content-between align-items-center mb-3 p-3"
+                    <div key={datos.id} 
+                      className="d-flex justify-content-between align-items-center mb-3 p-3"
                       style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
                     
                       {/* FOTO DEL PRODUCTO */}
@@ -109,8 +110,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
                       {/* Información del producto (nombre y subtotal) */}
                       <div style={{ flex: 1}}>
-                        <h6 className="m-0" style={{ fontWeight: '600' }}>{datos.nombre} {datos.varianteNombre && ` - ${datos.varianteNombre}`}</h6>
-                      
+                        <h6 className="m-0" style={{ fontWeight: '600' }}>{datos.nombre}</h6>                      
                       {/* Contenedor de precio, input y resultado*/}
                         <div className='d-flex flex-column'>
                           <div className="d-flex align-items-center gap-2">
@@ -121,13 +121,12 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                             <input
                               type="number"
                               value={datos.cantidad}
-                              min="0"
+                              min="1"
                               max="20"
                               className="form-control form-control-sm px-1"
                               style={{ 
                                 width: '60px', 
                                 textAlign: 'center' }}
-
                               onClick={()=> {
                                 if (datos.cantidad >= 20) {
                                   setErrorMaxId(datos.id);
@@ -136,43 +135,28 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                               }}
                               onChange={(e) => {
                                 const valor = parseInt(e.target.value);
-                                // si el usuario borra el numero o el numero es 0
-                                if (isNaN(valor) || valor <= 0){
-                                  alEliminar(DOMMatrixReadOnly.id);
-                                  return;
-                                } 
-                                // si el valor es correcto --> entre 1 y 20
+                                if (isNaN(valor)) return;
+
                                 if (valor <= 20) {
                                   setErrorMaxId(null); // Quitamos error si es válido
-                                  const diferencia = valorN - datos.cantidad;
+                                  const diferencia = valor - datos.cantidad;
                                   onCambiarCantidad(datos.id, diferencia);
-                                } else if (valorN > 20) {
+                                } else {
                                   // Si intenta pasarse de 20
-                                  setErrorMaxId(datos.id);
-                                  e.target.value = 20;
+                                  setErrorMaxId(prod.id);
                                   // Opcional: ocultar el mensaje tras 2 segundos
                                   setTimeout(() => setErrorMaxId(null), 2000);
                                 }
                               }}
-                              onBlur={(e) => {
-                                if (e.target.value === "" || e.target.value === "0") {
-                                  alEliminar(datos.id);
-                                }
-                              }}
                             />
-                            <span style={{ 
-                              fontWeight: '700', 
-                              fontSize: '1rem', 
-                              color: '#6A1B9A',
-                              whiteSpace: 'nowrap' 
-                            }}>
+                            <span className="ms-auto" style={{ fontWeight: '700', fontSize: '0.9rem', color: '#6A1B9A' }}>
                               = {(datos.precio * datos.cantidad).toFixed(2)}{DIVISA}
                             </span>
-                          </div>
+                        </div>
                           {/* Mensaje de error si se supera el máximo permitido */}
                           {/* Lo colocamos debajo del producto y su cantidad*/}
-                          {errorMaxId === datos.id && (
-                            <div className="animate_animated animate_fadeIn" style={{
+                          {errorMaxId === prod.id && (
+                            <div className="animate__animated animate__fadeIn" style={{
                               backgroundColor: '#fff1f0', // Un rojo muy clarito/rosado
                               border: '1px solid #ffa39e',
                               color: '#cf1322',
@@ -194,13 +178,13 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                     {/* Papelera: Elimina el producto por completo del carrito */}
                       <button 
                         className="btn-eliminar-coquette" 
-                        onClick={() => alEliminar(datos.id)}
+                        onClick={() => alEliminar(prod.id)}
                         title="Eliminar con amor"
                       >
                         <svg 
                           viewBox="0 0 24 24" 
                           fill="none" 
-                          stroke="currentColor" 
+                         stroke="currentColor" 
                           strokeWidth="1.2" 
                           strokeLinecap="round" 
                           strokeLinejoin="round"
@@ -220,7 +204,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                   <span style={{ fontSize: '1.2rem', fontWeight: '600', color: 'white' }}>Total:</span>
                   <span style={{ fontSize: '1.8rem', fontWeight: '800', color: 'white' }}>
                     {total.toFixed(2)}{DIVISA}
-                  </span>
+                 </span>
                 </div>
 
                 {/* Botón para borrar todos los elementos del carrito de golpe */}
@@ -249,4 +233,3 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 };
 
 export default Carrito;
-
