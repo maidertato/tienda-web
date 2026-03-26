@@ -149,7 +149,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                                 }
                               }}
                             />
-                            <span className="ms-auto" style={{ fontWeight: '700', fontSize: '0.9rem', color: '#6A1B9A' }}>
+                            <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#6A1B9A', marginLeft: '5px' }}>
                               = {(datos.precio * datos.cantidad).toFixed(2)}{DIVISA}
                             </span>
                         </div>
