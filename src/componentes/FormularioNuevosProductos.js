@@ -83,7 +83,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         );
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e) => { // Errores usando metodo centralizado
         e.preventDefault();
         //Offline
         if (deshabilitado) {
@@ -97,7 +97,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         }
 
         if(formData.precio > 200){
-        mostrarAlerta("No se permite añadir un producto que supero los 200€", "danger");
+        mostrarAlerta("No se permite añadir un producto que supere los 200€", "danger");
         return; 
         }
 
