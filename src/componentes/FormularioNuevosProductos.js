@@ -96,6 +96,11 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             return;
         }
 
+        if(formData.precio > 200){
+        mostrarAlerta("No se permite añadir un producto que supero los 200€", "danger");
+        return; 
+        }
+
         let imagenUrl = null;
         if (file) {
             imagenUrl = URL.createObjectURL(file); 
