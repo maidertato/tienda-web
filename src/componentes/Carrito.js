@@ -219,7 +219,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                   <span style={{ fontSize: '1.2rem', fontWeight: '600', color: 'white' }}>Total:</span>
                   <span style={{ fontSize: '1.8rem', fontWeight: '800', color: 'white' }}>
                     {total.toFixed(2)}{DIVISA}
-                 </span>
+                </span>
                 </div>
 
                 {/* Botón para borrar todos los elementos del carrito de golpe */}
