@@ -101,12 +101,9 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             return; 
         }
 
-        let imagenUrl = null;
-        if (file) {
-            imagenUrl = URL.createObjectURL(file); 
-        } else {
-            imagenUrl = "/imagenes/productos/default.png"; 
-        }
+        let imagenUrl = file
+            ? URL.createObjectURL(file)
+            : process.env.PUBLIC_URL + "/imagenes/productos/default.png";
 
         const precioNum = parseFloat(formData.precio);
         const nuevoProducto = {

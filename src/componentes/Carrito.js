@@ -6,7 +6,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
   
   // Función de ayuda para sacar los datos aunque sean privados
   const obtenerDatos = (p) => ({
-    id: p.id || p.id,
+    id: p.id,
     nombre: p.nombre || "Producto",
     precio: parseFloat(p.precio) || 0,
     imagen: p.imagen || 'imagenes/productos/default.png',
@@ -23,7 +23,6 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
   return (
     <>
-      {/* Fondo oscurecido con desenfoque suave, solo se muestra cuando el estado 'show' es verdadero */}
       {show && (
         <div
           className="offcanvas-backdrop fade show"
@@ -34,16 +33,10 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
       {/* Contenedor principal del carrito lateral */}
       <div
-        className={`offcanvas offcanvas-start ${show ? 'show' : ''}`}
+        className={`offcanvas offcanvas-start carrito-panel ${show ? 'show' : ''}`}
         tabIndex="-1"
         style={{
           visibility: show ? 'visible' : 'hidden',
-          width: '400px',
-          borderRight: 'none',
-          backgroundColor: '#9c61d6', 
-          boxShadow: '10px 0 30px rgba(0,0,0,0.1)',
-          borderRadius: '0 20px 20px 0', // Bordes redondeados a la derecha
-          transition: 'transform 0.3s ease-in-out',
           transform: show ? 'translateX(0)' : 'translateX(-100%)'
         }}
       >
@@ -82,7 +75,6 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                   </svg>
                   Inicio
               </button>
-
             </div>
           ) : (
             <div className="d-flex flex-column h-100">
@@ -94,7 +86,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                     <div key={datos.id} 
                       className="d-flex justify-content-between align-items-center mb-3 p-3"
                       style={{ backgroundColor: 'white', borderRadius: '15px', border: '1px solid #f0f0f0' }}>
-                    
+                      
                       {/* FOTO DEL PRODUCTO */}
                       <img
                         src={datos.imagen}
@@ -147,14 +139,14 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                                 }
 
                                 if (valorN > 0 && valorN <= 20) {
-                                  setErrorMaxId(null); // Quitamos error si es válido
+                                  setErrorMaxId(null); 
                                   const diferencia = valorN - datos.cantidad;
                                   onCambiarCantidad(datos.id, diferencia);
+
                                 } else if (valorN > 20) {
-                                  // Si intenta pasarse de 20
+
                                   setErrorMaxId(prod.id);
                                   e.target.value = 20;
-                                  // Opcional: ocultar el mensaje tras 2 segundos
                                   setTimeout(() => setErrorMaxId(null), 2000);
                                 }
                               }}
@@ -171,17 +163,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                           {/* Mensaje de error si se supera el máximo permitido */}
                           {/* Lo colocamos debajo del producto y su cantidad*/}
                           {errorMaxId === prod.id && (
-                            <div className="animate__animated animate__fadeIn" style={{
-                              backgroundColor: '#fff1f0', // Un rojo muy clarito/rosado
-                              border: '1px solid #ffa39e',
-                              color: '#cf1322',
-                              fontSize: '0.85rem',
-                              padding: '8px',
-                              borderRadius: '8px',
-                              marginTop: '12px',
-                              textAlign: 'center',
-                              fontWeight: '500'
-                            }}>
+                            <div className="animate__animated animate__fadeIn mensaje-error-carrito" >
                               No se permiten más de 20 copias.
                             </div>
                           )}  
@@ -189,7 +171,6 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                     </div>
                       
                   
-
                     {/* Papelera: Elimina el producto por completo del carrito */}
                       <button 
                         className="btn-eliminar-coquette" 
@@ -222,20 +203,8 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                 </span>
                 </div>
 
-                {/* Botón para borrar todos los elementos del carrito de golpe */}
-                <button
-                  className="btn w-100 mb-3"
-                  style={{
-                    backgroundColor: 'white',
-                    color: 'black',
-                    padding: '12px',
-                    borderRadius: '12px',
-                    fontWeight: '700',
-                    fontSize: '1.1rem',
-                    boxShadow: '0 4px 15px rgba(106, 27, 154, 0.3)'
-                  }}
-                  onClick={alVaciar}
-                >
+                {/* Botón de vaciar todo */}
+                <button className="btn w-100 mb-3 btn-vaciar-carrito" onClick={alVaciar} >
                   Vaciar todo
                 </button>
               </div>

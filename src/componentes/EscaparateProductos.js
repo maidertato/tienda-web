@@ -1,14 +1,12 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import DetallesProducto from './DetallesProducto';
 import BuscadorProductos from './BuscadorProductos';
 import Paginacion from './Paginacion';
 import { obtenerAtributoExtra } from '../tienda/tienda.js';
 
 const categorias = ["Todas", "Mobiliario", "Cabello", "Juguete", "Merchandising", "Alimentación", "Accesorios"];
-//////////////////////////////////
-// COMPONENTE PARA GESTIONAR LAS IMÁGENES Y VARIANTES
-//////////////////////////////////
-const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => {
+
+const GaleriaProducto = ({ prod, setProductoSeleccionado, onVarianteChange }) => {
     // Usamos useMemo para que el array de imágenes sea estable y no cambie en cada render
     const imagenes = useMemo(() => {
         return prod.variantes && prod.variantes.length > 0
@@ -19,20 +17,17 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
     // Índice para saber qué foto del carrusel estamos viendo
     const [idx, setIdx] = useState(0);
 
-    // Sincronizar el nombre de la variante cada vez que se cambie de imagen
-    useEffect(() => {
-        if (onVarianteChange && imagenes[idx]) {
-            onVarianteChange(imagenes[idx].nombre || "");
-        }
-    }, [idx, imagenes, onVarianteChange]);
-
-    // Función para pasar fotos adelante o atrás sin que se cierren los detalles
+    // Funcionalidad extra
     const cambiarImagen = (e, direccion) => {
         e.stopPropagation();
-        if (direccion === 'next') {
-            setIdx((prev) => (prev + 1) % imagenes.length);
-        } else {
-            setIdx((prev) => (prev - 1 + imagenes.length) % imagenes.length);
+        const nuevoIdx = direccion === 'next'
+            ? (idx + 1) % imagenes.length
+            : (idx - 1 + imagenes.length) % imagenes.length;
+        setIdx(nuevoIdx);
+
+        // Llamamos al padre solo cuando el usuario cambia la imagen
+        if (onVarianteChange) {
+            onVarianteChange(imagenes[nuevoIdx].nombre || "");
         }
     };
 
@@ -58,9 +53,8 @@ const CarruselImagen = ({ prod, setProductoSeleccionado, onVarianteChange }) => 
     );
 };
 
-//////////////////////////////////////
-// COMPONENTE PRINCIPAL: ESCAPARATE COMPLETO
-//////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
 const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, categoria, setCategoria, precioMax, setPrecioMax, paginaActual, setPaginaActual, carrito = [] }) => {
     // Estado para saber qué producto mostrar en la caja de detalles
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
@@ -69,10 +63,29 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
     // Estado para controlar qué burbuja de mensaje (exito/error) se muestra
     const [idAnadido, setIdAnadido] = useState(null);
     // Guardamos qué variante está seleccionada en cada producto para el título
-    const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
     const refFiltros = useRef(null);
-
     const [showFiltros, setShowFiltros] = useState(false);
+    // Que el padre memorice onVarianteChange
+    const handleVarianteChange = useCallback((idProducto, nombreVariante) => {
+        setVariantesSeleccionadas(prev => ({
+            ...prev,
+            [idProducto]: nombreVariante
+        }));
+    }, []);
+
+    const [variantesSeleccionadas, setVariantesSeleccionadas] = useState({});
+    useEffect(() => {
+        if (!productos) return;
+        const iniciales = {};
+        productos.forEach(prod => {
+            if (prod.variantes && prod.variantes.length > 0) {
+                iniciales[prod.id] = prod.variantes[0].nombre;
+            }
+        });
+        setVariantesSeleccionadas(iniciales);
+    }, [productos]);
+    
+
 
     const productosFiltrados = useMemo(() => {
         if (!productos) return [];
@@ -214,9 +227,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                                 background: categoria === cat ? '#f3ebff' : 'transparent',
                                                 color: categoria === cat ? '#8e24aa' : '#333',
                                                 borderRadius: '8px'
-                                            }}
-                                        >
-                                            {cat}
+                                            }}> {cat}
                                         </button>
                                     ))}
                                 </div>
@@ -262,15 +273,10 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                         <div key={prod.id} className="col d-flex justify-content-center">
                             <div className="card-producto-tienda w-100 h-100 shadow-sm border-0">
                                 <div className="position-relative">
-                                    <CarruselImagen
+                                    <GaleriaProducto
                                         prod={prod}
                                         setProductoSeleccionado={setProductoSeleccionado}
-                                        onVarianteChange={(nombre) => {
-                                            setVariantesSeleccionadas(prev => ({
-                                                ...prev,
-                                                [prod.id]: nombre
-                                            }));
-                                        }}
+                                        onVarianteChange={(nombre) => handleVarianteChange(prod.id, nombre)}
                                     />
 
                                     {/* Boton lateral del producto */}

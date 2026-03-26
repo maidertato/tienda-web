@@ -859,6 +859,37 @@ LISTA DE PRODUCTOS Y TARJETAS
 CARRITO DE COMPRAS (PANEL LATERAL)
  ========================== */
 
+.carrito-panel {
+  width: 400px;
+  background-color: #9c61d6 !important;
+  border-radius: 0 20px 20px 0;
+  border-right: none;
+  box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease-in-out;
+}
+.mensaje-error-carrito {
+  background-color: #fff1f0 !important;
+  border: 1px solid #ffa39e important;
+  color: #cf1322 !important;
+  font-size: 0.85rem;
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+.btn-vaciar-carrito {
+  background-color: white !important;
+  color: black !important;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(106, 27, 154, 0.3);
+  width: 100%;
+  margin-bottom: 1rem; /* equivalente a mb-3 */
+}
+
 .offcanvas {
   background-color: #9C66D4;
   font-family: 'Quicksand', sans-serif;
@@ -878,7 +909,6 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   text-align: center;
   margin-bottom: 1rem;
 }
-
 
 .custom-header {
   display: flex;
@@ -1525,8 +1555,10 @@ footer {
   ========================== */
 
 .badge-offline {
-  position: fixed;
-  top: 20px;
+  position: absolute;
+  transform: translateY(-50%);
+  top: 31px;
+  margin: 0;
   right: 20px;
   background-color: #ff0000 !important;
   color: white !important;

@@ -202,26 +202,14 @@ export const buscarProductoPorNombre = (nombre) => {
   return inventario.filter(p => p.nombre.toLowerCase().includes(nombre.toLowerCase()));
 };
 
-// Guarda un producto en la memoria del navegador usando su ID como clave
-export function guardarEnCarrito(producto) {
-  // Creamos un objeto simple con los datos que queremos conservar
-  const datosParaGuardar = {
-    id: producto.id,
-    nombre: producto.nombre,
-    precio: producto.precio,
-    descripcion: producto.descripcion,
-    imagen: producto.imagen,
-    tipo: producto.tipo,
-    // Guardamos el atributo extra según el tipo
-    extra: producto.tipoAlimento || producto.tipoMascota || producto.material || producto.estilo || producto.tipoJuguete || producto.parteDelCuerpo || ""
-  };
-  
-  localStorage.setItem("producto_" + producto.id, JSON.stringify(datosParaGuardar));
+// crea clave --> texto
+export function guardarEnCarrito(productoId, productoInfo) { 
+  localStorage.setItem(`producto_${productoId}`, JSON.stringify(productoInfo));
 }
 
 // Elimina un producto específico de la memoria del navegador
 export function borrarDelCarrito(productoId) {
-  localStorage.removeItem("producto_" + productoId);
+  localStorage.removeItem(`producto_${productoId}`);
 }
 
 // Recupera todos los productos guardados que empiecen por "producto_"
@@ -230,7 +218,7 @@ export const cargarCarrito = () => {
 
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key.startsWith("producto_")) {
+    if (key.includes("producto_")) {
       const datosRaw = JSON.parse(localStorage.getItem(key));
       
       // Convertimos el objeto plano otra vez en Clase

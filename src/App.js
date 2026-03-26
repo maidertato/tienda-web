@@ -154,18 +154,12 @@ function App() {
       {/* 1. Cabecera limpia: Solo recibe el título */}
       <Cabecera titulo="🐈   🐦 Tienda de Mascotas 🦮   🐇" />
 
-      {/* Rectángulo Offline (solo se muestra si isOnline es false) */}
-      {!isOnline && (
-        <div className="badge-offline">
-          Estás offline
-        </div>
-      )}
-
       {/* MenuNavegacion: buscador y botón del carrito */}
       <MenuNavegacion
         cantidadCarrito={totalUnidades}
         toggleCarrito={() => setShowCarrito(true)}
         irAInicio={irAInicio}
+        isOnline={!isOnline}
       />
 
       {/* Carrito: el panel lateral que se abre y cierra */}

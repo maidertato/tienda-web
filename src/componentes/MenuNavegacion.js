@@ -1,17 +1,11 @@
 import React from 'react';
 
-// El componente recibe 3 cosas: 
-// 1. cantidadCarrito: para mostrar el numerito en el icono
-// 2. toggleCarrito: para abrir el panel lateral
-// 3. irAInicio: para limpiar filtros y volver al principio
-
-const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio }) => {
+const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio, isOnline }) => {
   return (
     // Contenedor principal de la barra de navegación
-    <nav className="nav-expand">
+    <nav className="nav-expand d-flex align-items-center justify-content-center position-relative" style={{ minHeight: '60px' }}>
       {/* Lista horizontal de botones, centrada y con separación */}
       <ul className="button-container d-flex list-unstyled justify-content-center m-0 p-2 gap-4">
-
         {/* BOTÓN DE INICIO */}
         <li>
           <button className="nav-btn" onClick={irAInicio}>
@@ -27,7 +21,7 @@ const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio }) => {
         {/* BOTÓN DEL CARRITO */}
         <li>
           {/* El botón usa toggleCarrito y atributos de Bootstrap para abrir el Offcanvas */}
-          <button className="nav-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#carrito" onClick={toggleCarrito}>
+          <button className="nav-btn" type="button"onClick={toggleCarrito}>
             {/* Contenedor relativo para que el globo con el numerito se posicione sobre el icono */}
             <div style={{ position: "relative", display: "inline-flex" }}>
               {/* SVG del icono del carrito de compra */}
@@ -40,13 +34,16 @@ const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio }) => {
               <span className="cart-badge badge rounded-pill">
                 {cantidadCarrito}
               </span>
-
             </div>
             <span className="nav-text">Carrito</span>
           </button>
         </li>
-
       </ul>
+      {isOnline && (
+        <div className="badge-offline position-absolute end-0 me-3">
+          Estás offline
+        </div>
+      )}
     </nav>
   );
 };
