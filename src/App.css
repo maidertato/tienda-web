@@ -912,11 +912,12 @@ CARRITO DE COMPRAS (PANEL LATERAL)
 .btn-close-custom {
   opacity: 0.7;
   transition: 0.2s ease;
+  transform: translate(5px, -5px);
 }
 
 .btn-close-custom:hover {
   opacity: 1;
-  transform: scale(1.2);
+  transform: translate(5px, -5px) scale(1.2);
 }
 
 .carrito-item {
