@@ -110,8 +110,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
                       {/* Información del producto (nombre y subtotal) */}
                       <div style={{ flex: 1}}>
-                        <h6 className="m-0" style={{ fontWeight: '600' }}>{datos.nombre}</h6>                      
-                      {/* Contenedor de precio, input y resultado*/}
+                        <h6 className="m-0" style={{ fontWeight: '600' }}>{datos.nombre} {datos.varianteNombre && ` - ${datos.varianteNombre}`}</h6>                      {/* Contenedor de precio, input y resultado*/}
                         <div className='d-flex flex-column'>
                           <div className="d-flex align-items-center gap-2">
                             <span className="text-muted" style={{ fontSize: '0.8rem' }}>
@@ -121,7 +120,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                             <input
                               type="number"
                               value={datos.cantidad}
-                              min="1"
+                              min="0"
                               max="20"
                               className="form-control form-control-sm px-1"
                               style={{ 
@@ -136,20 +135,36 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                               onChange={(e) => {
                                 const valor = parseInt(e.target.value);
                                 if (isNaN(valor)) return;
+                                const valorS = e.target.value;
+                                
+                                if (valorS === "") return;
 
-                                if (valor <= 20) {
+                                const valorN = parseInt(valorS);
+                                
+                                if (valorN === 0) {
+                                  alEliminar(datos.id);
+                                  return;
+                                }
+
+                                if (valorN > 0 && valorN <= 20) {
                                   setErrorMaxId(null); // Quitamos error si es válido
-                                  const diferencia = valor - datos.cantidad;
+                                  const diferencia = valorN - datos.cantidad;
                                   onCambiarCantidad(datos.id, diferencia);
-                                } else {
+                                } else if (valorN > 20) {
                                   // Si intenta pasarse de 20
                                   setErrorMaxId(prod.id);
+                                  e.target.value = 20;
                                   // Opcional: ocultar el mensaje tras 2 segundos
                                   setTimeout(() => setErrorMaxId(null), 2000);
                                 }
                               }}
+                              onBlur={(e) => {
+                                if (e.target.value === "" || e.target.value === "0") {
+                                  alEliminar(datos.id);
+                                }
+                              }}
                             />
-                            <span className="ms-auto" style={{ fontWeight: '700', fontSize: '0.9rem', color: '#6A1B9A' }}>
+                            <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#6A1B9A', margin: 0.5 }}>
                               = {(datos.precio * datos.cantidad).toFixed(2)}{DIVISA}
                             </span>
                         </div>
@@ -178,13 +193,13 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                     {/* Papelera: Elimina el producto por completo del carrito */}
                       <button 
                         className="btn-eliminar-coquette" 
-                        onClick={() => alEliminar(prod.id)}
+                        onClick={() => alEliminar(datos.id)}
                         title="Eliminar con amor"
                       >
                         <svg 
                           viewBox="0 0 24 24" 
                           fill="none" 
-                         stroke="currentColor" 
+                          stroke="currentColor" 
                           strokeWidth="1.2" 
                           strokeLinecap="round" 
                           strokeLinejoin="round"
