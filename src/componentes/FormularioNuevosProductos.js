@@ -45,7 +45,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         const extension = archivo.name.split(".").pop().toLowerCase();
         if (!fileTypes.includes(extension)) {
             mostrarAlerta(
-                "Formato no válido. La imagen debe ser JPG, JPEG, PNG o GIF.",
+                "Formato no válido. La imagen debe ser JPG, JPEG o PNG.",
                 "danger"
             );
             return;
@@ -182,11 +182,12 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 {/* Imagen upload */}
                 <div className="mb-3">
                     <label className="form-label text-white">Imagen del Producto</label>
-                    <input type="file" ref={fileInputRef} className="form-control" accept="image/*" disabled={deshabilitado} onChange={(e) => {
+                    <input type="file" ref={fileInputRef} className="form-control" accept=".jpg, .jpeg, .png" disabled={deshabilitado} onChange={(e) => {
                         const archivos = e.target.files;
                             if (!archivos || archivos.length === 0) return;
                                 if (archivos.length > 1) {
                                     mostrarAlerta("Solo puedes subir un archivo", "danger");
+                                    e.target.value = "";
                                     return;
                                 }
                                 handleFile(archivos[0]);
@@ -204,7 +205,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                         disabled={deshabilitado}
                         onDraggingStateChange={setIsDragging}
                         onTypeError={() =>
-                            mostrarAlerta("Formato no válido. La imagen debe ser JPG, JPEG, PNG o GIF.", "danger")
+                            mostrarAlerta("Formato no válido. La imagen debe ser JPG, JPEG o PNG.", "danger")
                         }
                         /* Limpiamos textos por defecto de la librería */
                         hoverTitle=" " 
