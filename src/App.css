@@ -1152,6 +1152,30 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   font-size: 1.1rem;
 }
 
+/* =========================
+   DISEÑO DEL SCROLL (CARRITO)
+   ========================== 
+*/
+.offcanvas-body::-webkit-scrollbar {
+  width: 15px; 
+}
+.offcanvas-body::-webkit-scrollbar-track {
+  background: #f1e6ff;
+  border-radius: 10px;
+}
+.offcanvas-body::-webkit-scrollbar-thumb {
+  background: #a474d5;
+  border-radius: 10px;
+  border: 2px solid #f1e6ff;
+}
+.offcanvas-body::-webkit-scrollbar-thumb:hover {
+  background: #9d71ea;
+}
+.offcanvas-body {
+  scrollbar-width: thin;
+  scrollbar-color: #9543e6 #f1e6ff;
+}
+
 /*////////////////////BOTON CIRCULAR PRODUCTO CARRITO //////////////////////////////
 
 /* Estilo del texto de descripción en la tarjeta */
