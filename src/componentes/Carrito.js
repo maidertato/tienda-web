@@ -111,7 +111,8 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
 
                             <input
                               type="number"
-                              value={datos.cantidad}
+                              key={`input-${datos.id}-${datos.cantidad}`}
+                              defaultValue={datos.cantidad}
                               min="0"
                               max="20"
                               className="form-control form-control-sm px-1"
@@ -125,27 +126,25 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                                 }
                               }}
                               onChange={(e) => {
-                                const valor = parseInt(e.target.value);
-                                if (isNaN(valor)) return;
                                 const valorS = e.target.value;
-                                
+
                                 if (valorS === "") return;
 
                                 const valorN = parseInt(valorS);
-                                
+
                                 if (valorN === 0) {
                                   alEliminar(datos.id);
                                   return;
                                 }
 
                                 if (valorN > 0 && valorN <= 20) {
-                                  setErrorMaxId(null); 
+                                  setErrorMaxId(null); // Quitamos error si es válido
                                   const diferencia = valorN - datos.cantidad;
                                   onCambiarCantidad(datos.id, diferencia);
-
                                 } else if (valorN > 20) {
-
+                                  // Si intenta pasarse de 20
                                   setErrorMaxId(prod.id);
+                                  setErrorMaxId(datos.id);
                                   e.target.value = 20;
                                   setTimeout(() => setErrorMaxId(null), 2000);
                                 }
@@ -162,7 +161,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                         </div>
                           {/* Mensaje de error si se supera el máximo permitido */}
                           {/* Lo colocamos debajo del producto y su cantidad*/}
-                          {errorMaxId === prod.id && (
+                          {errorMaxId === datos.id && (
                             <div className="animate__animated animate__fadeIn mensaje-error-carrito" >
                               No se permiten más de 20 copias.
                             </div>
@@ -174,7 +173,7 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                     {/* Papelera: Elimina el producto por completo del carrito */}
                       <button 
                         className="btn-eliminar-coquette" 
-                        onClick={() => alEliminar(datos.id)}
+                        onClick={() => alEliminar(prod.id)}
                         title="Eliminar con amor"
                       >
                         <svg 
