@@ -140,12 +140,16 @@ const Carrito = ({ productosCarrito = [], alEliminar, alVaciar, show, alCerrar, 
                                 if (valorN > 0 && valorN <= 20) {
                                   setErrorMaxId(null); // Quitamos error si es válido
                                   const diferencia = valorN - datos.cantidad;
-                                  onCambiarCantidad(datos.id, diferencia);
+                                  if (diferencia !== 0) {
+                                    onCambiarCantidad(datos.id, diferencia);
+                                  }
                                 } else if (valorN > 20) {
                                   // Si intenta pasarse de 20
                                   setErrorMaxId(prod.id);
                                   setErrorMaxId(datos.id);
                                   e.target.value = 20;
+                                  const diferenciaAMax = 20 - datos.cantidad;
+                                  onCambiarCantidad(datos.id, diferenciaAMax);
                                   setTimeout(() => setErrorMaxId(null), 2000);
                                 }
                               }}
