@@ -148,6 +148,10 @@ function App() {
 
   // Calcula cuántos artículos hay en total sumando las cantidades de cada uno
   const totalUnidades = carrito.reduce((acc, item) => acc + (item.cantidad || 1), 0);
+  
+  const mongojs = require('mongojs')
+  const db = mongojs('clientespp', ['users'])
+
 
   return (
     <div id="contenedor">
