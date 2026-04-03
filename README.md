@@ -1,5 +1,5 @@
 ## Para ver Tablas:
 ### usuarios
-    - db.usuarios.find().pretty()
+     db.usuarios.find().pretty()
 ### productos
-    - db.productos.find().pretty()
+     db.productos.find().pretty()
