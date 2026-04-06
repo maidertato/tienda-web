@@ -1,9 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
-const MongoStore = require('connect-mongo').default;
 const mongoose = require('mongoose');
-
+const MongoStore = require('connect-mongo').default;
 const app = express();
 
 
@@ -44,8 +43,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/tienda')
     .catch(err => console.error('Error al conectar a MongoDB:', err));
 
 // usar rutas
-app.use('/api/productos', misProductos);
-app.use('/api/usuarios', misUsuarios);
+app.use('//productos', misProductos);
+app.use('//usuarios', misUsuarios);
 
 app.get('/', (req, res) => {
     res.send('Servidor de la Tienda de mascotas funcionando correct');
