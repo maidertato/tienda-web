@@ -197,7 +197,7 @@ inventario.find(p => p.nombre === 'Alfombra mascotas').variantes = [
 // ========================================================================
 // METODOS
 
-// BUSCADOR: Filtra el inventario comparando el texto con el nombre del producto
+// Filtra el inventario comparando el texto con el nombre del producto
 export const buscarProductoPorNombre = (nombre) => {
   return inventario.filter(p => p.nombre.toLowerCase().includes(nombre.toLowerCase()));
 };
@@ -231,7 +231,9 @@ export const cargarCarrito = () => {
   }
   return carrito;
 };
-// CREADOR: Recibe datos del formulario de la web y crea un objeto de la clase correcta
+// Conecta el formulatio con el sistem
+  // cuando envias el form, llamas aqui.
+  // Coge el tipo que le has puesto, y dependiendo de este, crea el objeto de ese tipo
 export function crearNuevoProducto(tipo, datos) {
   let nuevo;
 
@@ -305,15 +307,14 @@ export function crearNuevoProducto(tipo, datos) {
       return false; // No reconoce el tipo
   }
   if(inventario.find(p => p.name === nuevo.nombre)) {
-    return false; // Ya existe un producto con ese nombre, no lo añadimos
+    return false; // Ya existe un producto con ese nombre, no lo añadimos ( NO DUPLICAMOS)
   }
-  const existe = inventario.some(p => p.id === nuevo.id);
-  if (!existe) {
+  const existe = inventario.some(p => p.id === nuevo.id); // hay al menos uno que tenga ese id
+  if (!existe) { /// si no existe, lo añadimos
       inventario.push(nuevo);// Lo añadimos al inventario para que esté disponible en la tienda
     return nuevo; // Devolvemos el nuevo producto para que se pueda usar en el carrito
   }
 } 
-
 
 export const obtenerAtributoExtra = (producto) => {
     switch (producto.tipo) {

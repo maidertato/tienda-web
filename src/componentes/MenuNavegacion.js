@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio, isOnline }) => {
+const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio, isOffline }) => {
   return (
     // Contenedor principal de la barra de navegación
     <nav className="nav-expand d-flex align-items-center justify-content-center position-relative" style={{ minHeight: '60px' }}>
@@ -39,7 +39,7 @@ const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio, isOnline })
           </button>
         </li>
       </ul>
-      {isOnline && (
+      {isOffline && (
         <div className="badge-offline position-absolute end-0 me-3">
           Estás offline
         </div>

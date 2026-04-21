@@ -1,10 +1,16 @@
 import React, { useState, useRef } from 'react';
+    // Hooks de React:
+    // useState --> para guardar datos que cambioan
+    // useRef --> Sirve para acceder a cosas del DOM (inputs) ( apunta directamenete a algo)
 import { FileUploader } from "react-drag-drop-files";
+    // Libreria para arrastrar imagenes
 import { DIVISA } from '../tienda/tienda.js';
 
 const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
+    // onAgregarProducto --> se ejecuta cuando añado un producto
+    // deshabilitado --> si es true, OFFLINE
     const fileTypes = ["jpg", "png", "jpeg"];
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({ // guardar todos los datos del formulario en un solo estado ( los que pone el usuario)
         tipo: '',
         nombre: '',
         precio: '',
@@ -15,26 +21,32 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         tipoMascota: '',
         categoria: '',
         estilo: ''
-    });
-    const [file, setFile] = useState(null);
-    const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" });
-    const [isDragging, setIsDragging] = useState(false);
-    const fileInputRef = useRef(null);
+    }); // un oslo objeto que guarda todo
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+    const [file, setFile] = useState(null); // guarda la imagen que subes
+    const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" }); // para mostrar mensajes
+    const [isDragging, setIsDragging] = useState(false); // detecta si estas haciendo d&d
+    const fileInputRef = useRef(null); // controla el input de archivo 
+
+    const handleChange = (e) => { // Cuando escribes en el input
+        const { name, value } = e.target; 
+        setFormData(prev => ({ ...prev, [name]: value })); // coge lo que teniamos (..prev) y lo actualiza con el campo que el usuario a tocado
     };
+    // (name) mira que campos has cambiado
+    // (value) el valor que has puesto
+    // setFormat --> actualiza el estado
 
-    const mostrarAlerta = (texto, tipo) => {
+    const mostrarAlerta = (texto, tipo) => { // metodo de alertas generalizado. 
         setAlerta({ visible: true, texto, tipo });
         setTimeout(() => 
             setAlerta({ 
                 visible: false, texto: "", tipo: "" 
-            }), 3000);
+            }), 2500);
     };
 
-    const handleFile = (archivo) => {
+
+    const handleFile = (archivo) => { // control de la imagen
         if (!archivo) return;
         // Si ya hay imagen
         if (file) {
@@ -52,8 +64,12 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         }
         setFile(archivo);
     };
+    // 3 cosas:
+        // 1. si hay una iamgen, no deja subir otra
+        // 2. si formato no valido, no deja subir
+        // 3. si todo correcto, guarda la imagen en el estado 
 
-    const renderCampoDinamico = () => {
+    const renderCampoDinamico = () => { // depende el tipo  que se escoja, un campo extra u otro
         const configExtra = {
             'Mobiliario': { label: 'Material', name: 'material', ph: 'Ej: Madera, Roble...' },
             'Juguete': { label: 'Tipo de Juguete', name: 'categoriajuguete', ph: 'Ej: Peluche, Cuerda...' },
@@ -81,39 +97,45 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 />
             </div>
         );
+        // genera un trozo del html que dependiendo de lo que elija el usuario, cambia
+        
     };
 
-    const handleSubmit = (e) => { // Errores usando metodo centralizado
+    const handleSubmit = (e) => { // Al darle a subir producto
         e.preventDefault();
         //Offline
         if (deshabilitado) {
             mostrarAlerta("El formulario está deshabilitado", "danger");
             return;
         }
-
+        // si no hay tipo de producto
         if (!formData.tipo) {
             mostrarAlerta("Escoge un tipo", "danger");
             return;
         }
-
+        // si el precio introducido mayor 200
         if(formData.precio > 200){
             mostrarAlerta("No se permite añadir un producto que supere los 200€.", "danger");
             return; 
-        }
-
+        }   
+        // Si hay imagen, usa esa
+        // sino la default
         let imagenUrl = file
             ? URL.createObjectURL(file)
             : process.env.PUBLIC_URL + "/imagenes/productos/default.png";
-
+        // Convierte texto -->  numero
         const precioNum = parseFloat(formData.precio);
+        // creo objeto producto con id unico, datos del form e imagen
         const nuevoProducto = {
             id: "prod-" + Date.now(),
             ...formData,
             precio: precioNum,
             imagen: imagenUrl
         };
-
-        onAgregarProducto(formData.tipo, nuevoProducto);
+        // le pasas los datos al padre
+        onAgregarProducto(formData.tipo, nuevoProducto); // envair producto a tienda.js
+            // le paso el tipo (mobiliario...)
+            // nuevo producto --> el producto (dato)
         mostrarAlerta("¡Producto añadido!", "success");
         // Reset del formulario
         setFormData({
@@ -146,6 +168,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 {/* Tipo de Producto */}
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
+                    {/*El tipo qu ele paso a tienda.js */}
                     <select name="tipo" className="form-select" value={formData.tipo} onChange={handleChange} required disabled={deshabilitado} >
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
