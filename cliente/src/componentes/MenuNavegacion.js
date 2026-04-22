@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio, isOnline, irAMiCuenta, irAñadirProducto, irEditarEliminarProducto }) => {
+const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio, isOnline }) => {
   return (
     // Contenedor principal de la barra de navegación
     <nav className="nav-expand d-flex align-items-center justify-content-center position-relative" style={{ minHeight: '60px' }}>
@@ -36,39 +36,6 @@ const MenuNavegacion = ({ cantidadCarrito, toggleCarrito, irAInicio, isOnline, i
               </span>
             </div>
             <span className="nav-text">Carrito</span>
-          </button>
-        </li>
-
-        {/* BOTÓN DE MI CUENTA*/}
-        <li>
-          <button className="nav-btn" onClick={irAMiCuenta}>
-            <svg className="icon" width="24" height="24" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-            <span className="nav-text">Mi Cuenta</span>
-          </button>
-        </li>
-
-        {/* BOTÓN DE AÑADIR PRODUCTO */}
-        <li>
-          <button className="nav-btn" onClick={irAñadirProducto}>
-            <svg className="icon" width="24" height="24" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
-              10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
-            </svg>
-            <span className="nav-text">Añadir Productos</span>
-          </button>
-        </li>
-
-        {/* BOTÓN DE EDITAR/ELIMINAR PRODUCTO */}
-        <li>
-          <button className="nav-btn" onClick={irEditarEliminarProducto}>
-            <svg className="icon" width="24" height="24" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 
-              17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 
-              0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-            </svg>
-            <span className="nav-text">Editar/Eliminar Productos</span>
           </button>
         </li>
       </ul>
