@@ -10,6 +10,8 @@ import FormularioNuevosProductos from './componentes/FormularioNuevosProductos';
 import Pie from './componentes/Pie';
 import Carrito from './componentes/Carrito';
 
+import LogIn from './componentes/LogIn';
+
 
 function App() {
   // ESTADOS BÁSICOS DE LA APLICACIÓN
@@ -30,6 +32,10 @@ function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   // Controlamos el precio máximo para después aplicar el filtro
   const [precioMax, setPrecioMax] = useState(200);
+//________________________________________________________________________
+  const [usuario, setUsuario] = useState(null);
+  const [seccion, setSeccion] = useState("inicio");
+
 
   useEffect(() => {
     // Funciones para actualizar el estado
@@ -161,6 +167,7 @@ function App() {
         toggleCarrito={() => setShowCarrito(true)}
         irAInicio={irAInicio}
         isOnline={!isOnline}
+        setSeccion={setSeccion}
       />
 
       {/* Carrito: el panel lateral que se abre y cierra */}
@@ -176,7 +183,6 @@ function App() {
       {/* escaparate + formulario */}
       <div id="contenido" className="container-fluid mt-4">
         <div className="row">
-
           {/* Parte principal: Lista de productos */}
           <main className="col-md-8">
             {/* 2. EscaparateProductos ahora recibe la lógica de búsqueda */}
@@ -193,13 +199,43 @@ function App() {
               paginaActual={paginaActual}
               setPaginaActual={setPaginaActual}
             />
+            {seccion === "add" && (
+            <FormularioNuevosProductos onNuevoProducto={manejarNuevoProducto} />
+          )}
+
+          {seccion === "editar" && (
+            <h2>Aquí iría editar/borrar productos</h2>
+          )}
+
+          {seccion === "cuenta" && (
+            <h2>Panel de usuario</h2>
+          )}
           </main>
 
           {/* Barra lateral: Formulario para crear productos nuevos */}
-          <aside className="col-md-3">
-            <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}
-            deshabilitado={!isOnline}
-            />
+          <aside className="col-md-4">
+            {!usuario ? (
+              <LogIn 
+                onLogin={(datos) => setUsuario(datos)} 
+                isOnline={isOnline} 
+                apiBaseUrl="http://localhost:4000/api" 
+              />
+            ) : (
+              /* Si SÍ hay usuario, mostramos el Panel de Usuario (Requisito 3.3) */
+              <div className="card p-3 shadow-sm border-success text-center">
+                <h4>Bienvenide, {usuario.nombre}</h4>
+                <hr />
+                <p className="mb-1"><strong>Rol:</strong> {usuario.rol || "Cliente"}</p>
+                <p className="mb-3">Visitas: {usuario.visitas || 1}</p>
+                
+                <button 
+                  className="btn btn-outline-danger btn-sm w-100" 
+                  onClick={() => setUsuario(null)}
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            )}
           </aside>
         </div>
       </div>
