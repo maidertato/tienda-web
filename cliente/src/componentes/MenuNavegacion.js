@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio, isOnline }) => {
+const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio, isOnline, rolUsuario }) => {
   return (
     // Contenedor principal de la barra de navegación
     <nav className="nav-expand d-flex align-items-center justify-content-center position-relative" style={{ minHeight: '60px' }}>
@@ -8,9 +8,10 @@ const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio,
       <ul className="button-container d-flex list-unstyled justify-content-center m-0 p-2 gap-4">
         {/* BOTÓN DE INICIO */}
         <li>
-          <button className="nav-btn" onClick={() => {irAInicio();
-                                                      setSeccion("inicio");
-                                                    }}>
+          <button className="nav-btn" onClick={() => {
+            irAInicio();
+            setSeccion("inicio");
+          }}>
             {/* SVG del icono de inicio */}
             <svg className="icon" width="24" height="24" viewBox="0 0 1024 1024">
               <path fill="currentColor"
@@ -23,7 +24,7 @@ const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio,
         {/* BOTÓN DEL CARRITO */}
         <li>
           {/* El botón usa toggleCarrito y atributos de Bootstrap para abrir el Offcanvas */}
-          <button className="nav-btn" type="button"onClick={toggleCarrito}>
+          <button className="nav-btn" type="button" onClick={toggleCarrito}>
             {/* Contenedor relativo para que el globo con el numerito se posicione sobre el icono */}
             <div style={{ position: "relative", display: "inline-flex" }}>
               {/* SVG del icono del carrito de compra */}
@@ -43,48 +44,36 @@ const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio,
 
         {/* BOTÓN DEL MI CUENTA */}
         <li>
-          <button className="nav-btn" type="button"onClick={() => setSeccion("cuenta")}>
-            <div style={{ position: "relative", display: "inline-flex" }}>
-              <svg className="icon" width="24"height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
-                <circle cx="12" cy="10" r="3" stroke="white" strokeWidth="2"/>
-                <path d="M6 18.5C7.5 15.5 10 14 12 14C14 14 16.5 15.5 18 18.5" stroke="white" strokeWidth="2" strokeLinecap="round"
-                />
-              </svg>
-            </div>
+          <button className="nav-btn" type="button" onClick={() => setSeccion("cuenta")}>
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
             <span className="nav-text">Mi cuenta</span>
           </button>
         </li>
 
-        {/* BOTÓN DE AÑADIR UN PRODUCTO */}
-        <li>
-          <button className="nav-btn" type="button"onClick={() => setSeccion("add")}>
-            <div style={{ position: "relative", display: "inline-flex" }}>
-              <svg className="icon" width="26" height="24" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-              </svg>
-            </div>
-            <span className="nav-text">Add producto</span>
-          </button>
-        </li>
-        {/* BOTÓN DE EDITAR/BORRAR PRODUCTO */}
-        <li>
-          <button className="nav-btn" type="button"onClick={() => setSeccion("editar")}>
-            <div style={{ position: "relative", display: "inline-flex" }}>
-              <svg className="icon" width="24" height="24" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-              </svg>
-            </div>
-            <span className="nav-text">Editar/Borrar producto</span>
-          </button>
-        </li>
-
-
-
+        {rolUsuario === 'admin' && (
+          <>
+            <li>
+              <button className="nav-btn" type="button" onClick={() => setSeccion("add")}>
+                <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" />
+                </svg>
+                <span className="nav-text">Añadir</span>
+              </button>
+            </li>
+            <li>
+              <button className="nav-btn" type="button" onClick={() => setSeccion("editar/borrar")}>
+                <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+                <span className="nav-text">Edita/borra</span>
+              </button>
+            </li>
+          </>
+        )}
       </ul>
       {isOnline && (
         <div className="badge-offline position-absolute end-0 me-3">
