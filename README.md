@@ -17,5 +17,4 @@ db.usuarios.insertOne({
 
 
 ## Para Abrir la web:
-     cd servidor / cliente 
-     npm start
+     npm run dev
