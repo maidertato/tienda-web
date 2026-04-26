@@ -90,7 +90,7 @@ BOTONES EXPANSIBLES E ICONOS
 .button-container {
   display: flex;
   background-color: #9C66D4;
-  width: 310px;
+  width: auto;
   height: 50px;
   align-items: center;
   justify-content: space-evenly;
