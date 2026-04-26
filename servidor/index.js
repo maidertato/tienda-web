@@ -43,11 +43,10 @@ app.use((req, res, next) => {
     next();
 });
 
-
 //  Conectar a MongoDB
-// mongoose.connect('mongodb://127.0.0.1:27017/tienda')
-//    .then(() => console.log('Conectado a MongoDB (Base de datos: tienda)'))
-//    .catch(err => console.error('Error al conectar a MongoDB:', err));
+mongoose.connect('mongodb://127.0.0.1:27017/tienda')
+    .then(() => console.log('Conectado a MongoDB (Base de datos: tienda)'))
+    .catch(err => console.error('Error al conectar a MongoDB:', err));
 
 // usar rutas
 app.use('/productos', misProductos);
@@ -63,7 +62,7 @@ app.get('/api/contador', (req, res) => {
 });
 
 // Puerto
-const PORT = 5002;
+const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`Servidor en http://localhost:${PORT}`);
     console.log(`Firebase HTML en: http://localhost:${PORT}/email-password.html`);

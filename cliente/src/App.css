@@ -216,13 +216,7 @@ main .pagination-wrapper {
   FORMULARIO (ASIDE)
   ========================================= */
 aside {
-  background-color: #9C66D4;
-  padding: 1.2rem;
-  border-radius: 20px;
   align-self: flex-start;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  width: 260px;
-  top: 2rem;
   font-family: 'Quicksand', sans-serif;
   flex-shrink: 0;
 }
@@ -327,6 +321,7 @@ aside button {
   transition: background-color 0.3s, transform 0.2s;
 }
 
+
 aside button:hover {
   background-color: #d0b4f5;
   transform: scale(1.05);
@@ -409,7 +404,7 @@ main {
   flex: 1 !important;
   min-width: 0;
   padding-right: 2rem !important;
-  border-right: 2px solid #e0c5f2 !important;
+  border-right: none !important;
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;

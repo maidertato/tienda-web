@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase-config'; 
+import { auth } from "../firebase-config";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
     const [email, setEmail] = useState('');
@@ -24,21 +24,16 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
 
             if (response.ok) {
                 const datosServidor = await response.json();
-                onLogin(datosServidor); 
+                onLogin(datosServidor.usuario); 
             }
         } catch (err) {
-            setError("Credenciales incorrectas");
+            setError("No se ha podido iniciar sesión");
         }
     };
 
     return (
-        <div className="card shadow-lg border-0" style={{ 
-            borderRadius: '20px', 
-            backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-            backdropFilter: 'blur(10px)', 
-            padding: '10px'
-        }}> 
-            <div className="card-header bg-primary text-white text-center border-0" style={{ borderRadius: '15px 15px 0 0' }}>
+        <div > 
+            <div className="titulo formulario" >
                 <h5 className="mb-0 fw-bold">Acceso Clientes</h5>
             </div>
             <div className="card-body">
@@ -71,7 +66,11 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-primary w-100 fw-bold py-2" disabled={!isOnline}>
+                    <button 
+                        type="submit" 
+                        className="btn btn-custom w-100 fw-bold py-2" 
+                        disabled={!isOnline}
+                        >
                         {isOnline ? "IDENTIFICARSE" : "SIN CONEXIÓN"}
                     </button>
                 </form>

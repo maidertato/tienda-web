@@ -182,7 +182,7 @@ function App() {
       <div id="contenido" className="container-fluid mt-4">
         <div className="row justify-content-center">
           {/* Parte principal: Lista de productos */}
-          <main className={seccion === "inicio" ? "col-md-8" : "col-12"} >
+          <main className={seccion === "inicio" ? "col-md-9" : "col-12"} >
             {/* 2. EscaparateProductos ahora recibe la lógica de búsqueda */}
             {seccion === "inicio" && (
               <EscaparateProductos
@@ -224,25 +224,27 @@ function App() {
 
           {/* Barra lateral: Formulario para crear productos nuevos */}
           {seccion === "inicio" && (
-            <aside className="col-md-4">
-              {!usuario ? (
-                <LogIn
-                  onLogin={(datos) => setUsuario(datos)}
-                  isOnline={isOnline}
-                  apiBaseUrl="http://localhost:4000/api"
-                />
-              ) : (
-                <div className="card p-3 shadow-sm border-success text-center">
-                  <h4>Bienvenida, {usuario.nombre}</h4>
-                  <hr />
-                  <p className="mb-1"><strong>Rol:</strong> {usuario.rol || "Cliente"}</p>
-                  <p className="mb-3">Visitas: {usuario.visitas || 1}</p>
+            <aside className="col-md-3">
+              <div style={{ backgroundColor: '#9C66D4', borderRadius: '20px', padding: '1.2rem', marginLeft: '1.5rem', boxShadow: '0 10px 25px rgba(0,0,0,0.1)'}}>
+                {!usuario ? (
+                  <LogIn
+                    onLogin={(datos) => setUsuario(datos)}
+                    isOnline={isOnline}
+                    apiBaseUrl="http://localhost:4000"
+                  />
+                ) : (
+                  <div className="card p-3 shadow-sm border-success text-center">
+                    <h4>Bienvenida, {usuario.nombre}</h4>
+                    <hr />
+                    <p className="mb-1"><strong>Rol:</strong> {usuario.rol || "Cliente"}</p>
+                    <p className="mb-3">Visitas: {usuario.visitas || 1}</p>
 
-                  <button className="btn btn-outline-danger btn-sm w-100" onClick={() => { setUsuario(null); setSeccion("inicio"); }}>
-                    Cerrar sesión
-                  </button>
-                </div>
-              )}
+                    <button className="btn btn-outline-danger btn-sm w-100" onClick={() => { setUsuario(null); setSeccion("inicio"); }}>
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
+              </div>
             </aside>
           )}
         </div>
