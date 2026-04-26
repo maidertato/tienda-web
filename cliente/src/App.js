@@ -15,7 +15,6 @@ import LogIn from './componentes/LogIn';
 
 function App() {
   // ESTADOS BÁSICOS DE LA APLICACIÓN
-
   // Lista total de productos (empieza con el inventario de tienda.js)
   const [productos, setProductos] = useState(inventarioInicial);
   // Lista de lo que el usuario ha comprado (carga lo que haya en LocalStorage)
@@ -32,7 +31,7 @@ function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   // Controlamos el precio máximo para después aplicar el filtro
   const [precioMax, setPrecioMax] = useState(200);
-//________________________________________________________________________
+  //________________________________________________________________________
   const [usuario, setUsuario] = useState(null);
   const [seccion, setSeccion] = useState("inicio");
 
@@ -60,26 +59,24 @@ function App() {
     setPrecioMax(100); // Pone a 100 el filtro del precio
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  
+
 
   // Crea un producto nuevo desde el formulario y lo mete en la lista
   const manejarNuevoProducto = (tipo, datos) => {
     setProductos(prevProductos => {
       if (prevProductos.find(p => p.id === datos.id)) {
-        return prevProductos; 
+        return prevProductos;
       }
       return [...prevProductos, datos];
     });
-    
-    setBusqueda("");
-    setCategoria("Todas");
+    irAInicio();
   };
 
   // Filtra los productos en tiempo real según lo que escribas en el buscador
   const productosFiltrados = useMemo(() => {
     return productos.filter(p => {
       // Función interna para quitar tildes y pasar a minúsculas
-      const normalizar = (texto) => 
+      const normalizar = (texto) =>
         texto?.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") || "";
 
       const nombreProd = normalizar(p.nombre);
@@ -89,7 +86,7 @@ function App() {
 
       const coincideNombre = nombreProd.includes(busquedaNormal);
       const coincideCategoria = categoria === "Todas" || tipoProducto === categoriaSeleccionada;
-      
+
       return coincideNombre && coincideCategoria;
     });
   }, [productos, busqueda, categoria]);
@@ -154,7 +151,7 @@ function App() {
 
   // Calcula cuántos artículos hay en total sumando las cantidades de cada uno
   const totalUnidades = carrito.reduce((acc, item) => acc + (item.cantidad || 1), 0);
-  
+
 
   return (
     <div id="contenedor">
@@ -168,6 +165,7 @@ function App() {
         irAInicio={irAInicio}
         isOnline={!isOnline}
         setSeccion={setSeccion}
+        rolUsuario={usuario?.rol}
       />
 
       {/* Carrito: el panel lateral que se abre y cierra */}
@@ -182,66 +180,76 @@ function App() {
 
       {/* escaparate + formulario */}
       <div id="contenido" className="container-fluid mt-4">
-        <div className="row">
+        <div className="row justify-content-center">
           {/* Parte principal: Lista de productos */}
-          <main className="col-md-8">
+          <main className={seccion === "inicio" ? "col-md-8" : "col-12"} >
             {/* 2. EscaparateProductos ahora recibe la lógica de búsqueda */}
-            <EscaparateProductos
-              productos={productosFiltrados}
-              onAnadirAlCarrito={manejarAnadirAlCarrito}
-              carrito={carrito}
-              busqueda={busqueda}
-              setBusqueda={setBusqueda}
-              categoria={categoria}
-              setCategoria={setCategoria}
-              precioMax={precioMax}
-              setPrecioMax={setPrecioMax}
-              paginaActual={paginaActual}
-              setPaginaActual={setPaginaActual}
-            />
-            {seccion === "add" && (
-            <FormularioNuevosProductos onNuevoProducto={manejarNuevoProducto} />
-          )}
+            {seccion === "inicio" && (
+              <EscaparateProductos
+                productos={productosFiltrados}
+                onAnadirAlCarrito={manejarAnadirAlCarrito}
+                carrito={carrito}
+                busqueda={busqueda}
+                setBusqueda={setBusqueda}
+                categoria={categoria}
+                setCategoria={setCategoria}
+                precioMax={precioMax}
+                setPrecioMax={setPrecioMax}
+                paginaActual={paginaActual}
+                setPaginaActual={setPaginaActual}
+              />)}
 
-          {seccion === "editar" && (
-            <h2>Aquí iría editar/borrar productos</h2>
-          )}
+            {seccion === "add" && usuario?.rol === "admin" && (
+              <div className="card shadow p-4 animate__animated animate__fadeIn">
+                <h2 className="mb-4 text-center">Añadir productos</h2>
+                <hr />
+                <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto} />
+              </div>
+            )}
 
-          {seccion === "cuenta" && (
-            <h2>Panel de usuario</h2>
-          )}
+            {seccion === "editar/borrar" && usuario?.rol === "admin" && (
+              <div className="card p-5 text-center">
+                <h2>Editar/Borrar</h2>
+                <p>Sección para editar o eliminar productos existentes.</p>
+              </div>
+            )}
+
+            {seccion === "cuenta" && (
+              <div className="card p-5 text-center">
+                <h2>Mi Cuenta</h2>
+                {usuario ? <p>Conectado como {usuario.nombre}</p> : <p>Inicia sesión para ver tu perfil.</p>}
+              </div>
+            )}
           </main>
 
           {/* Barra lateral: Formulario para crear productos nuevos */}
-          <aside className="col-md-4">
-            {!usuario ? (
-              <LogIn 
-                onLogin={(datos) => setUsuario(datos)} 
-                isOnline={isOnline} 
-                apiBaseUrl="http://localhost:4000/api" 
-              />
-            ) : (
-              /* Si SÍ hay usuario, mostramos el Panel de Usuario (Requisito 3.3) */
-              <div className="card p-3 shadow-sm border-success text-center">
-                <h4>Bienvenide, {usuario.nombre}</h4>
-                <hr />
-                <p className="mb-1"><strong>Rol:</strong> {usuario.rol || "Cliente"}</p>
-                <p className="mb-3">Visitas: {usuario.visitas || 1}</p>
-                
-                <button 
-                  className="btn btn-outline-danger btn-sm w-100" 
-                  onClick={() => setUsuario(null)}
-                >
-                  Cerrar sesión
-                </button>
-              </div>
-            )}
-          </aside>
+          {seccion === "inicio" && (
+            <aside className="col-md-4">
+              {!usuario ? (
+                <LogIn
+                  onLogin={(datos) => setUsuario(datos)}
+                  isOnline={isOnline}
+                  apiBaseUrl="http://localhost:4000/api"
+                />
+              ) : (
+                <div className="card p-3 shadow-sm border-success text-center">
+                  <h4>Bienvenida, {usuario.nombre}</h4>
+                  <hr />
+                  <p className="mb-1"><strong>Rol:</strong> {usuario.rol || "Cliente"}</p>
+                  <p className="mb-3">Visitas: {usuario.visitas || 1}</p>
+
+                  <button className="btn btn-outline-danger btn-sm w-100" onClick={() => { setUsuario(null); setSeccion("inicio"); }}>
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
+            </aside>
+          )}
         </div>
       </div>
       {/* Footer con nuestro nombre :) */}
       <Pie contenido="© Dawidawe taldea" />
-    </div>
+    </div >
   );
 }
 
