@@ -19,7 +19,7 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ email: user.email }),
+                body: JSON.stringify({ email: email }),
             });
 
             if (response.ok) {
@@ -27,6 +27,7 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
                 onLogin(datosServidor.usuario); 
             }
         } catch (err) {
+            console.log("Error Firebase:", err.code, err.message);
             setError("No se ha podido iniciar sesión");
         }
     };

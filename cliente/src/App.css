@@ -219,6 +219,8 @@ aside {
   align-self: flex-start;
   font-family: 'Quicksand', sans-serif;
   flex-shrink: 0;
+  border-left: 2px solid #e0c5f2;
+
 }
 
 aside h3 {

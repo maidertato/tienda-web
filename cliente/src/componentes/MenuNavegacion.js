@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio, isOnline, rolUsuario }) => {
+const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio, isOnline, rolUsuario, usuario }) => {
   return (
     // Contenedor principal de la barra de navegación
     <nav className="nav-expand d-flex align-items-center justify-content-center position-relative" style={{ minHeight: '60px' }}>
@@ -43,15 +43,17 @@ const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio,
         </li>
 
         {/* BOTÓN DEL MI CUENTA */}
-        <li>
-          <button className="nav-btn" type="button" onClick={() => setSeccion("cuenta")}>
-            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            <span className="nav-text">Mi cuenta</span>
-          </button>
-        </li>
+        {usuario && (
+          <li>
+            <button className="nav-btn" type="button" onClick={() => setSeccion("cuenta")}>
+              <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <span className="nav-text">Mi cuenta</span>
+            </button>
+          </li>
+        )}
 
         {rolUsuario === 'admin' && (
           <>

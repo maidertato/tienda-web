@@ -166,6 +166,7 @@ function App() {
         isOnline={!isOnline}
         setSeccion={setSeccion}
         rolUsuario={usuario?.rol}
+        usuario={usuario}
       />
 
       {/* Carrito: el panel lateral que se abre y cierra */}
@@ -234,9 +235,11 @@ function App() {
                   />
                 ) : (
                   <div className="card p-3 shadow-sm border-success text-center">
-                    <h4>Bienvenida, {usuario.nombre}</h4>
+                    <h4>Bienvenide, {usuario.nombre}</h4>
                     <hr />
-                    <p className="mb-1"><strong>Rol:</strong> {usuario.rol || "Cliente"}</p>
+                    {usuario.rol === 'admin' && (
+                      <p className="mb-1"><strong>Rol:</strong> {usuario.rol}</p>
+                    )}
                     <p className="mb-3">Visitas: {usuario.visitas || 1}</p>
 
                     <button className="btn btn-outline-danger btn-sm w-100" onClick={() => { setUsuario(null); setSeccion("inicio"); }}>
