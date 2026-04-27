@@ -154,7 +154,7 @@ function App() {
     <div id="contenedor">
       {/* 1. Cabecera limpia: Solo recibe el título */}
       <Cabecera titulo="🐈   🐦 Tienda de Mascotas 🦮   🐇" />
-
+      
       {/* MenuNavegacion: buscador y botón del carrito */}
       <MenuNavegacion
         cantidadCarrito={totalUnidades}
