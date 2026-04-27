@@ -5,7 +5,13 @@ const MenuNavegacion = ({ setSeccion, cantidadCarrito, toggleCarrito, irAInicio,
     // Contenedor principal de la barra de navegación
     <nav className="nav-expand d-flex align-items-center justify-content-center position-relative" style={{ minHeight: '60px' }}>
       {/* Lista horizontal de botones, centrada y con separación */}
-      <ul className="button-container d-flex list-unstyled justify-content-center m-0 p-2 gap-4">
+      <ul className={`button-container d-flex list-unstyled justify-content-center m-0 p-2 gap-4 ${
+    !usuario
+      ? "guest"
+      : rolUsuario === "admin"
+      ? "admin"
+      : "user"
+  }`}>
         {/* BOTÓN DE INICIO */}
         <li>
           <button className="nav-btn" onClick={() => {

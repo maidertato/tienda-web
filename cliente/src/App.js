@@ -11,6 +11,7 @@ import Pie from './componentes/Pie';
 import Carrito from './componentes/Carrito';
 
 import LogIn from './componentes/LogIn';
+import SeccionMiCuenta from './componentes/SeccionMiCuenta';
 
 
 function App() {
@@ -93,8 +94,6 @@ function App() {
 
   // Lógica para añadir cosas a la cesta de la compra
   const manejarAnadirAlCarrito = (productoDeClase) => {
-    // 1. "Aplanamos" el objeto de la clase a un objeto simple
-    // Esto extrae los datos usando los GETTERS de la clase
     const productoSimple = {
       id: productoDeClase.id,
       nombre: productoDeClase.nombre,
@@ -103,7 +102,6 @@ function App() {
       varianteNombre: productoDeClase.varianteNombre
     };
 
-    // 2. Buscamos usando el ID del producto simple
     const productoExistente = carrito.find(item => item.id === productoSimple.id);
 
     if (productoExistente) {
@@ -117,7 +115,6 @@ function App() {
       setCarrito(nuevoCarrito);
       localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
     } else {
-      // 3. Añadimos el objeto simple con cantidad 1
       const nuevoCarrito = [...carrito, { ...productoSimple, cantidad: 1 }];
       setCarrito(nuevoCarrito);
       localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
@@ -216,10 +213,7 @@ function App() {
             )}
 
             {seccion === "cuenta" && (
-              <div className="card p-5 text-center">
-                <h2>Mi Cuenta</h2>
-                {usuario ? <p>Conectado como {usuario.nombre}</p> : <p>Inicia sesión para ver tu perfil.</p>}
-              </div>
+              <SeccionMiCuenta usuario={usuario} />
             )}
           </main>
 

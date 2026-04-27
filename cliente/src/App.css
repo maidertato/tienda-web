@@ -100,8 +100,28 @@ BOTONES EXPANSIBLES E ICONOS
   overflow: hidden;
 }
 
+.button-container {
+  --expand-width: 500px;
+}
+
+/* Hover usa variable */
 .button-container:hover {
-  width: 700px;
+  width: var(--expand-width);
+}
+
+/* Invitado */
+.button-container.guest {
+  --expand-width: 300px;
+}
+
+/* Usuario normal */
+.button-container.user {
+  --expand-width: 500px;
+}
+
+/* Admin */
+.button-container.admin {
+  --expand-width: 700px;
 }
 
 .button-container li {
