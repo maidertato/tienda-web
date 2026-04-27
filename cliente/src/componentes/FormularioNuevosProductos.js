@@ -1,25 +1,36 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FileUploader } from "react-drag-drop-files";
 import { DIVISA } from '../tienda/tienda.js';
 
-const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
+const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado, productoAEditar, esEdicion, onGuardarCambios }) => {
     const fileTypes = ["jpg", "png", "jpeg"];
     const [formData, setFormData] = useState({
-        tipo: '',
-        nombre: '',
-        precio: '',
-        descripcion: '',
-        material: '',
-        categoriajuguete: '',
-        tipoAlimento: '',
-        tipoMascota: '',
-        categoria: '',
-        estilo: ''
+        tipo: productoAEditar?.tipo || '',
+        nombre: productoAEditar?.nombre || '',
+        precio: productoAEditar?.precio || '',
+        descripcion: productoAEditar?.descripcion || '',
+        material: productoAEditar?.material || '',
+        categoriajuguete: productoAEditar?.categoriajuguete || '',
+        tipoAlimento: productoAEditar?.tipoAlimento || '',
+        tipoMascota: productoAEditar?.tipoMascota || '',
+        categoria: productoAEditar?.categoria || '',
+        estilo: productoAEditar?.estilo || ''
     });
     const [file, setFile] = useState(null);
     const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" });
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        if (productoAEditar) {
+            setFormData({ ...productoAEditar, tipo: productoAEditar.tipo || '' });
+        } else {
+            setFormData({
+            tipo: '', nombre: '', precio: '', descripcion: '', material: '',
+            categoriajuguete: '', tipoAlimento: '', tipoMascota: '', categoria: '', estilo: ''
+        });
+        }
+    }, [productoAEditar]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,9 +39,9 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
 
     const mostrarAlerta = (texto, tipo) => {
         setAlerta({ visible: true, texto, tipo });
-        setTimeout(() => 
-            setAlerta({ 
-                visible: false, texto: "", tipo: "" 
+        setTimeout(() =>
+            setAlerta({
+                visible: false, texto: "", tipo: ""
             }), 3000);
     };
 
@@ -54,6 +65,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     };
 
     const renderCampoDinamico = () => {
+        if (esEdicion) return null;
         const configExtra = {
             'Mobiliario': { label: 'Material', name: 'material', ph: 'Ej: Madera, Roble...' },
             'Juguete': { label: 'Tipo de Juguete', name: 'categoriajuguete', ph: 'Ej: Peluche, Cuerda...' },
@@ -69,15 +81,15 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         return (
             <div className="mb-3 animate__animated animate__fadeIn">
                 <label className="form-label fw-bold">{config.label}</label>
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    name={config.name} 
-                    value={formData[config.name]} 
-                    onChange={handleChange} 
-                    placeholder={config.ph} 
-                    required 
-                    disabled={deshabilitado} 
+                <input
+                    type="text"
+                    className="form-control"
+                    name={config.name}
+                    value={formData[config.name] || ''}
+                    onChange={handleChange}
+                    placeholder={config.ph}
+                    required
+                    disabled={deshabilitado}
                 />
             </div>
         );
@@ -85,6 +97,12 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
 
     const handleSubmit = (e) => { // Errores usando metodo centralizado
         e.preventDefault();
+        const tipoFinal = formData.tipo || productoAEditar?.tipo;
+        
+        if (!tipoFinal) {
+        mostrarAlerta("Escoge un tipo", "danger");
+        return;
+    }
         //Offline
         if (deshabilitado) {
             mostrarAlerta("El formulario está deshabilitado", "danger");
@@ -96,57 +114,62 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             return;
         }
 
-        if(formData.precio > 200){
+        if (formData.precio > 200) {
             mostrarAlerta("No se permite añadir un producto que supere los 200€.", "danger");
-            return; 
+            return;
         }
 
-        let imagenUrl = file
-            ? URL.createObjectURL(file)
-            : process.env.PUBLIC_URL + "/imagenes/productos/default.png";
+        let imagenUrl = file ? URL.createObjectURL(file) : (productoAEditar?.imagen || process.env.PUBLIC_URL + "/imagenes/productos/default.png");
 
-        const precioNum = parseFloat(formData.precio);
-        const nuevoProducto = {
-            id: "prod-" + Date.now(),
+        const datosActualizados = {
             ...formData,
-            precio: precioNum,
+            id: productoAEditar?.id,
+            tipo: tipoFinal,
+            precio: parseFloat(formData.precio),
             imagen: imagenUrl
         };
 
-        onAgregarProducto(formData.tipo, nuevoProducto);
-        mostrarAlerta("¡Producto añadido!", "success");
-        // Reset del formulario
-        setFormData({
-            tipo: '',
-            nombre: '',
-            precio: '',
-            descripcion: '',
-            material: '',
-            categoriajuguete: '',
-            tipoAlimento: '',
-            tipoMascota: '',
-            categoria: '',
-            estilo: ''
-        });
-        setFile(null);
-
-        if (fileInputRef.current) {
-            fileInputRef.current.value = ""; 
+        if (esEdicion) {
+            onGuardarCambios(datosActualizados);
+            mostrarAlerta("¡Cambios guardados!", "success");
+        } else {
+            const nuevoProducto = {
+                ...datosActualizados,
+                id: "prod-" + Date.now()
+            };
+            onAgregarProducto(formData.tipo, nuevoProducto);
+            mostrarAlerta("¡Producto añadido!", "success");
+            // Reset del formulario
+            setFormData({
+                tipo: '',
+                nombre: '',
+                precio: '',
+                descripcion: '',
+                material: '',
+                categoriajuguete: '',
+                tipoAlimento: '',
+                tipoMascota: '',
+                categoria: '',
+                estilo: ''
+            });
+            setFile(null);
+            if (fileInputRef.current) fileInputRef.current.value = "";
         }
-
-        const primerInput = document.querySelector('#form-producto [name="tipo"]');
-        if (primerInput) primerInput.focus();
     };
+
+
 
     return (
         <div className={`formulario-wrapper ${deshabilitado ? "offline-mode" : ""}`}> {/* cuando deshabilitado = true --> se ponen todos gris (heredan todos)*/}
-            <h3 className="text-center mb-3">Añadir Productos</h3>
+            <h3 className="text-center mb-3">
+                {esEdicion ? `Editando: ${productoAEditar.nombre}` : "Añadir Productos"}
+            </h3>
             <form id="form-producto" onSubmit={handleSubmit}>
-                
+
                 {/* Tipo de Producto */}
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
-                    <select name="tipo" className="form-select" value={formData.tipo} onChange={handleChange} required disabled={deshabilitado} >
+                    <select name="tipo" className="form-select" value={formData.tipo} onChange={handleChange} required disabled={deshabilitado || esEdicion} >
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
                         <option value="Cabello">Cabello</option>
@@ -160,38 +183,38 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 {/* Nombre */}
                 <div className="mb-3">
                     <label className="form-label">Nombre del Producto</label>
-                    <input type="text" className="form-control"  name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Ej: Pelota de goma" required disabled={deshabilitado} />
+                    <input type="text" className="form-control" name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Ej: Pelota de goma" required disabled={deshabilitado} />
                 </div>
 
                 {/* Precio */}
                 <div className="mb-3">
                     <label className="form-label">Precio ({DIVISA})</label>
-                    <input type="number" className="form-control"  name="precio" value={formData.precio} onChange={handleChange} required disabled={deshabilitado} 
-                        onKeyDown={(e) => { if (["e","E","+","-"].includes(e.key)) e.preventDefault(); }} step="0.01" min="0" placeholder="0.00" /> {/* Para que no permita las e ni nada de eso + que empiece en 0 y que incremente centimo a centimo si usas las flechas */}
+                    <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} required disabled={deshabilitado}
+                        onKeyDown={(e) => { if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault(); }} step="0.01" min="0" placeholder="0.00" /> {/* Para que no permita las e ni nada de eso + que empiece en 0 y que incremente centimo a centimo si usas las flechas */}
                 </div>
 
 
                 {/* Descripción */}
                 <div className="mb-3">
                     <label className="form-label">Descripción</label>
-                    <textarea className="form-control"  disabled={deshabilitado} name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Describe tu producto..." rows="2"></textarea>
+                    <textarea className="form-control" disabled={deshabilitado} name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Describe tu producto..." rows="2"></textarea>
                 </div>
 
                 {renderCampoDinamico()}
 
                 {/* Imagen upload */}
                 <div className="mb-3">
-                    <label className="form-label text-white">Imagen del Producto</label>
+                    <label className="form-label text-white">Imagen del Producto {esEdicion && "(deja vacío para mantener la actual)"}</label>
                     <input type="file" ref={fileInputRef} className="form-control" accept=".jpg, .jpeg, .png" disabled={deshabilitado} onChange={(e) => {
                         const archivos = e.target.files;
-                            if (!archivos || archivos.length === 0) return;
-                                if (archivos.length > 1) {
-                                    mostrarAlerta("Solo puedes subir un archivo", "danger");
-                                    e.target.value = "";
-                                    return;
-                                }
-                                handleFile(archivos[0]);
-                                }} 
+                        if (!archivos || archivos.length === 0) return;
+                        if (archivos.length > 1) {
+                            mostrarAlerta("Solo puedes subir un archivo", "danger");
+                            e.target.value = "";
+                            return;
+                        }
+                        handleFile(archivos[0]);
+                    }}
                     />
                 </div>
 
@@ -208,7 +231,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                             mostrarAlerta("Formato no válido. La imagen debe ser JPG, JPEG o PNG.", "danger")
                         }
                         /* Limpiamos textos por defecto de la librería */
-                        hoverTitle=" " 
+                        hoverTitle=" "
                         dropMessageStyle={{ display: 'none' }}
                         classes="w-100"
                     >
@@ -221,7 +244,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                                 alignItems: "center",
                                 justifyContent: "center",
                                 cursor: deshabilitado ? "not-allowed" : "pointer",
-                                border: "2px dashed #ccc" 
+                                border: "2px dashed #ccc"
                             }}
                         >
                             {isDragging ? (
@@ -230,7 +253,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                                 <span className="success-message">✓ {file.name}</span>
                             ) : deshabilitado ? (
                                 <p className="m-0">Estas sin conexión</p>
-                            ) : null 
+                            ) : null
                             }
                         </div>
                     </FileUploader>
@@ -238,8 +261,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
 
                 {/* Submit Button */}
                 <button type="submit" className="btn btn-custom w-100" disabled={deshabilitado}>
-                    {deshabilitado ? "+ SUBIR PRODUCTO" : "+ Subir Producto"}
-                </button>
+                    {esEdicion ? "GUARDAR CAMBIOS" : (deshabilitado ? "+ SUBIR PRODUCTO" : "+ Subir Producto")}            </button>
 
                 {alerta.visible && (
                     <div className={`alert alert-${alerta.tipo} mt-3`}>{alerta.texto}</div>
@@ -249,4 +271,4 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
     );
 };
 
-export default FormularioNuevosProductos;
+    export default FormularioNuevosProductos;
