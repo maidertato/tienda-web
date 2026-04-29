@@ -1,8 +1,13 @@
 const express = require('express');
+
 const cors = require('cors');
+
 const session = require('express-session');
+
 const mongoose = require('mongoose');
+
 const MongoStore = require('connect-mongo').default;
+
 const path = require('path');
 
 const app = express();
@@ -36,34 +41,58 @@ app.use(session({
 }));
 // contador de visitras
 app.use((req, res, next) => {
-    if (req.session.vistas === undefined) {
-        req.session.vistas = 0;
+    if (req.session.visitas === undefined) {
+        req.session.visitas = 0;
     }
-    req.session.vistas++;
     next();
 });
 
-//  Conectar a MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/tienda')
-    .then(() => console.log('Conectado a MongoDB (Base de datos: tienda)'))
-    .catch(err => console.error('Error al conectar a MongoDB:', err));
+// incrementar visitas manualmente
+app.post('/api/visitas', (req, res) => {
+    if (!req.session.usuario) {
+        return res.status(401).json({ error: 'Debes iniciar sesión' });
+    }
+    req.session.visitas++;
 
-// usar rutas
+    req.session.save((err) => {
+        if (err) {
+            console.error('Error guardando sesión:', err);
+            return res.status(500).json({ error: 'No se pudo actualizar' });
+        }
+
+        res.json({ visitas: req.session.visitas });
+    });
+});
+// ver las visitas
+app.get('/api/contador', (req, res) => {
+    res.json({ visitas: req.session.visitas });
+});
+
+// usar rutas de productos y usuarios
 app.use('/productos', misProductos);
 app.use('/usuarios', misUsuarios);
 
+// Para probar que el servidor funciona
 app.get('/', (req, res) => {
     res.send('Servidor de la Tienda de mascotas funcionando correct');
 });
 
-// Para ver contador de react
-app.get('/api/contador', (req, res) => {
-    res.json({ vistas: req.session.vistas });
-});
-
 // Puerto
 const PORT = 4000;
-app.listen(PORT, () => {
-    console.log(`Servidor en http://localhost:${PORT}`);
-    console.log(`Firebase HTML en: http://localhost:${PORT}/email-password.html`);
-});
+
+async function iniciarApp() {
+    try {
+        await mongoose.connect('mongodb://127.0.0.1:27017/tienda');
+        console.log('Conectado a MongoDB');
+
+        app.listen(PORT, () => {
+            console.log(`Servidor en http://localhost:${PORT}`);
+        });
+
+    } catch (error) {
+        console.error(' Error al conectar:', error);
+        process.exit(1);
+    }
+}
+
+iniciarApp();
