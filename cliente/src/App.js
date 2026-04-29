@@ -12,6 +12,7 @@ import Carrito from './componentes/Carrito';
 
 import LogIn from './componentes/LogIn';
 import SeccionMiCuenta from './componentes/SeccionMiCuenta';
+import GestionInventario from './componentes/GestionInventario';
 
 
 function App() {
@@ -150,6 +151,22 @@ function App() {
   const totalUnidades = carrito.reduce((acc, item) => acc + (item.cantidad || 1), 0);
 
 
+  // ELIMINAR VARIOS PRODUCTOS
+  const alEliminarVarios = (idsABorrar) => {
+    setProductos(prevProductos =>
+      prevProductos.filter(p => !idsABorrar.includes(p.id))
+    );
+  };
+
+  // ACTUALIZAR un producto editado
+  const alActualizarProducto = (productoEditado) => {
+    setProductos(prevProductos =>
+      prevProductos.map(p =>
+        p.id === productoEditado.id ? productoEditado : p
+      )
+    );
+  };
+  
   return (
     <div id="contenedor">
       {/* 1. Cabecera limpia: Solo recibe el título */}
@@ -206,9 +223,15 @@ function App() {
             )}
 
             {seccion === "editar/borrar" && usuario?.rol === "admin" && (
-              <div className="card p-5 text-center">
-                <h2>Editar/Borrar</h2>
-                <p>Sección para editar o eliminar productos existentes.</p>
+              <div className="card shadow p-4 animate__animated animate__fadeIn">
+                <h2 className="text-center mb-4">Editar/Borrar</h2>
+                <p className="text-center text-muted">Selecciona productos para borrar o edita sus detalles.</p>
+                <hr />
+                <GestionInventario
+                  productos={productos}
+                  alEliminarVarios={alEliminarVarios}
+                  alActualizarProducto={alActualizarProducto}
+                />
               </div>
             )}
 
