@@ -14,11 +14,12 @@ import LogIn from './componentes/LogIn';
 import SeccionMiCuenta from './componentes/SeccionMiCuenta';
 import GestionInventario from './componentes/GestionInventario';
 
+const API = 'http://192.168.0.19:4000';
 
 function App() {
   // ESTADOS BÁSICOS DE LA APLICACIÓN
   // Lista total de productos (empieza con el inventario de tienda.js)
-  const [productos, setProductos] = useState(inventarioInicial);
+  const [productos, setProductos] = useState([]);
   // Lista de lo que el usuario ha comprado (carga lo que haya en LocalStorage)
   const [carrito, setCarrito] = useState(cargarCarrito());
   // Controla si el panel lateral del carrito se ve o está escondido
@@ -36,7 +37,9 @@ function App() {
   //________________________________________________________________________
   const [usuario, setUsuario] = useState(null);
   const [seccion, setSeccion] = useState("inicio");
-
+  const [visitas, setVisitas] = useState(1);
+  
+  //________________________________________________________________________
 
   useEffect(() => {
     // Funciones para actualizar el estado
@@ -53,6 +56,49 @@ function App() {
     };
   }, []);
 
+  // Cargar productos desde MongoDB al arrancar
+  useEffect(() => {
+    fetch(`${API}/productos`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(data => setProductos(data))
+      .catch(err => console.error('Error cargando productos:', err));
+  }, []);
+
+    // Incrementar contador de visitas cada vez que se recarga la página con sesión activa
+  useEffect(() => {
+    if (!usuario) return;
+    fetch(`${API}/usuarios/mi-cuenta`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(data => {
+        if (data.visitas) setVisitas(data.visitas);
+      })
+      .catch(err => console.error('Error actualizando visitas:', err));
+  }, []);  // solo al montar, que es cuando se carga/recarga la página
+    
+  // Login: guarda usuario y visitas por separado
+  const manejarLogin = (datosUsuario, visitasIniciales) => {
+    setUsuario(datosUsuario);
+    setVisitas(visitasIniciales || 1);
+  };
+
+  // Logout: avisa al servidor y limpia el estado
+  const manejarLogout = async () => {
+    try {
+      await fetch(`${API}/usuarios/logout`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {
+      console.error('Error al cerrar sesión:', err);
+    }
+    setUsuario(null);
+    setVisitas(1);
+    setSeccion("inicio");
+  };
+
+  //_______________________________________________________________________
+
+
   // Función para resetear la vista al estado original
   const irAInicio = () => {
     setBusqueda("");      // Limpia el buscador
@@ -62,17 +108,60 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-
   // Crea un producto nuevo desde el formulario y lo mete en la lista
-  const manejarNuevoProducto = (tipo, datos) => {
-    setProductos(prevProductos => {
-      if (prevProductos.find(p => p.id === datos.id)) {
-        return prevProductos;
-      }
-      return [...prevProductos, datos];
-    });
-    irAInicio();
+  const manejarNuevoProducto = async (tipo, datos) => {
+    try {
+      const respuesta = await fetch(`${API}/productos/anadir`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(datos)
+      });
+      const productoGuardado = await respuesta.json();
+      setProductos(prev => [...prev, productoGuardado]);
+      irAInicio();
+    } catch (err) {
+      console.error('Error añadiendo producto:', err);
+    }
   };
+  // Borrar varios: llama al servidor y actualiza el estado local
+  const alEliminarVarios = async (idsABorrar) => {
+    try {
+      await fetch(`${API}/productos/borrar`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ ids: idsABorrar })
+      });
+      setProductos(prev => prev.filter(p => !idsABorrar.includes(p._id)));
+    } catch (err) {
+      console.error('Error borrando productos:', err);
+    }
+  };
+
+  // Editar producto: llama al servidor y actualiza el estado local
+  const alActualizarProducto = async (productoEditado) => {
+    try {
+      const respuesta = await fetch(`${API}/productos/editar/${productoEditado._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(productoEditado)
+      });
+      const actualizado = await respuesta.json();
+      setProductos(prev => prev.map(p => p._id === actualizado._id ? actualizado : p));
+    } catch (err) {
+      console.error('Error actualizando producto:', err);
+    }
+  };
+
+
+
+
+
+
+
+
 
   // Filtra los productos en tiempo real según lo que escribas en el buscador
   const productosFiltrados = useMemo(() => {
@@ -150,29 +239,10 @@ function App() {
   // Calcula cuántos artículos hay en total sumando las cantidades de cada uno
   const totalUnidades = carrito.reduce((acc, item) => acc + (item.cantidad || 1), 0);
 
-
-  // ELIMINAR VARIOS PRODUCTOS
-  const alEliminarVarios = (idsABorrar) => {
-    setProductos(prevProductos =>
-      prevProductos.filter(p => !idsABorrar.includes(p.id))
-    );
-  };
-
-  // ACTUALIZAR un producto editado
-  const alActualizarProducto = (productoEditado) => {
-    setProductos(prevProductos =>
-      prevProductos.map(p =>
-        p.id === productoEditado.id ? productoEditado : p
-      )
-    );
-  };
-  
   return (
     <div id="contenedor">
-      {/* 1. Cabecera limpia: Solo recibe el título */}
       <Cabecera titulo="🐈   🐦 Tienda de Mascotas 🦮   🐇" />
       
-      {/* MenuNavegacion: buscador y botón del carrito */}
       <MenuNavegacion
         cantidadCarrito={totalUnidades}
         toggleCarrito={() => setShowCarrito(true)}
@@ -236,7 +306,12 @@ function App() {
             )}
 
             {seccion === "cuenta" && (
-              <SeccionMiCuenta usuario={usuario} />
+              <SeccionMiCuenta
+                              usuario={usuario}
+                              apiBaseUrl={API}
+                              isOnline={isOnline}
+                              onActualizar={(datosActualizados) => setUsuario(prev => ({ ...prev, ...datosActualizados }))}
+              />
             )}
           </main>
 
@@ -246,9 +321,9 @@ function App() {
               <div style={{ backgroundColor: '#9C66D4', borderRadius: '20px', padding: '1.2rem', marginLeft: '1.5rem', boxShadow: '0 10px 25px rgba(0,0,0,0.1)'}}>
                 {!usuario ? (
                   <LogIn
-                    onLogin={(datos) => setUsuario(datos)}
+                    onLogin={manejarLogin}
                     isOnline={isOnline}
-                    apiBaseUrl="http://10.0.0.25:4000"
+                    apiBaseUrl={API}
                   />
                 ) : (
                   <div className="card p-3 shadow-sm border-success text-center">
@@ -257,9 +332,8 @@ function App() {
                     {usuario.rol === 'admin' && (
                       <p className="mb-1"><strong>Rol:</strong> {usuario.rol}</p>
                     )}
-                    <p className="mb-3">Visitas: {usuario.visitas || 1}</p>
-
-                    <button className="btn btn-outline-danger btn-sm w-100" onClick={() => { setUsuario(null); setSeccion("inicio"); }}>
+                    <p className="mb-3">Número de visitas: {visitas}</p>
+                    <button className="btn btn-outline-danger btn-sm w-100" onClick={manejarLogout}>
                       Cerrar sesión
                     </button>
                   </div>

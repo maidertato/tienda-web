@@ -1,46 +1,67 @@
 const express = require('express');
 const router = express.Router();
-const mongojs = require('mongojs');
-// Conexión a la base de datos 'tienda' y colección a los productos 
-const db = mongojs('tienda', ['productos']);
+const mongoose = require('mongoose');
 
-// Obtener todos los productos para el escaparate
-router.get('/', (req, res) => {
-    db.productos.find((err, docs) => {
-        if (err) return res.status(500).send(err);
-        res.json(docs);
-    });
+// Esquema del producto — ajusta los campos extra a los de tu tienda
+const productoSchema = new mongoose.Schema({
+    tipo:        { type: String, required: true },
+    nombre:      { type: String, required: true },
+    precio:      { type: Number, required: true },
+    descripcion: { type: String },
+    campoExtra:  { type: String },   // el campo extra de cada tipo de producto
+    imagen:      { type: String }    // ruta de la imagen
 });
 
-// Añadir un nuevo producto 
-router.post('/anadir', (req, res) => {
-    const nuevoProducto = req.body; 
-    //  tipo, nombre, precio, descripción, campo extra e imagen 
-    db.productos.insert(nuevoProducto, (err, doc) => {
-        if (err) return res.status(500).send(err);
-        res.json(doc);
-    });
+const Producto = mongoose.model('Producto', productoSchema, 'productos');
+
+// GET /productos — obtener todos
+router.get('/', async (req, res) => {
+    try {
+        const productos = await Producto.find();
+        res.json(productos);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// Editar un producto específico
-router.put('/editar/:id', (req, res) => {
-    db.productos.update(
-        { _id: mongojs.ObjectId(req.params.id) },
-        { $set: req.body }, // Actualiza campos concretos 
-        (err, doc) => {
-            if (err) return res.status(500).send(err);
-            res.json(doc);
-        }
-    );
+// POST /productos/anadir — añadir uno nuevo
+router.post('/anadir', async (req, res) => {
+    try {
+        const nuevo = new Producto(req.body);
+        const guardado = await nuevo.save();
+        res.json(guardado);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// Borrar una lista de productos 
-router.delete('/borrar', (req, res) => {
-    const idsABorrar = req.body.ids.map(id => mongojs.ObjectId(id));
-    db.productos.remove({ _id: { $in: idsABorrar } }, (err, result) => {
-        if (err) return res.status(500).send(err);
-        res.json(result);
-    });
+// PUT /productos/editar/:id — editar campos concretos
+router.put('/editar/:id', async (req, res) => {
+    try {
+        const actualizado = await Producto.findByIdAndUpdate(
+            req.params.id,
+            { $set: req.body },
+            { new: true }
+        );
+        if (!actualizado) return res.status(404).json({ error: 'Producto no encontrado' });
+        res.json(actualizado);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// DELETE /productos/borrar — borrar lista de ids
+router.delete('/borrar', async (req, res) => {
+    try {
+        const { ids } = req.body;
+        if (!ids || !ids.length) return res.status(400).json({ error: 'No se enviaron ids' });
+
+        const objectIds = ids.map(id => new mongoose.Types.ObjectId(id));
+        const resultado = await Producto.deleteMany({ _id: { $in: objectIds } });
+        res.json(resultado);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 module.exports = router;

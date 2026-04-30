@@ -1,64 +1,81 @@
 const express = require('express');
 const router = express.Router();
-const mongojs = require('mongojs');
-const db = mongojs('tienda', ['usuarios']);
+const mongoose = require('mongoose');
 
-// Login y creación de sesión 
-router.post('/login', (req, res) => {
+// Esquema del usuario — nombre, email, rol + 3 campos extra (cámbialos por los que hayáis elegido)
+const usuarioSchema = new mongoose.Schema({
+    nombre:      { type: String, required: true },
+    email:       { type: String, required: true, unique: true },
+    rol:         { type: String, default: '' },   // 'admin' o vacío
+    campoExtra1: { type: String, default: '' },
+    campoExtra2: { type: String, default: '' },
+    campoExtra3: { type: String, default: '' }
+});
+
+const Usuario = mongoose.model('Usuario', usuarioSchema, 'usuarios');
+
+// POST /usuarios/login — Firebase ya autenticó; aquí arrancamos la sesión
+router.post('/login', async (req, res) => {
     const { email } = req.body;
-    // Se usa el email como prueba de sesión iniciada
-    req.session.email = email;
-    req.session.visitas = 1; // = 1 al autenticarse 
-    
-    // Buscar datos adicionales del usuario en MongoDB 
-    db.usuarios.findOne({ email: email }, (err, usuario) => {
-        if (err || !usuario) return res.status(404).send("Usuario no en MongoDB");
-        res.json({ mensaje: "Sesión iniciada", usuario, visitas: req.session.visitas });
-    });
+    try {
+        const usuario = await Usuario.findOne({ email });
+        if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado en MongoDB' });
+
+        // Iniciar sesión: email como prueba + contador a 1
+        req.session.email = email;
+        req.session.visitas = 1;
+
+        await req.session.save();
+        res.json({ mensaje: 'Sesión iniciada', usuario, visitas: req.session.visitas });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// obtener datos del usuario actual y actualizar contador
-router.get('/mi-cuenta', (req, res) => {
-    if (!req.session.email) return res.status(401).send("No autenticado");
+// GET /usuarios/mi-cuenta — datos del usuario + incrementar visitas
+router.get('/mi-cuenta', async (req, res) => {
+    if (!req.session.email) return res.status(401).json({ error: 'No autenticado' });
 
-    // Incrementar contador de visitas en cada actualización de página 
-    req.session.visitas++;
+    req.session.visitas = (req.session.visitas || 1) + 1;
 
-    db.usuarios.findOne({ email: req.session.email }, (err, usuario) => {
-        if (err) return res.status(500).send(err);
-        res.json({ ...usuario, visitas: req.session.visitas });
-    });
+    try {
+        const usuario = await Usuario.findOne({ email: req.session.email });
+        if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+        await req.session.save();
+        res.json({ ...usuario.toObject(), visitas: req.session.visitas });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-//  Editar datos de usuario
-router.put('/actualizar', (req, res) => {
-    const { nombre } = req.body;
-    
-    // El nombre de u no puede estar vacío 
-    if (!nombre || nombre.trim() === "") {
-        return res.status(400).send("El nombre es obligatorio");
+// PUT /usuarios/actualizar — editar datos (nombre obligatorio, email no se toca)
+router.put('/actualizar', async (req, res) => {
+    if (!req.session.email) return res.status(401).json({ error: 'No autenticado' });
+
+    const { nombre, campoExtra1, campoExtra2, campoExtra3 } = req.body;
+    if (!nombre || nombre.trim() === '') {
+        return res.status(400).json({ error: 'El nombre es obligatorio' });
     }
 
-    db.usuarios.update(
-        { email: req.session.email },
-        { $set: { 
-            nombre: nombre,
-            // El email no se puede modificar
-            campoExtra1: req.body.campoExtra1,
-            campoExtra2: req.body.campoExtra2,
-            campoExtra3: req.body.campoExtra3
-        }},
-        (err, result) => {
-            if (err) return res.status(500).send(err);
-            res.json(result);
-        }
-    );
+    try {
+        const actualizado = await Usuario.findOneAndUpdate(
+            { email: req.session.email },
+            { $set: { nombre, campoExtra1, campoExtra2, campoExtra3 } },
+            { new: true }
+        );
+        res.json(actualizado);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// Cerrar sesión
+// POST /usuarios/logout — destruir sesión
 router.post('/logout', (req, res) => {
-    req.session.destroy();
-    res.json({ mensaje: "Sesión cerrada" });
+    req.session.destroy(err => {
+        if (err) return res.status(500).json({ error: 'Error al cerrar sesión' });
+        res.json({ mensaje: 'Sesión cerrada' });
+    });
 });
 
 module.exports = router;

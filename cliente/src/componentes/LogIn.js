@@ -9,34 +9,52 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
 
     const manejarSubmit = async (e) => {
         e.preventDefault();
-        if (!isOnline) return; 
+        if (!isOnline) return;
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
+            // autenticar con Firebase
+            await signInWithEmailAndPassword(auth, email, password);
 
-            onLogin(user);
-            
+            // avisar al servidor Express para crear la sesión
+            // y obtener los datos del usuario desde MongoDB
+            const respuesta = await fetch(`${apiBaseUrl}/usuarios/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', // necesario para que la cookie de sesión se guarde
+                body: JSON.stringify({ email })
+            });
+
+            if (!respuesta.ok) {
+                const data = await respuesta.json();
+                throw new Error(data.error || 'Error al iniciar sesión en el servidor');
+            }
+
+            const data = await respuesta.json();
+
+            // data.usuario tiene los datos de MongoDB (nombre, rol, campos extra...)
+            // data.visitas tiene el contador (empieza en 1)
+            onLogin(data.usuario, data.visitas);
+
         } catch (err) {
-            console.log("Error Firebase:", err.code, err.message);
-            setError("No se ha podido iniciar sesión");
+            console.error("Error login:", err);
+            setError(err.message || "No se ha podido iniciar sesión");
         }
     };
 
     return (
-        <div > 
-            <div className="titulo formulario" >
+        <div>
+            <div className="titulo formulario">
                 <h5 className="mb-0 fw-bold">Acceso Clientes</h5>
             </div>
             <div className="card-body">
                 <form onSubmit={manejarSubmit}>
                     {error && <div className="alert alert-danger py-1 small">{error}</div>}
-                    
+
                     <div className="mb-3 text-start">
                         <label className="form-label small fw-bold text-dark">Correo Electrónico</label>
-                        <input 
-                            type="email" 
-                            className="form-control shadow-sm" 
+                        <input
+                            type="email"
+                            className="form-control shadow-sm"
                             style={{ border: '1px solid #000000', color: '#000' }}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -44,12 +62,12 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
                             required
                         />
                     </div>
-                    
+
                     <div className="mb-4 text-start">
                         <label className="form-label small fw-bold text-dark">Contraseña</label>
-                        <input 
-                            type="password" 
-                            className="form-control shadow-sm" 
+                        <input
+                            type="password"
+                            className="form-control shadow-sm"
                             style={{ border: '1px solid #000000', color: '#000' }}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -58,17 +76,17 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
                         />
                     </div>
 
-                    <button 
-                        type="submit" 
-                        className="btn btn-custom w-100 fw-bold py-2" 
+                    <button
+                        type="submit"
+                        className="btn btn-custom w-100 fw-bold py-2"
                         disabled={!isOnline}
-                        >
+                    >
                         {isOnline ? "IDENTIFICARSE" : "SIN CONEXIÓN"}
                     </button>
                 </form>
             </div>
         </div>
     );
-}; 
+};
 
 export default LogIn;
