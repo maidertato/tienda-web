@@ -1,15 +1,14 @@
 import React from 'react';
 
-const Paginacion = ({
-    totalProductos,
-    productosPorPagina,
-    paginaActual,
-    onCambiarPagina
-}) => {
-    const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
-    const inicio = (paginaActual - 1) * productosPorPagina;
-    const fin = Math.min(inicio + productosPorPagina, totalProductos);
+const Paginacion = ({ totalProductos, productosPorPagina, paginaActual,onCambiarPagina}) => {
+    const totalPaginas = Math.ceil(totalProductos / productosPorPagina); // calculo de num de paginas
+    // PARA MOSTRADOS
+      // cuantos productos se estan viendo
+    const inicio = (paginaActual - 1) * productosPorPagina; // el numero del primer roduct de la pagina
+    const fin = Math.min(inicio + productosPorPagina, totalProductos); // el numero del ultimo producto de la pagina (6(0-5))
+    // cuantos de cuantos se muetsran - Luego para el return
     const mostrados = totalProductos === 0 ? 0 : fin - inicio;
+    
     // si no hay productos nada --> 0 de 0 productos
     if (totalProductos === 0) {
         return (
@@ -18,7 +17,7 @@ const Paginacion = ({
             </nav>
         );
     }
-    // lista de páginas --> cuantos botones
+    // Crear lista con num de botones 
     const paginas = [];
     for (let i = 1; i <= totalPaginas; i++) {
         paginas.push(i);
@@ -35,7 +34,7 @@ const Paginacion = ({
             <ul className="pagination justify-content-center">
 
                 {/* btn Anterior */}
-                {paginaActual > 1 && (
+                {paginaActual > 1 && ( // si es la pagian 1 no sale
                     <li className="page-item">
                         <button
                             className="page-link"
@@ -47,7 +46,7 @@ const Paginacion = ({
                 )}
 
                 {/* Num Páginas */}
-                {paginas.map(num => (
+                {paginas.map(num => ( // se crean los botones. react recorre con .map()
                     <li key={num} className={`page-item ${num === paginaActual ? 'active' : ''}`}>
                         <button className="page-link" onClick={() => onCambiarPagina(num)} >
                             {num}
@@ -56,7 +55,7 @@ const Paginacion = ({
                 ))}
 
                 {/* btn Siguiente */}
-                {paginaActual < totalPaginas && (
+                {paginaActual < totalPaginas && ( // si es la ultima no sale
                     <li className="page-item">
                         <button className="page-link" onClick={() => onCambiarPagina(paginaActual + 1)} >
                             Siguiente

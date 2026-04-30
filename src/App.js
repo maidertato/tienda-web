@@ -68,7 +68,7 @@ function App() {
     setBusqueda("");
     setCategoria("Todas");
   };
-
+  // Se guarda el resultado del calcul 
   // Filtra los productos en tiempo real según lo que escribas en el buscador
   const productosFiltrados = useMemo(() => {
     return productos.filter(p => {
@@ -151,7 +151,10 @@ function App() {
 
   return (
     <div id="contenedor">
-      <Cabecera titulo="🐈   🐦 Tienda de Mascotas 🦮   🐇" />
+
+      <Cabecera 
+        titulo="🐈   🐦 Tienda de Mascotas 🦮   🐇" 
+      />
 
       <MenuNavegacion
         cantidadCarrito={totalUnidades}
@@ -194,7 +197,8 @@ function App() {
 
           {/* Barra lateral: Formulario para crear productos nuevos */}
           <aside className="col-md-3">
-            <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}
+            <FormularioNuevosProductos 
+            onAgregarProducto={manejarNuevoProducto}
             deshabilitado={!isOnline}
             />
           </aside>

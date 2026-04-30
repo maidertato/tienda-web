@@ -162,12 +162,13 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
         setTimeout(() => setIdAnadido(null), 2000);
     };
 
-    // Lógica de paginación: calculamos qué trozo del array de productos mostrar
-    const indexOfLastProduct = paginaActual * productosPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
-    const currentProducts = productosFiltrados.slice(indexOfFirstProduct, indexOfLastProduct);
+    
+    const indexOfLastProduct = paginaActual * productosPerPage; // hasta que producto llego? (pagina 1 --> 1*6), pagina 2 --> 2* 6)
+    const indexOfFirstProduct = indexOfLastProduct - productosPerPage; // desde que producto empiezo ( pagina 2 --> 12 - 6 = 6)
+    // Buscador
+    const currentProducts = productosFiltrados.slice(indexOfFirstProduct, indexOfLastProduct); 
 
-    // Cambia de página y sube el scroll arriba del todo
+    // Si hago click en un numero de los de la paginacion, entonces cambia el estado de pagina actual
     const paginate = (pageNumber) => {
         setPaginaActual(pageNumber);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -322,8 +323,8 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             {/* Paginación */}
             <div className="mt-4">
                 <Paginacion
-                    totalProductos={productosFiltrados.length}
-                    productosPorPagina={productosPerPage}
+                    totalProductos={productosFiltrados.length} // filtrando x cantidad
+                    productosPorPagina={productosPerPage} 
                     paginaActual={paginaActual}
                     onCambiarPagina={paginate}
                 />

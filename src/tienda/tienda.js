@@ -231,8 +231,6 @@ export const cargarCarrito = () => {
   }
   return carrito;
 };
-// Conecta el formulatio con el sistem
-  // cuando envias el form, llamas aqui.
   // Coge el tipo que le has puesto, y dependiendo de este, crea el objeto de ese tipo
 export function crearNuevoProducto(tipo, datos) {
   let nuevo;

@@ -5,9 +5,9 @@ import React, { useState, useRef } from 'react';
 import { FileUploader } from "react-drag-drop-files";
     // Libreria para arrastrar imagenes
 import { DIVISA } from '../tienda/tienda.js';
-
+                                    // Le pasa la función de app.js: manejarNuevoProducto
 const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
-    // onAgregarProducto --> se ejecuta cuando añado un producto
+    // PROP --> onAgregarProducto es la funcion manejarNuevioProducto --> se ejecuta cuando pulso para añadir un producto (le mando la info al padre)
     // deshabilitado --> si es true, OFFLINE
     const fileTypes = ["jpg", "png", "jpeg"];
     const [formData, setFormData] = useState({ // guardar todos los datos del formulario en un solo estado ( los que pone el usuario)
@@ -25,17 +25,22 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
 
 
     const [file, setFile] = useState(null); // guarda la imagen que subes
-    const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" }); // para mostrar mensajes
-    const [isDragging, setIsDragging] = useState(false); // detecta si estas haciendo d&d
-    const fileInputRef = useRef(null); // controla el input de archivo 
+    const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" }); // para mostrar mensajes EXITO o ERROR
+    const [isDragging, setIsDragging] = useState(false); // detecta si estas haciendo d&d en el recuadro
+    const fileInputRef = useRef(null); // controla el input de archivo. Lo uso para limpiar el input 
+    const tipoRef = useRef(null); // controla el select de tipo
 
+    // Coge el form anterior
+    // Hace copia
+    // Cambia solo el campo que el usuario esta editando
+    // name = "nombre", "precio" --> la variable
+    // value = Lo que escriba el usuario
     const handleChange = (e) => { // Cuando escribes en el input
-        const { name, value } = e.target; 
-        setFormData(prev => ({ ...prev, [name]: value })); // coge lo que teniamos (..prev) y lo actualiza con el campo que el usuario a tocado
+        const { name, value } = e.target; // te quedas con el campo y lo que ha escrito (nuevo vlaor) para actualizar solo ese cmapo
+        setFormData(prev => ({ 
+            ...prev, 
+            [name]: value })); // coge lo que teniamos (..prev) y lo actualiza con el campo que el usuario a tocado
     };
-    // (name) mira que campos has cambiado
-    // (value) el valor que has puesto
-    // setFormat --> actualiza el estado
 
     const mostrarAlerta = (texto, tipo) => { // metodo de alertas generalizado. 
         setAlerta({ visible: true, texto, tipo });
@@ -45,8 +50,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             }), 2500);
     };
 
-
-    const handleFile = (archivo) => { // control de la imagen
+    const handleFile = (archivo) => { // control de la imagen que se sube
         if (!archivo) return;
         // Si ya hay imagen
         if (file) {
@@ -62,15 +66,15 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             );
             return;
         }
-        setFile(archivo);
+        setFile(archivo); // Si todo bien, guarda la imagen en el estado file
     };
     // 3 cosas:
         // 1. si hay una iamgen, no deja subir otra
         // 2. si formato no valido, no deja subir
         // 3. si todo correcto, guarda la imagen en el estado 
 
-    const renderCampoDinamico = () => { // depende el tipo  que se escoja, un campo extra u otro
-        const configExtra = {
+    const renderCampoDinamico = () => { // depende el tipo que se escoja, un campo extra u otro
+        const configExtra = { // Dependiendo del tipo que haya elejido el usuario
             'Mobiliario': { label: 'Material', name: 'material', ph: 'Ej: Madera, Roble...' },
             'Juguete': { label: 'Tipo de Juguete', name: 'categoriajuguete', ph: 'Ej: Peluche, Cuerda...' },
             'Alimentacion': { label: 'Tipo Alimento', name: 'tipoAlimento', ph: 'Ej: Snack, Pienso...' },
@@ -79,21 +83,27 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             'Merchandising': { label: 'Parte del Cuerpo', name: 'parteDelCuerpo', ph: 'Ej: Cabeza, Patas...' }
         };
 
-        const config = configExtra[formData.tipo];
-        if (!config) return null;
+        const config = configExtra[formData.tipo]; 
+        // Si el usuario selecciona un tipo:
+        // CONFIG =
+            //label: "Tipo de Juguete",
+            // name: "categoriajuguete",
+            // ph: "Ej: Peluche..."
+        if (!config) 
+            return null;// Si no tipo seleccionado --> null
 
         return (
             <div className="mb-3 animate__animated animate__fadeIn">
-                <label className="form-label fw-bold">{config.label}</label>
+                <label className="form-label fw-bold">{config.label}</label> // el texto del label cambia dinamicamente
                 <input 
                     type="text" 
                     className="form-control" 
-                    name={config.name} 
-                    value={formData[config.name]} 
-                    onChange={handleChange} 
-                    placeholder={config.ph} 
-                    required 
-                    disabled={deshabilitado} 
+                    name={config.name} // nomber del campo dinamico (material, categoriajuguete...) para guardarlo en el estado
+                    value={formData[config.name]} //conecta el input con el estado. si config.name = "material" formData["material"]
+                    onChange={handleChange} // Cada vez que el usuario escriba algo, ejecuta handleChange para actualizar el estado
+                    placeholder={config.ph} // cuando vacio, lo que sale
+                    required
+                    disabled={deshabilitado} // si desabilitado = true --> OFFLINE -->  input se bloquea
                 />
             </div>
         );
@@ -101,13 +111,14 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         
     };
 
-    const handleSubmit = (e) => { // Al darle a subir producto
-        e.preventDefault();
+    const handleSubmit = (e) => { // Al darle a SUBIR PRODUCTO
+        e.preventDefault(); // no se regargue la pagina cuando lo envie
         //Offline
-        if (deshabilitado) {
+        if (deshabilitado) { 
             mostrarAlerta("El formulario está deshabilitado", "danger");
             return;
         }
+        // ERRORES // ALERTAS
         // si no hay tipo de producto
         if (!formData.tipo) {
             mostrarAlerta("Escoge un tipo", "danger");
@@ -121,23 +132,27 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
         // Si hay imagen, usa esa
         // sino la default
         let imagenUrl = file
-            ? URL.createObjectURL(file)
-            : process.env.PUBLIC_URL + "/imagenes/productos/default.png";
-        // Convierte texto -->  numero
+            ? URL.createObjectURL(file) // si hay file, lo usas y creas una URL temporal
+            : process.env.PUBLIC_URL + "/imagenes/productos/default.png"; // sino usa la default guardada en la carpeta publica del proyecto
+        
+            // Convierte "texto" del input del precio -->  float
         const precioNum = parseFloat(formData.precio);
-        // creo objeto producto con id unico, datos del form e imagen
+        // Cojo todos los datos del form
+        // Añado id unico
+        // añado la imagen
+        // convierto en objeto --> prod final para pasarlo al padre
         const nuevoProducto = {
             id: "prod-" + Date.now(),
             ...formData,
             precio: precioNum,
             imagen: imagenUrl
         };
-        // le pasas los datos al padre
+        // Ejecuto manejarNuevoProducto de app.js, para que añada el producto
         onAgregarProducto(formData.tipo, nuevoProducto); // envair producto a tienda.js
             // le paso el tipo (mobiliario...)
             // nuevo producto --> el producto (dato)
         mostrarAlerta("¡Producto añadido!", "success");
-        // Reset del formulario
+        // Reset del formulario --> todo como estaba antes
         setFormData({
             tipo: '',
             nombre: '',
@@ -156,8 +171,8 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
             fileInputRef.current.value = ""; 
         }
 
-        const primerInput = document.querySelector('#form-producto [name="tipo"]');
-        if (primerInput) primerInput.focus();
+        if (tipoRef.current) 
+            tipoRef.current.focus();
     };
 
     return (
@@ -169,7 +184,8 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 <div className="mb-3">
                     <label className="form-label">Tipo de Producto</label>
                     {/*El tipo qu ele paso a tienda.js */}
-                    <select name="tipo" className="form-select" value={formData.tipo} onChange={handleChange} required disabled={deshabilitado} >
+                    {/* Ato el puntero al elemento */}
+                    <select ref={tipoRef} name="tipo" className="form-select" value={formData.tipo} onChange={handleChange} required disabled={deshabilitado} >
                         <option value="">Escoge un tipo</option>
                         <option value="Mobiliario">Mobiliario</option>
                         <option value="Cabello">Cabello</option>
@@ -222,11 +238,11 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado }) => {
                 <div className="mb-4">
                     <label className="form-label">O arrastra la imagen aquí</label>
                     <FileUploader
-                        handleChange={(file) => handleFile(file)}
+                        handleChange={(file) => handleFile(file)} // cuando suelto la imagen
                         name="file"
                         types={fileTypes}
                         disabled={deshabilitado}
-                        onDraggingStateChange={setIsDragging}
+                        onDraggingStateChange={setIsDragging} // si esta arrastrando encima (dragging)
                         onTypeError={() =>
                             mostrarAlerta("Formato no válido. La imagen debe ser JPG, JPEG o PNG.", "danger")
                         }
