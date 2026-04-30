@@ -17,7 +17,7 @@ const misProductos = require('./rutas/productos');
 const misUsuarios = require('./rutas/usuarios');
 
 app.use(cors({
-    origin: 'http://localhost:3000', // El puerto de tu React (cliente)
+    origin: 'http://10.0.0.25:3000', // El puerto de tu React (cliente)
     credentials: true
 }));
 app.use(express.json());
@@ -49,9 +49,6 @@ app.use((req, res, next) => {
 
 // incrementar visitas manualmente
 app.post('/api/visitas', (req, res) => {
-    if (!req.session.usuario) {
-        return res.status(401).json({ error: 'Debes iniciar sesión' });
-    }
     req.session.visitas++;
 
     req.session.save((err) => {
@@ -70,7 +67,6 @@ app.get('/api/contador', (req, res) => {
 
 // usar rutas de productos y usuarios
 app.use('/productos', misProductos);
-app.use('/usuarios', misUsuarios);
 
 // Para probar que el servidor funciona
 app.get('/', (req, res) => {
@@ -85,7 +81,7 @@ async function iniciarApp() {
         await mongoose.connect('mongodb://127.0.0.1:27017/tienda');
         console.log('Conectado a MongoDB');
 
-        app.listen(PORT, () => {
+        app.listen(PORT, '0.0.0.0', () => {
             console.log(`Servidor en http://localhost:${PORT}`);
         });
 

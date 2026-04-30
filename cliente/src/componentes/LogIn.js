@@ -15,17 +15,8 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            const response = await fetch(`${apiBaseUrl}/usuarios/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ email: email }),
-            });
-
-            if (response.ok) {
-                const datosServidor = await response.json();
-                onLogin(datosServidor.usuario); 
-            }
+            onLogin(user);
+            
         } catch (err) {
             console.log("Error Firebase:", err.code, err.message);
             setError("No se ha podido iniciar sesión");

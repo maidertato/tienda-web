@@ -248,7 +248,7 @@ function App() {
                   <LogIn
                     onLogin={(datos) => setUsuario(datos)}
                     isOnline={isOnline}
-                    apiBaseUrl="http://localhost:4000"
+                    apiBaseUrl="http://10.0.0.25:4000"
                   />
                 ) : (
                   <div className="card p-3 shadow-sm border-success text-center">
