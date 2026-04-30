@@ -1635,3 +1635,88 @@ select:disabled,
 button:disabled {
   cursor: not-allowed;
 }
+/* =========================
+  SECCIÓN MI CUENTA
+  ========================= */
+.mi-cuenta-card {
+  border-radius: 16px;
+  border: 1px solid #e8d5f5;
+  overflow: hidden;
+}
+
+.mi-cuenta-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e8d5f5;
+}
+
+.mi-cuenta-header h2 {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.mi-cuenta-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mi-cuenta-label {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #888;
+  margin-bottom: 4px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mi-cuenta-input {
+  border-radius: 8px !important;
+  border: 1px solid #ddd !important;
+  font-family: 'Quicksand', sans-serif !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  font-size: 0.95rem !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+.mi-cuenta-input::placeholder {
+  color: #bbb !important;
+  font-weight: 400 !important;
+  opacity: 1 !important;
+}
+
+.mi-cuenta-input-disabled {
+  background-color: #f9f9f9 !important;
+  color: #999 !important;
+  cursor: not-allowed !important;
+}
+
+.mi-cuenta-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #9C66D4;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.mi-cuenta-btn:hover:not(:disabled) {
+  background-color: #7b4db5;
+}
+
+.mi-cuenta-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
