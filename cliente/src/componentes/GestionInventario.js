@@ -32,13 +32,13 @@ const GestionInventario = ({ productos, alEliminarVarios, alActualizarProducto }
 
             <ul className="list-group list-group-flush">
                 {productos.map((p) => (
-                    <React.Fragment key={p.id}>
+                    <React.Fragment key={p._id}>
                         <li className="list-group-item d-flex align-items-center justify-content-between py-3">
                             <div className="d-flex align-items-center gap-3">
                                 <input
                                     type="checkbox"
-                                    checked={seleccionados.includes(p.id)}
-                                    onChange={() => toggleSeleccion(p.id)}
+                                    checked={seleccionados.includes(p._id)}
+                                    onChange={() => toggleSeleccion(p._id)}
                                 />
                                 <img src={p.imagen} alt="" style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
                                 <span>{p.nombre}</span>
@@ -46,20 +46,20 @@ const GestionInventario = ({ productos, alEliminarVarios, alActualizarProducto }
 
                             <button
                                 className="btn btn-link text-decoration-none"
-                                onClick={() => setEditandoId(editandoId === p.id ? null : p.id)}
+                                onClick={() => setEditandoId(editandoId === p._id ? null : p._id)}
                             >
-                                {editandoId === p.id ? "Cerrar" : "Editar"}
+                                {editandoId === p._id ? "Cerrar" : "Editar"}
                             </button>
                         </li>
 
                         {/* FORMULARIO DE EDICIÓN */}
-                        {editandoId === p.id && (
+                        {editandoId === p._id && (
                             <li className="list-group-item bg-light p-4 animate__animated animate__fadeIn">
                                 <FormularioNuevosProductos
                                     productoAEditar={p}
                                     esEdicion={true}
                                     onGuardarCambios={(datosActualizados) => {
-                                        const productoCompleto = { ...datosActualizados, id: p.id };
+                                        const productoCompleto = { ...datosActualizados, id: p._id };
                                         alActualizarProducto(productoCompleto);
                                         setEditandoId(null);
                                     }}

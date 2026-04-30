@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef  } from 'react';
 import { inventario as inventarioInicial, cargarCarrito } from './tienda/tienda';
 import './App.css';
 
@@ -14,7 +14,7 @@ import LogIn from './componentes/LogIn';
 import SeccionMiCuenta from './componentes/SeccionMiCuenta';
 import GestionInventario from './componentes/GestionInventario';
 
-const API = 'http://192.168.0.19:4000';
+const API = 'http://localhost:4000';
 
 function App() {
   // ESTADOS BÁSICOS DE LA APLICACIÓN
@@ -38,8 +38,32 @@ function App() {
   const [usuario, setUsuario] = useState(null);
   const [seccion, setSeccion] = useState("inicio");
   const [visitas, setVisitas] = useState(1);
-  
+  const loginReciente = useRef(false);
+
   //________________________________________________________________________
+  // Login: guarda usuario y visitas por separado
+  const manejarLogin = (datosUsuario, visitasIniciales) => {
+    loginReciente.current = true;
+    setUsuario(datosUsuario);
+    setVisitas(visitasIniciales || 1);
+  };
+
+   // Logout: avisa al servidor y limpia el estado
+  const manejarLogout = async () => {
+    loginReciente.current = false;
+    try {
+      await fetch(`${API}/usuarios/logout`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {
+      console.error('Error al cerrar sesión:', err);
+    }
+    setUsuario(null);
+    setVisitas(1);
+    setSeccion("inicio");
+    loginReciente.current = false;
+  };
 
   useEffect(() => {
     // Funciones para actualizar el estado
@@ -64,37 +88,23 @@ function App() {
       .catch(err => console.error('Error cargando productos:', err));
   }, []);
 
-    // Incrementar contador de visitas cada vez que se recarga la página con sesión activa
+      // Recuperar sesión al arrancar / incrementar visitas al recargar
   useEffect(() => {
-    if (!usuario) return;
-    fetch(`${API}/usuarios/mi-cuenta`, { credentials: 'include' })
-      .then(r => r.json())
-      .then(data => {
-        if (data.visitas) setVisitas(data.visitas);
-      })
-      .catch(err => console.error('Error actualizando visitas:', err));
-  }, []);  // solo al montar, que es cuando se carga/recarga la página
+    if (loginReciente.current) return; // si acabamos de hacer login, no llamar a mi-cuenta
     
-  // Login: guarda usuario y visitas por separado
-  const manejarLogin = (datosUsuario, visitasIniciales) => {
-    setUsuario(datosUsuario);
-    setVisitas(visitasIniciales || 1);
-  };
-
-  // Logout: avisa al servidor y limpia el estado
-  const manejarLogout = async () => {
-    try {
-      await fetch(`${API}/usuarios/logout`, {
-        method: 'POST',
-        credentials: 'include'
-      });
-    } catch (err) {
-      console.error('Error al cerrar sesión:', err);
-    }
-    setUsuario(null);
-    setVisitas(1);
-    setSeccion("inicio");
-  };
+    fetch(`${API}/usuarios/mi-cuenta`, { credentials: 'include' })
+        .then(r => {
+            if (!r.ok) return null;
+            return r.json();
+        })
+        .then(data => {
+            if (data && data.email) {
+                setUsuario(data);
+                setVisitas(data.visitas);
+            }
+        })
+        .catch(() => {});
+  }, []);
 
   //_______________________________________________________________________
 
@@ -154,13 +164,6 @@ function App() {
       console.error('Error actualizando producto:', err);
     }
   };
-
-
-
-
-
-
-
 
 
   // Filtra los productos en tiempo real según lo que escribas en el buscador

@@ -21,12 +21,11 @@ router.post('/login', async (req, res) => {
         const usuario = await Usuario.findOne({ email });
         if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado en MongoDB' });
 
-        // Iniciar sesión: email como prueba + contador a 1
         req.session.email = email;
         req.session.visitas = 1;
 
         await req.session.save();
-        res.json({ mensaje: 'Sesión iniciada', usuario, visitas: req.session.visitas });
+        res.json({ mensaje: 'Sesión iniciada', usuario, visitas: 1 });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -76,6 +75,21 @@ router.post('/logout', (req, res) => {
         if (err) return res.status(500).json({ error: 'Error al cerrar sesión' });
         res.json({ mensaje: 'Sesión cerrada' });
     });
+});
+
+router.get('/mi-cuenta', async (req, res) => {
+    if (!req.session.email) return res.status(401).json({ error: 'No autenticado' });
+
+    req.session.visitas = (req.session.visitas || 1) + 1;  // incrementa siempre
+
+    try {
+        const usuario = await Usuario.findOne({ email: req.session.email });
+        if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+        await req.session.save();
+        res.json({ ...usuario.toObject(), visitas: req.session.visitas });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 module.exports = router;

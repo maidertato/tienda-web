@@ -270,7 +270,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
                     const varianteReal = varianteSeleccionada || { nombre: "", imagen: prod.imagen };
                     return (
-                        <div key={prod.id} className="col d-flex justify-content-center">
+                        <div key={prod._id} className="col d-flex justify-content-center">
                             <div className="card-producto-tienda w-100 h-100 shadow-sm border-0">
                                 <div className="position-relative">
                                     <GaleriaProducto
