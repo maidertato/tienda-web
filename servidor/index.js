@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -22,7 +23,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: 'mongodb://127.0.0.1:27017/tienda',
+        mongoUrl: process.env.MONGO_URI,
         collectionName: 'sessions'
     }),
     cookie: {
@@ -43,7 +44,7 @@ const PORT = 4000;
 
 async function iniciarApp() {
     try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/tienda');
+        await mongoose.connect(process.env.MONGO_URI);
         console.log('Conectado a MongoDB');
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Servidor en http://localhost:${PORT}`);
