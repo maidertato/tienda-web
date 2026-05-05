@@ -2,14 +2,30 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-// Esquema del producto — ajusta los campos extra a los de tu tienda
 const productoSchema = new mongoose.Schema({
-    tipo:        { type: String, required: true },
-    nombre:      { type: String, required: true },
-    precio:      { type: Number, required: true },
-    descripcion: { type: String },
-    campoExtra:  { type: String },   // el campo extra de cada tipo de producto
-    imagen:      { type: String }    // ruta de la imagen
+    tipo:           { type: String, required: true },
+    nombre:         { type: String, required: true },
+    precio:         { type: Number, required: true },
+    descripcion:    { type: String },
+    imagen:         { type: String },
+    variantes:      [{ nombre: String, imagen: String }],
+    // Juguete
+    categoriajuguete: { type: String },
+    tamano:           { type: String },
+    esInteractivo:    { type: Boolean },
+    // Alimentacion
+    tipoAlimento:   { type: String },
+    tipoMascota:    { type: String },
+    // Merchandising
+    parteDelCuerpo: { type: String },
+    talla:          { type: String },
+    color:          { type: String },
+    // Cabello
+    estilo:         { type: String },
+    tamaño:         { type: String },
+    // Mobiliario
+    material:       { type: String },
+    usoInterior:    { type: Boolean }
 });
 
 const Producto = mongoose.model('Producto', productoSchema, 'productos');
