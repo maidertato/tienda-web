@@ -58,104 +58,7 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
     const ey = eyeOffset.y;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '16px 8px' }}>
-            <style>{`
-                @keyframes blink {
-                    0%,2%,4%,26%,28%,71%,73%,100% { ry: 4.5; cy: 31.7; }
-                    1%,3%,27%,72% { ry: 0.5; cy: 30; }
-                }
-                .lg-eye { animation: blink 8s 1s infinite; transition: all 0.2s ease; }
-                .lg-eye-closed { ry: 0.5 !important; cy: 30 !important; animation: none !important; }
-
-                .lg-avatar {
-                    width: 120px; height: 120px;
-                    border-radius: 50%;
-                    border: 2px solid #c9b8e8;
-                    background: #f3eeff;
-                    display: flex; align-items: center; justify-content: center;
-                    position: relative; overflow: hidden;
-                }
-                .lg-avatar svg { position: absolute; width: 110px; height: 110px; }
-                .lg-hands {
-                    z-index: 2;
-                    transform-origin: 50% 100%;
-                    transition: transform 0.3s ease;
-                    transform: translateY(80px) rotateX(-21deg);
-                }
-                .lg-hands.tapando { transform: translate3d(0, 18px, 0) rotateX(0deg); }
-
-                .lg-input-wrap { display: flex; flex-direction: column; gap: 3px; width: 100%; }
-                .lg-label { font-size: 0.75rem; font-weight: 700; color: #9575cd;
-                    font-family: 'Quicksand', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
-                .lg-input {
-                    border: 1.5px solid #d1c4e9; border-radius: 8px;
-                    padding: 7px 10px; font-size: 0.88rem;
-                    font-family: 'Quicksand', sans-serif;
-                    background: #faf6ff; color: #333; outline: none; width: 100%;
-                    transition: border-color 0.2s, box-shadow 0.2s;
-                }
-                .lg-input:focus { border-color: #9575cd; box-shadow: 0 0 0 3px rgba(149,117,205,0.15); }
-
-                .lg-pass-wrap {
-                    display: flex; align-items: center; gap: 6px;
-                }
-                .lg-pass-wrap .lg-input { flex: 1; }
-                .lg-pass-toggle {
-                    flex-shrink: 0;
-                    background: white; border: 1.5px solid #d1c4e9;
-                    border-radius: 8px; cursor: pointer;
-                    font-size: 0.72rem; font-weight: 700; color: #9575cd;
-                    font-family: 'Quicksand', sans-serif;
-                    padding: 6px 8px; white-space: nowrap;
-                    transition: background 0.2s;
-                }
-                .lg-pass-toggle:hover { background: #f3eeff; }
-
-                /* Botón expandible */
-                .lg-btn {
-                    display: flex; align-items: center; justify-content: flex-start;
-                    width: 45px; height: 45px;
-                    border: none; border-radius: 50%;
-                    cursor: pointer; position: relative; overflow: hidden;
-                    transition: width 0.3s ease, border-radius 0.3s ease;
-                    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-                    background: linear-gradient(135deg, #9575cd, #7b3fa0);
-                    margin: 4px auto 0;
-                }
-                .lg-btn:hover { width: 130px; border-radius: 40px; }
-                .lg-btn:active { transform: translate(2px, 2px); }
-                .lg-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-                .lg-btn-icon {
-                    width: 100%; display: flex; align-items: center; justify-content: center;
-                    transition: width 0.3s ease, padding 0.3s ease; flex-shrink: 0;
-                }
-                .lg-btn:hover .lg-btn-icon { width: 30%; padding-left: 14px; }
-                .lg-btn-icon svg { width: 17px; fill: white; }
-
-                .lg-btn-text {
-                    position: absolute; right: 0; width: 0; opacity: 0;
-                    color: white; font-size: 0.95rem; font-weight: 700;
-                    font-family: 'Quicksand', sans-serif;
-                    transition: width 0.3s ease, opacity 0.3s ease;
-                    white-space: nowrap;
-                }
-                .lg-btn:hover .lg-btn-text { opacity: 1; width: 70%; padding-right: 12px; }
-
-                .lg-error {
-                    font-size: 0.8rem; color: #c62828;
-                    background: #fce4e4; border-radius: 8px;
-                    padding: 5px 10px; font-family: 'Quicksand', sans-serif;
-                    font-weight: 600; width: 100%; text-align: center;
-                }
-
-                .lg-titulo {
-                    font-size: 1.35rem; font-weight: 800; color: white;
-                    font-family: 'Quicksand', sans-serif; text-align: center;
-                    letter-spacing: 0.3px;
-                }
-            `}</style>
-
+        <div className="lg-wrapper">
             <p className="lg-titulo">Acceso Clientes</p>
 
             {/* Mono */}
@@ -196,7 +99,7 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
             </div>
 
             {/* Formulario */}
-            <form onSubmit={manejarSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <form onSubmit={manejarSubmit} className="lg-form">
                 {error && <div className="lg-error">{error}</div>}
 
                 <div className="lg-input-wrap">
@@ -237,7 +140,7 @@ const LogIn = ({ onLogin, isOnline, apiBaseUrl }) => {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div className="lg-btn-wrap">
                     <button className="lg-btn" type="submit" disabled={!isOnline}>
                         <div className="lg-btn-icon">
                             <svg viewBox="0 0 512 512">
