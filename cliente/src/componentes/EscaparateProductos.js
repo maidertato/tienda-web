@@ -144,7 +144,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
         // Comprobamos el límite de 20 unidades
         if (cantidadActual >= 20) {
-            setIdAnadido(`${prod.id}-error`);
+            setIdAnadido(`${prod._id}-error`);
         } else {
             const item = {
                 id: prod.id + "_" + (varianteSeleccionada?.nombre || "default"),
@@ -155,7 +155,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                 cantidad: 1
                 };
             onAnadirAlCarrito(item);
-            setIdAnadido(`${prod.id}-exito`);
+            setIdAnadido(`${prod._id}-exito`);
         }
 
         // Limpiamos el mensaje después de 2 segundos
@@ -281,10 +281,10 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
                                     {/* Boton lateral del producto */}
                                     <div className="btn-carrito-container">
-                                        {idAnadido === `${prod.id}-exito` && (
+                                        {idAnadido === `${prod._id}-exito` && (
                                             <div className="mensaje-exito-flotante">¡Añadido!</div>
                                         )}
-                                        {idAnadido === `${prod.id}-error` && (
+                                        {idAnadido === `${prod._id}-error` && (
                                             <div className="mensaje-error-flotante">
                                                 Max. 20 unidades
                                             </div>
