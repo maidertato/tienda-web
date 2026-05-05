@@ -18,3 +18,8 @@ db.usuarios.insertOne({
 
 ## Para Abrir la web:
      npm run dev
+
+
+
+## ejecuar
+npm install mongodb
