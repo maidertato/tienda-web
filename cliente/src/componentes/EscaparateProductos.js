@@ -79,7 +79,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
         const iniciales = {};
         productos.forEach(prod => {
             if (prod.variantes && prod.variantes.length > 0) {
-                iniciales[prod.id] = prod.variantes[0].nombre;
+                iniciales[prod._id] = prod.variantes[0].nombre;
             }
         });
         setVariantesSeleccionadas(iniciales);
@@ -262,7 +262,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             <div id="lista-productos" className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-3 px-3" style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 {currentProducts.map((prod) => {
                     const info = obtenerAtributoExtra(prod);
-                    const nombreVariante = variantesSeleccionadas[prod.id] || "";
+                    const nombreVariante = variantesSeleccionadas[prod._id] || "";
 
                     const varianteSeleccionada = prod.variantes?.find(
                         v => v.nombre === nombreVariante
@@ -276,7 +276,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                     <GaleriaProducto
                                         prod={prod}
                                         setProductoSeleccionado={setProductoSeleccionado}
-                                        onVarianteChange={(nombre) => handleVarianteChange(prod.id, nombre)}
+                                        onVarianteChange={(nombre) => handleVarianteChange(prod._id, nombre)}
                                     />
 
                                     {/* Boton lateral del producto */}
