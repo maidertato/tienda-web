@@ -209,6 +209,9 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado, productoA
                         required
                         disabled={deshabilitado}
                         onKeyDown={(e) => { if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault(); }}
+                        onInput={(e) => {
+                            e.target.value = e.target.value.replace(/[^0-9.]/g, '');
+                        }}
                         step="0.01"
                         min="0"
                         placeholder="0.00"
