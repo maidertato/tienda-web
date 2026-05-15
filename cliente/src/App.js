@@ -287,11 +287,12 @@ function App() {
                 setPaginaActual={setPaginaActual}
               />)}
 
-            {seccion === "add" && usuario?.rol === "admin" && (
+            {seccion === "add" && usuario?.rol === "admin" &&isOnline && (
               <div className="card shadow p-4 animate__animated animate__fadeIn">
                 <h2 className="mb-4 text-center">Añadir productos</h2>
                 <hr />
-                <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto} />
+                <FormularioNuevosProductos onAgregarProducto={manejarNuevoProducto}
+                deshabilitado={!isOnline} />
               </div>
             )}
 
