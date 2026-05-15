@@ -21,5 +21,13 @@ db.usuarios.insertOne({
 
 
 
-## ejecuar
-npm install mongodb
+## Ejecutar 
+- Para que os salgan los productos
+     cd servidor 
+     npm install dotenv
+
+     En la raíz:
+     npm install mongodb
+
+- Ejecurtar normal
+       npm run dev
