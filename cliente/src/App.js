@@ -287,7 +287,7 @@ function App() {
                 setPaginaActual={setPaginaActual}
               />)}
 
-            {seccion === "add" && usuario?.rol === "admin" &&isOnline && (
+            {seccion === "add" && usuario?.rol === "admin" &&(
               <div className="card shadow p-4 animate__animated animate__fadeIn">
                 <h2 className="mb-4 text-center">Añadir productos</h2>
                 <hr />
