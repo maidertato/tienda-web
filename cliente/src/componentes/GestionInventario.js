@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FormularioNuevosProductos from './FormularioNuevosProductos';
 
-const GestionInventario = ({ productos, alEliminarVarios, alActualizarProducto }) => {
+const GestionInventario = ({ productos, alEliminarVarios, alActualizarProducto, deshabilitado }) => {
     const [seleccionados, setSeleccionados] = useState([]);
     const [editandoId, setEditandoId] = useState(null); // Guarda el ID del producto que se está editando
     const [modalBorrar, setModalBorrar] = useState(false);
@@ -142,15 +142,16 @@ const GestionInventario = ({ productos, alEliminarVarios, alActualizarProducto }
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.2rem', flexWrap: 'wrap', gap: '1rem' }}>
 
                 <button
-                    onClick={() => { if (seleccionados.length > 0) setModalBorrar(true); }}
-                    disabled={seleccionados.length === 0}
+                    onClick={() => { if (seleccionados.length > 0 && !deshabilitado) setModalBorrar(true); }}
+                    disabled={seleccionados.length === 0 || deshabilitado}
+                    title={deshabilitado ? 'No disponible sin conexión' : ''}
                     style={{
                         display: 'flex', alignItems: 'center', gap: '8px',
                         background: '#fff7fc', color: '#9C66D4',
                         border: '1.5px solid #e0c5f2', borderRadius: '14px',
                         padding: '9px 18px', fontFamily: "'Quicksand', sans-serif",
-                        fontWeight: 700, fontSize: '0.85rem', cursor: seleccionados.length === 0 ? 'not-allowed' : 'pointer',
-                        opacity: seleccionados.length === 0 ? 0.38 : 1,
+                        fontWeight: 700, fontSize: '0.85rem', cursor: (seleccionados.length === 0 || deshabilitado) ? 'not-allowed' : 'pointer',
+                        opacity: (seleccionados.length === 0 || deshabilitado) ? 0.38 : 1,
                         transition: 'all 0.25s ease',
                     }}
                 >
@@ -207,6 +208,7 @@ const GestionInventario = ({ productos, alEliminarVarios, alActualizarProducto }
                             <img
                                 src={p.imagen}
                                 alt=""
+                                onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/imagenes/productos/default.png'; }}
                                 style={{ width: '42px', height: '42px', borderRadius: '10px', objectFit: 'cover', border: '1.5px solid #ead5f7', flexShrink: 0 }}
                             />
 
@@ -216,7 +218,9 @@ const GestionInventario = ({ productos, alEliminarVarios, alActualizarProducto }
 
                             {/* Botón editar/cerrar */}
                             <button
-                                onClick={() => setEditandoId(editandoId === p._id ? null : p._id)}
+                                onClick={() => { if (!deshabilitado) setEditandoId(editandoId === p._id ? null : p._id); }}
+                                disabled={deshabilitado}
+                                title={deshabilitado ? 'No disponible sin conexión' : ''}
                                 style={{
                                     display: 'flex', alignItems: 'center', gap: '5px',
                                     background: editandoId === p._id ? '#fdf7ff' : 'none',
@@ -224,8 +228,10 @@ const GestionInventario = ({ productos, alEliminarVarios, alActualizarProducto }
                                     borderRadius: '20px', padding: '5px 14px',
                                     fontFamily: "'Quicksand', sans-serif", fontWeight: 700,
                                     fontSize: '0.82rem',
-                                    color: editandoId === p._id ? '#b085d4' : '#9C66D4',
-                                    cursor: 'pointer', transition: 'all 0.2s',
+                                    color: deshabilitado ? '#c9a8e8' : (editandoId === p._id ? '#b085d4' : '#9C66D4'),
+                                    cursor: deshabilitado ? 'not-allowed' : 'pointer',
+                                    opacity: deshabilitado ? 0.38 : 1,
+                                    transition: 'all 0.2s',
                                 }}
                             >
                                 {editandoId === p._id ? (

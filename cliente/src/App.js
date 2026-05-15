@@ -305,6 +305,7 @@ function App() {
                   productos={productos}
                   alEliminarVarios={alEliminarVarios}
                   alActualizarProducto={alActualizarProducto}
+                  deshabilitado={!isOnline}
                 />
               </div>
             )}

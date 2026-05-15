@@ -106,10 +106,10 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado, productoA
         );
     };
 
-    const handleSubmit = (e) => { // Errores usando metodo centralizado
+    const handleSubmit = async (e) => { // Errores usando metodo centralizado
         e.preventDefault();
         const tipoFinal = formData.tipo || productoAEditar?.tipo;
-        
+
         if (!tipoFinal) {
         mostrarAlerta("Escoge un tipo", "danger");
         return;
@@ -130,7 +130,16 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado, productoA
             return;
         }
 
-        let imagenUrl = file ? URL.createObjectURL(file) : (productoAEditar?.imagen || process.env.PUBLIC_URL + "/imagenes/productos/default.png");
+        let imagenUrl;
+        if (file) {
+            imagenUrl = await new Promise((resolve) => { 
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.readAsDataURL(file); // base64
+            });
+        } else {
+            imagenUrl = productoAEditar?.imagen || process.env.PUBLIC_URL + "/imagenes/productos/default.png";
+        }
 
         const datosActualizados = {
             ...formData,
