@@ -247,7 +247,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
                                 <button
                                     className="btn btn-sm w-100 mt-3"
-                                    onClick={() => { setCategoria("Todas"); setPrecioMax(100); setBusqueda(""); setShowFiltros(false); }}
+                                    onClick={() => { setCategoria("Todas"); setPrecioMax(200); setBusqueda(""); setShowFiltros(false); }}
                                     style={{ borderRadius: '10px', backgroundColor: '#fee2e2', color: '#991b1b', border: 'none', fontWeight: '500' }}
                                 >
                                     Borrar Filtros

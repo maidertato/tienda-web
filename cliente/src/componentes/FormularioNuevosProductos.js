@@ -20,6 +20,17 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado, productoA
     const [alerta, setAlerta] = useState({ visible: false, texto: "", tipo: "" });
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef(null);
+    const [errorPrecio, setErrorPrecio] = useState('');
+
+    const handlePrecio = (e) => {
+        const valor = e.target.value;
+        setFormData(prev => ({ ...prev, precio: valor }));
+        if (valor > 200) {
+            setErrorPrecio('El precio no puede superar los 200€');
+        } else {
+            setErrorPrecio('');
+        }
+    };
 
     useEffect(() => {
         if (productoAEditar) {
@@ -115,7 +126,7 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado, productoA
         }
 
         if (formData.precio > 200) {
-            mostrarAlerta("No se permite añadir un producto que supere los 200€.", "danger");
+            setErrorPrecio('El precio no puede superar los 200€');
             return;
         }
 
@@ -189,8 +200,37 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado, productoA
                 {/* Precio */}
                 <div className="mb-3">
                     <label className="form-label">Precio ({DIVISA})</label>
-                    <input type="number" className="form-control" name="precio" value={formData.precio} onChange={handleChange} required disabled={deshabilitado}
-                        onKeyDown={(e) => { if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault(); }} step="0.01" min="0" placeholder="0.00" /> {/* Para que no permita las e ni nada de eso + que empiece en 0 y que incremente centimo a centimo si usas las flechas */}
+                    <input
+                        type="number"
+                        className="form-control"
+                        name="precio"
+                        value={formData.precio}
+                        onChange={handlePrecio}
+                        required
+                        disabled={deshabilitado}
+                        onKeyDown={(e) => { if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault(); }}
+                        onInput={(e) => {
+                            e.target.value = e.target.value.replace(/[^0-9.]/g, '');
+                        }}
+                        step="0.01"
+                        min="0"
+                        placeholder="0.00"
+                    />
+                    {errorPrecio && (
+                        <p style={{
+                            margin: '6px 0 0',
+                            padding: '5px 10px',
+                            background: 'rgba(219, 62, 62, 0.15)',
+                            border: '1px solid rgba(255, 100, 100, 0.5)',
+                            borderRadius: '8px',
+                            color: '#e45858',
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
+                            fontFamily: "'Quicksand', sans-serif",
+                        }}>
+                            {errorPrecio}
+                        </p>
+                    )}
                 </div>
 
 
@@ -260,8 +300,43 @@ const FormularioNuevosProductos = ({ onAgregarProducto, deshabilitado, productoA
                 </div>
 
                 {/* Submit Button */}
-                <button type="submit" className="btn btn-custom w-100" disabled={deshabilitado}>
-                    {esEdicion ? "GUARDAR CAMBIOS" : (deshabilitado ? "+ SUBIR PRODUCTO" : "+ Subir Producto")}            </button>
+                <button
+                    type="submit"
+                    disabled={deshabilitado}
+                    style={esEdicion ? {
+                        width: '100%',
+                        marginTop: '6px',
+                        background: deshabilitado ? 'rgba(255,255,255,0.3)' : 'white',
+                        color: deshabilitado ? 'rgba(255,255,255,0.5)' : '#9C66D4',
+                        border: 'none',
+                        borderRadius: '12px',
+                        padding: '11px',
+                        fontFamily: "'Quicksand', sans-serif",
+                        fontWeight: 800,
+                        fontSize: '0.92rem',
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                        cursor: deshabilitado ? 'not-allowed' : 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        boxShadow: deshabilitado ? 'none' : '0 4px 16px rgba(0,0,0,0.15)',
+                        transition: 'all 0.25s',
+                    } : {}}
+                    className={!esEdicion ? 'btn btn-custom w-100' : ''}
+                >
+                    {esEdicion ? (
+                        <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                                <polyline points="17 21 17 13 7 13 7 21"/>
+                                <polyline points="7 3 7 8 15 8"/>
+                            </svg>
+                            Guardar cambios
+                        </>
+                    ) : (deshabilitado ? "+ SUBIR PRODUCTO" : "+ Subir Producto")}
+                </button>
 
                 {alerta.visible && (
                     <div className={`alert alert-${alerta.tipo} mt-3`}>{alerta.texto}</div>

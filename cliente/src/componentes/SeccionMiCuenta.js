@@ -38,7 +38,10 @@ const SeccionMiCuenta = ({ usuario, apiBaseUrl, isOnline, onActualizar }) => {
 
     return (
         <>
+<<<<<<< HEAD
 
+=======
+>>>>>>> cf59b1e0adb0b8174c65afab0e40fddc7dc4ea4b
             <div className="mc-pantalla">
                 <div className={`mc-book ${abierto ? 'abierto' : ''}`}>
                     {/* Interior con el formulario */}
