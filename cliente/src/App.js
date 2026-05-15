@@ -114,7 +114,7 @@ function App() {
     setBusqueda("");      // Limpia el buscador
     setPaginaActual(1);   // Vuelve a la página 1
     setCategoria("Todas"); // Cambia el filtro a todas
-    setPrecioMax(100); // Pone a 100 el filtro del precio
+    setPrecioMax(200); // Pone a 200 el filtro del precio
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
