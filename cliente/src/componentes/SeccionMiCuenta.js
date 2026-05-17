@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 const SeccionMiCuenta = ({ usuario, apiBaseUrl, isOnline, onActualizar }) => {
     const [nombre, setNombre] = useState(usuario?.nombre || '');
-    const [campoExtra1, setCampoExtra1] = useState(usuario?.campoExtra1 || '');
-    const [campoExtra2, setCampoExtra2] = useState(usuario?.campoExtra2 || '');
-    const [campoExtra3, setCampoExtra3] = useState(usuario?.campoExtra3 || '');
+    const [edad, setEdad] = useState(usuario?.edad || '');
+    const [universidad, setUniversidad] = useState(usuario?.universidad || '');
+    const [ciudad, setCiudad] = useState(usuario?.ciudad || '');
     const [error, setError] = useState('');
     const [exito, setExito] = useState('');
     const [abierto, setAbierto] = useState(false);
@@ -20,7 +20,7 @@ const SeccionMiCuenta = ({ usuario, apiBaseUrl, isOnline, onActualizar }) => {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ nombre, campoExtra1, campoExtra2, campoExtra3 })
+                body: JSON.stringify({ nombre, edad, universidad, ciudad })
             });
             if (!respuesta.ok) {
                 const data = await respuesta.json();
@@ -60,23 +60,23 @@ const SeccionMiCuenta = ({ usuario, apiBaseUrl, isOnline, onActualizar }) => {
                         </div>
 
                         <div className="mc-campo">
-                            <label className="mc-label">Teléfono</label>
-                            <input className="mc-input" type="text" value={campoExtra1}
-                                onChange={e => setCampoExtra1(e.target.value)}
-                                disabled={!isOnline} placeholder="Tu teléfono" />
+                            <label className="mc-label">Edad</label>
+                            <input className="mc-input" type="number" value={edad}
+                                onChange={e => setEdad(e.target.value)}
+                                disabled={!isOnline} placeholder="Tu edad" />
                         </div>
 
                         <div className="mc-campo">
-                            <label className="mc-label">Dirección</label>
-                            <input className="mc-input" type="text" value={campoExtra2}
-                                onChange={e => setCampoExtra2(e.target.value)}
-                                disabled={!isOnline} placeholder="Tu dirección" />
+                            <label className="mc-label">Universidad</label>
+                            <input className="mc-input" type="text" value={universidad}
+                                onChange={e => setUniversidad(e.target.value)}
+                                disabled={!isOnline} placeholder="Tu universidad" />
                         </div>
 
                         <div className="mc-campo">
                             <label className="mc-label">Ciudad</label>
-                            <input className="mc-input" type="text" value={campoExtra3}
-                                onChange={e => setCampoExtra3(e.target.value)}
+                            <input className="mc-input" type="text" value={ciudad}
+                                onChange={e => setCiudad(e.target.value)}
                                 disabled={!isOnline} placeholder="Tu ciudad" />
                         </div>
 

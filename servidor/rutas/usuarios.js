@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-// Esquema del usuario — nombre, email, rol + 3 campos extra (cámbialos por los que hayáis elegido)
+// Esquema del usuario
 const usuarioSchema = new mongoose.Schema({
     nombre:      { type: String, required: true },
     email:       { type: String, required: true, unique: true },
     rol:         { type: String, default: '' },   // 'admin' o vacío
-    campoExtra1: { type: String, default: '' },
-    campoExtra2: { type: String, default: '' },
-    campoExtra3: { type: String, default: '' }
+    edad:        { type: Number, default: null },
+    universidad: { type: String, default: '' },
+    ciudad:      { type: String, default: '' }
 });
 
 const Usuario = mongoose.model('Usuario', usuarioSchema, 'usuarios');
@@ -52,7 +52,7 @@ router.get('/mi-cuenta', async (req, res) => {
 router.put('/actualizar', async (req, res) => {
     if (!req.session.email) return res.status(401).json({ error: 'No autenticado' });
 
-    const { nombre, campoExtra1, campoExtra2, campoExtra3 } = req.body;
+    const { nombre, edad, universidad, ciudad } = req.body;
     if (!nombre || nombre.trim() === '') {
         return res.status(400).json({ error: 'El nombre es obligatorio' });
     }
@@ -60,7 +60,7 @@ router.put('/actualizar', async (req, res) => {
     try {
         const actualizado = await Usuario.findOneAndUpdate(
             { email: req.session.email },
-            { $set: { nombre, campoExtra1, campoExtra2, campoExtra3 } },
+            { $set: { nombre, edad, universidad, ciudad } },
             { new: true }
         );
         res.json(actualizado);
