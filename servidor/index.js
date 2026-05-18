@@ -47,7 +47,7 @@ async function iniciarApp() {
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Conectado a MongoDB');
         app.listen(PORT, '0.0.0.0', () => {
-            console.log(`Servidor en http://localhost:${PORT}`);
+            console.log(`Servidor en puerto: ${PORT}`);
         });
     } catch (error) {
         console.error('Error al conectar:', error);
