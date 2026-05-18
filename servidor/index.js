@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
     res.send('Servidor de la tienda funcionando');
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 async function iniciarApp() {
     try {
