@@ -14,7 +14,7 @@ import LogIn from './componentes/LogIn';
 import SeccionMiCuenta from './componentes/SeccionMiCuenta';
 import GestionInventario from './componentes/GestionInventario';
 
-const API = 'https://dawidawe-nke42.ondigitalocean.app/';
+const API = '/api';
 
 function App() {
   // ESTADOS BÁSICOS DE LA APLICACIÓN
