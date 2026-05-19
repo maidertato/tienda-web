@@ -9,6 +9,9 @@ const path = require('path');
 const app = express();
 const isProd = process.env.NODE_ENV === 'production';
 
+// Necesario para que Express confíe en el proxy de DigitalOcean y las cookies secure funcionen
+if (isProd) app.set('trust proxy', 1);
+
 const misProductos = require('./rutas/productos');
 const misUsuarios = require('./rutas/usuarios');
 
