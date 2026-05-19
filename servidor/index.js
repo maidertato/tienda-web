@@ -7,19 +7,20 @@ const { MongoStore } = require('connect-mongo');
 const path = require('path');
 
 const app = express();
+const isProd = process.env.NODE_ENV === 'production';
 
 const misProductos = require('./rutas/productos');
 const misUsuarios = require('./rutas/usuarios');
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
     credentials: true
 }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-    secret: 'mi_clave_secreta',
+    secret: process.env.SESSION_SECRET || 'mi_clave_secreta',
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -27,20 +28,27 @@ app.use(session({
         collectionName: 'sessions'
     }),
     cookie: {
-        maxAge: 1000 * 60 * 60, // 1 hora
-        secure: false
+        maxAge: 1000 * 60 * 60,
+        secure: isProd
     }
 }));
 
-// Rutas
-app.use('/productos', misProductos);
-app.use('/usuarios', misUsuarios);
+// Rutas API
+app.use('/api/productos', misProductos);
+app.use('/api/usuarios', misUsuarios);
 
-app.get('/', (req, res) => {
-    res.send('Servidor de la tienda funcionando');
-});
+// En producción, cualquier ruta que no sea API devuelve el index.html de React
+if (isProd) {
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.send('Servidor de la tienda funcionando');
+    });
+}
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 async function iniciarApp() {
     try {

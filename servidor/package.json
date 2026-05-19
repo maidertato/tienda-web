@@ -4,7 +4,8 @@
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
-        "dev": "nodemon index.js"
+        "dev": "nodemon index.js",
+        "build": "cd ../cliente && npm install && npm run build && xcopy /E /I /Y build ..\\servidor\\public"
     },
     "dependencies": {
         "connect-mongo": "^6.0.0",
