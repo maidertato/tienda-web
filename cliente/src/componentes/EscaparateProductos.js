@@ -55,7 +55,7 @@ const GaleriaProducto = ({ prod, setProductoSeleccionado, onVarianteChange }) =>
 
 ////////////////////////////////////////////////////////////////////////////
 
-const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, categoria, setCategoria, precioMax, setPrecioMax, paginaActual, setPaginaActual, carrito = [] }) => {
+const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusqueda, categoria, setCategoria, precioMax, setPrecioMax, paginaActual, setPaginaActual, carrito = [], listaDeseos = [], onAnadirDeseo }) => {
     // Estado para saber qué producto mostrar en la caja de detalles
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     // 6 productos para que sean filas de 3
@@ -84,7 +84,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
         });
         setVariantesSeleccionadas(iniciales);
     }, [productos]);
-    
+     
 
 
     const productosFiltrados = useMemo(() => {
@@ -104,8 +104,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
             const busquedaNormal = quitarTildes(busqueda || "");
             const coincideBusqueda = nombreProd.includes(busquedaNormal);
             const coincidePrecio = prod.precio <= precioMax;
-            
-
+             
 
             if (!categoria || categoria === "Todas") {
                 return coincideBusqueda && coincidePrecio;
@@ -138,27 +137,26 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
 
 
     // Gestiona el clic en el carrito y controla el límite de 20 unidades
+
     const handleAnadirConTooltip = (prod, varianteSeleccionada) => {
-        const itemEnCarrito = carrito.find(item => item.id === prod.id + "_" + (varianteSeleccionada?.nombre || "default"));
+        const vNombre = varianteSeleccionada?.nombre || "default";
+        const idUnicoCarrito = `${prod._id}_${vNombre}`; // <- Corregido a _id
+        
+        const itemEnCarrito = carrito.find(item => item.id === idUnicoCarrito);
         const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
 
-        // Comprobamos el límite de 20 unidades
         if (cantidadActual >= 20) {
             setIdAnadido(`${prod._id}-error`);
         } else {
-            const item = {
-                id: prod.id + "_" + (varianteSeleccionada?.nombre || "default"),
-                nombre: prod.nombre,
-                precio: prod.precio,
-                imagen: varianteSeleccionada?.imagen || prod.imagen,
-                varianteNombre: varianteSeleccionada?.nombre || "",
-                cantidad: 1
-                };
-            onAnadirAlCarrito(item);
+            // Pasamos el producto limpio con su _id original de MongoDB
+            onAnadirAlCarrito({
+                ...prod,
+                varianteNombre: vNombre === "default" ? "" : vNombre,
+                variante: vNombre
+            });
             setIdAnadido(`${prod._id}-exito`);
         }
 
-        // Limpiamos el mensaje después de 2 segundos
         setTimeout(() => setIdAnadido(null), 2000);
     };
 
@@ -269,6 +267,10 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                     ) || (prod.variantes && prod.variantes.length > 0 ? prod.variantes[0] : { nombre: "", imagen: prod.imagen });
 
                     const varianteReal = varianteSeleccionada || { nombre: "", imagen: prod.imagen };
+                    
+                    // Generamos el ID combinado para validar de forma correcta el estado del corazón visual
+                    const idUnicoFavorito = prod._id + "_" + (varianteReal.nombre || "default");
+
                     return (
                         <div key={prod._id} className="col d-flex justify-content-center">
                             <div className="card-producto-tienda w-100 h-100 shadow-sm border-0">
@@ -279,7 +281,37 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                         onVarianteChange={(nombre) => handleVarianteChange(prod._id, nombre)}
                                     />
 
-                                    {/* Boton lateral del producto */}
+                                    {/* CONTENEDOR IZQUIERDO: Lista de deseos (Corazón) */}
+                                    <div className="btn-deseos-container">
+                                        <button
+                                            className="btn-agregar-flotante btn-deseos"
+                                            style={{
+                                                backgroundColor: listaDeseos.some(item => item._id === idUnicoFavorito) ? '#f3ebff' : 'white',
+                                                color: listaDeseos.some(item => item._id === idUnicoFavorito) ? '#8e24aa' : '#6c757d',
+                                                border: 'none'
+                                            }}
+                                            onClick={() => onAnadirDeseo && onAnadirDeseo({ 
+                                                ...prod, 
+                                                _id: idUnicoFavorito, // Pasamos el ID compuesto para que coincida con lo que evalúa .some()
+                                                varianteNombre: varianteReal.nombre === "default" ? "" : varianteReal.nombre 
+                                            })}
+                                            title="Añadir a la lista de deseos"
+                                        >
+                                            <svg 
+                                                xmlns="http://www.w3.org/2000/svg" 
+                                                width="18" 
+                                                height="18" 
+                                                viewBox="0 0 24 24" 
+                                                fill={listaDeseos.some(item => item._id === idUnicoFavorito) ? "#8e24aa" : "none"}
+                                                stroke="currentColor" 
+                                                strokeWidth="2"
+                                            >
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    {/* CONTENEDOR DERECHO: Carrito y Tooltips de aviso */}
                                     <div className="btn-carrito-container">
                                         {idAnadido === `${prod._id}-exito` && (
                                             <div className="mensaje-exito-flotante">¡Añadido!</div>
@@ -290,7 +322,7 @@ const EscaparateProductos = ({ productos, onAnadirAlCarrito, busqueda, setBusque
                                             </div>
                                         )}
                                         <button
-                                            className="btn-agregar-flotante"
+                                            className="btn-agregar-flotante btn-carrito"
                                             onClick={() => handleAnadirConTooltip(prod, varianteReal)}
                                         >
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '20px' }}><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>

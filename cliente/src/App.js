@@ -9,6 +9,8 @@ import EscaparateProductos from './componentes/EscaparateProductos';
 import FormularioNuevosProductos from './componentes/FormularioNuevosProductos';
 import Pie from './componentes/Pie';
 import Carrito from './componentes/Carrito';
+import ModalCupones from './componentes/ModalCupones';
+import ListaDeseos from './componentes/ListaDeseos';
 
 import LogIn from './componentes/LogIn';
 import SeccionMiCuenta from './componentes/SeccionMiCuenta';
@@ -39,8 +41,24 @@ function App() {
   const [seccion, setSeccion] = useState("inicio");
   const [visitas, setVisitas] = useState(1);
   const loginReciente = useRef(false);
-
+  
   //________________________________________________________________________
+  // NUEVO : aplicacion de los descuentos 
+  const [descuento, setDescuento] = useState(0);
+  const [verModalCupones, setVerModalCupones] = useState(false);
+  
+  //________________________________________________________________________
+  // NUEVO : Lista de deseos (Estructurada por subtipos dinámicos de MongoDB)
+  const [listaDeseos, setListaDeseos] = useState({
+    Juguete: [],
+    Alimentacion: [],
+    Merchandising: [],
+    Accesorios: [],
+    Cabello: [],
+    Mobiliario: []
+  });
+  //________________________________________________________________________
+  
   // Login: guarda usuario y visitas por separado
   const manejarLogin = (datosUsuario, visitasIniciales) => {
     loginReciente.current = true;
@@ -88,7 +106,7 @@ function App() {
       .catch(err => console.error('Error cargando productos:', err));
   }, []);
 
-      // Recuperar sesión al arrancar / incrementar visitas al recargar
+  // Recuperar sesión al arrancar / incrementar visitas al recargar
   useEffect(() => {
     if (loginReciente.current) return; // si acabamos de hacer login, no llamar a mi-cuenta
     
@@ -134,6 +152,7 @@ function App() {
       console.error('Error añadiendo producto:', err);
     }
   };
+  
   // Borrar varios: llama al servidor y actualiza el estado local
   const alEliminarVarios = async (idsABorrar) => {
     try {
@@ -175,56 +194,97 @@ function App() {
 
       const nombreProd = normalizar(p.nombre);
       const busquedaNormal = normalizar(busqueda);
-      const tipoProducto = normalizar(p.tipo);
+      const tipoProducto = normalizar(p.tipo || p.categoria);
       const categoriaSeleccionada = normalizar(categoria);
 
       const coincideNombre = nombreProd.includes(busquedaNormal);
       const coincideCategoria = categoria === "Todas" || tipoProducto === categoriaSeleccionada;
+      const coincidePrecio = Number(p.precio) <= Number(precioMax);
 
-      return coincideNombre && coincideCategoria;
+      return coincideNombre && coincideCategoria && coincidePrecio;
     });
-  }, [productos, busqueda, categoria]);
+  }, [productos, busqueda, categoria, precioMax]);
 
-  // Lógica para añadir cosas a la cesta de la compra
+  // Lógica para añadir cosas a la cesta de la compra (Corregida para evitar duplicados y "Grande-Grande")
   const manejarAnadirAlCarrito = (productoDeClase) => {
+    const idCompleto = productoDeClase._id || productoDeClase.id || "";
+    const baseId = idCompleto.includes('_') ? idCompleto.split('_')[0] : idCompleto;
+
+    if (!baseId) return;
+
+    let variante = "default";
+    if (productoDeClase.varianteNombre) {
+      variante = productoDeClase.varianteNombre;
+    } else if (productoDeClase.variante) {
+      variante = typeof productoDeClase.variante === 'object' ? productoDeClase.variante.nombre : productoDeClase.variante;
+    } else if (idCompleto.includes('_')) {
+      variante = idCompleto.split('_')[1];
+    }
+
+    if (!variante || variante === "default") {
+      variante = "default";
+    }
+
+    const idUnicoCarrito = `${baseId}_${variante}`;
+
+    // Corta el nombre ante cualquier tipo de guion y elimina espacios extra
+    let nombreLimpio = productoDeClase.nombre || "Producto";
+    nombreLimpio = nombreLimpio.split(/\s*[-–—]\s*/)[0].trim(); 
+
+    let imagenCorrecta = productoDeClase.imagen;
+    if (variante !== "default" && productoDeClase.variantes?.length > 0) {
+      const varianteEncontrada = productoDeClase.variantes.find(v => v.nombre === variante);
+      if (varianteEncontrada) {
+        imagenCorrecta = varianteEncontrada.imagen;
+      }
+    }
+
     const productoSimple = {
-      id: productoDeClase.id,
-      nombre: productoDeClase.nombre,
-      precio: productoDeClase.precio,
-      imagen: productoDeClase.imagen,
-      varianteNombre: productoDeClase.varianteNombre
+      id: idUnicoCarrito,
+      _id: baseId,
+      nombre: variante === "default" ? nombreLimpio : `${nombreLimpio} - ${variante}`,
+      precio: parseFloat(productoDeClase.precio) || 0,
+      imagen: imagenCorrecta,
+      varianteNombre: variante === "default" ? "" : variante
     };
 
-    const productoExistente = carrito.find(item => item.id === productoSimple.id);
+    setCarrito(prevCarrito => {
+      const productoExistente = prevCarrito.find(item => item.id === productoSimple.id);
+      let nuevoCarrito;
 
-    if (productoExistente) {
-      if (productoExistente.cantidad >= 20) return;
+      if (productoExistente) {
+        if (productoExistente.cantidad >= 20) return prevCarrito;
 
-      const nuevoCarrito = carrito.map(item =>
-        item.id === productoSimple.id
-          ? { ...item, cantidad: item.cantidad + 1 }
-          : item
-      );
-      setCarrito(nuevoCarrito);
+        nuevoCarrito = prevCarrito.map(item =>
+          item.id === productoSimple.id
+            ? { ...item, cantidad: item.cantidad + 1 }
+            : item
+        );
+      } else {
+        nuevoCarrito = [...prevCarrito, { ...productoSimple, cantidad: 1 }];
+      }
+
       localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
-    } else {
-      const nuevoCarrito = [...carrito, { ...productoSimple, cantidad: 1 }];
-      setCarrito(nuevoCarrito);
-      localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
-    }
+      return nuevoCarrito;
+    });
   };
 
-  // Aumenta o disminuye la cantidad de un producto (+1 o -1)
-  const manejarCambiarCantidad = (id, delta) => {
+  // NUEVA FUNCIÓN CORREGIDA: Controla cantidades sin romper ni duplicar
+  const manejarCambiarCantidad = (idUnico, delta) => {
     setCarrito(prevCarrito => {
       const nuevoCarrito = prevCarrito.map(item => {
-        if (item.id === id) {
+        if (item.id === idUnico) {
           const nuevaCantidad = (item.cantidad || 1) + delta;
-          // Math.max evita que la cantidad sea menos de 1
-          return { ...item, cantidad: Math.max(1, nuevaCantidad) };
+          
+          // Límites seguros: no permitimos bajar de 1 ni pasar de 20
+          if (nuevaCantidad <= 0) return null; 
+          if (nuevaCantidad > 20) return { ...item, cantidad: 20 };
+          
+          return { ...item, cantidad: nuevaCantidad };
         }
         return item;
-      });
+      }).filter(Boolean); // Si devolvió null (cantidad <= 0), se elimina del carrito de forma segura
+
       localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
       return nuevoCarrito;
     });
@@ -242,12 +302,87 @@ function App() {
   // Calcula cuántos artículos hay en total sumando las cantidades de cada uno
   const totalUnidades = carrito.reduce((acc, item) => acc + (item.cantidad || 1), 0);
 
+  // Gestión de la lista de deseos
+  const manejarEliminarDeseo = (id) => {
+    setListaDeseos(prev => {
+      const nuevoEstado = { ...prev };
+      for (const subtipo in nuevoEstado) {
+        nuevoEstado[subtipo] = nuevoEstado[subtipo].filter(item => item._id !== id);
+      }
+      return nuevoEstado;
+    });
+  };
+
+  const manejarAnadirDeseo = (producto) => {
+    const subtipo = producto.tipo || producto.categoria;
+    if (!subtipo) return;
+
+    // 1. Extraer el ID base limpio
+    const idCompleto = producto._id || producto.id || "";
+    const baseId = idCompleto.includes('_') ? idCompleto.split('_')[0] : idCompleto;
+
+    // 2. Averiguar la variante de forma segura
+    let variante = "default";
+    if (producto.varianteNombre) {
+      variante = producto.varianteNombre;
+    } else if (producto.variante) {
+      variante = typeof producto.variante === 'object' ? producto.variante.nombre : producto.variante;
+    } else if (idCompleto.includes('_')) {
+      variante = idCompleto.split('_')[1];
+    }
+
+    const idUnicoFavorito = `${baseId}_${variante}`;
+
+    setListaDeseos(prev => {
+      const existe = prev[subtipo]?.some(item => item._id === idUnicoFavorito);
+      
+      if (existe) {
+        return {
+          ...prev,
+          [subtipo]: prev[subtipo].filter(item => item._id !== idUnicoFavorito)
+        };
+      } else {
+        // 3. FOTO CORRECTA: Buscar la imagen específica de la variante seleccionada
+        let imagenCorrecta = producto.imagen;
+        if (variante !== "default" && producto.variantes?.length > 0) {
+          const varianteEncontrada = producto.variantes.find(v => v.nombre === variante);
+          if (varianteEncontrada) {
+            imagenCorrecta = varianteEncontrada.imagen; // ¡Asigna la foto rosa si es Grande!
+          }
+        }
+
+        // 4. NOMBRE LIMPIO: Evitar guardar nombres que ya lleven guiones duplicados
+        let nombreLimpio = producto.nombre || "Producto";
+        if (nombreLimpio.includes(' - ')) nombreLimpio = nombreLimpio.split(' - ')[0];
+
+        const productoConVariante = {
+          ...producto,
+          _id: idUnicoFavorito,
+          nombre: nombreLimpio, // Guardamos solo el nombre base para que no explote luego
+          imagen: imagenCorrecta, // Guardamos su foto buena
+          varianteNombre: variante
+        };
+
+        return {
+          ...prev,
+          [subtipo]: [...(prev[subtipo] || []), productoConVariante]
+        };
+      }
+    });
+  };
+
+  // Cuenta el total de deseos sumando la longitud de cada array de categoría
+  const totalDeseos = useMemo(() => {
+    return Object.values(listaDeseos).reduce((acc, arr) => acc + arr.length, 0);
+  }, [listaDeseos]);
+
   return (
     <div id="contenedor">
-      <Cabecera titulo="🐈   🐦 Tienda de Mascotas 🦮   🐇" />
+      <Cabecera titulo="🐈  🐦 Tienda de Mascotas 🦮  🐇" />
       
       <MenuNavegacion
         cantidadCarrito={totalUnidades}
+        cantidadDeseos={totalDeseos}
         toggleCarrito={() => setShowCarrito(true)}
         irAInicio={irAInicio}
         isOnline={!isOnline}
@@ -263,7 +398,9 @@ function App() {
         productosCarrito={carrito}
         alEliminar={manejarEliminarDelCarrito}
         onCambiarCantidad={manejarCambiarCantidad}
-        alVaciar={() => { localStorage.clear(); setCarrito([]); }}
+        alVaciar={() => { localStorage.removeItem('carrito'); setCarrito([]); }}
+        onAbrirCupones={() => setVerModalCupones(true)}
+        descuentoGlobal={descuento}
       />
 
       {/* escaparate + formulario */}
@@ -285,8 +422,13 @@ function App() {
                 setPrecioMax={setPrecioMax}
                 paginaActual={paginaActual}
                 setPaginaActual={setPaginaActual}
-              />)}
-
+                
+                // Convertimos el objeto de categorías en una lista plana para que el .some() del hijo no rompa
+                listaDeseos={Object.values(listaDeseos).flat()} 
+                
+                onAnadirDeseo={manejarAnadirDeseo}
+              />
+            )}
             {seccion === "add" && usuario?.rol === "admin" &&(
               <div className="card shadow p-4 animate__animated animate__fadeIn">
                 <h2 className="mb-4 text-center">Añadir productos</h2>
@@ -301,6 +443,7 @@ function App() {
                 <h2 className="text-center mb-4">Editar/Borrar</h2>
                 <p className="text-center text-muted">Selecciona productos para borrar o edita sus detalles.</p>
                 <hr />
+                {/* Modificado para que sea idéntico al de GitHub sin la prop alAñadirAFavoritos */}
                 <GestionInventario
                   productos={productos}
                   alEliminarVarios={alEliminarVarios}
@@ -312,14 +455,23 @@ function App() {
 
             {seccion === "cuenta" && (
               <SeccionMiCuenta
-                              usuario={usuario}
-                              apiBaseUrl={API}
-                              isOnline={isOnline}
-                              onActualizar={(datosActualizados) => setUsuario(prev => ({ ...prev, ...datosActualizados }))}
+                usuario={usuario}
+                apiBaseUrl={API}
+                isOnline={isOnline}
+                onActualizar={(datosActualizados) => setUsuario(prev => ({ ...prev, ...datosActualizados }))}
+              />
+            )}
+
+            {seccion === "deseos" && (
+              <ListaDeseos 
+                // Convertimos el objeto en array plano antes de pasárselo al componente
+                listaDeseos={Object.values(listaDeseos).flat()}
+                alEliminarDeseo={manejarEliminarDeseo}
+                alAñadirAlCarrito={manejarAnadirAlCarrito}
               />
             )}
           </main>
-
+            
           {/* Barra lateral: Formulario para crear productos nuevos */}
           {seccion === "inicio" && (
             <aside className="col-md-3">
@@ -350,7 +502,15 @@ function App() {
       </div>
       {/* Footer con nuestro nombre :) */}
       <Pie contenido="© Dawidawe taldea" />
-    </div >
+      
+      {/* NUEVO : Modal de Cupones */}
+      <ModalCupones 
+        show={verModalCupones} 
+        onCerrar={() => setVerModalCupones(false)} 
+        onAplicarDescuento={setDescuento} 
+        descuentoGlobal={descuento} 
+      />
+    </div>
   );
 }
 
