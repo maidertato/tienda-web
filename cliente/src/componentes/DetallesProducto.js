@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DIVISA, obtenerAtributoExtra } from '../tienda/tienda.js';
-
+import ResenasProducto from './ResenasProducto.js';
 
 //Detalles producto es una ventana modal 
 // (pop-up) que muestra la información 
@@ -10,6 +10,7 @@ const DetallesProducto = ({ producto, variante, onCerrar }) => {
     // - variante: la variante del producto seleccionada
     // - onCerrar: la función para quitar el modal de la pantalla
 
+    const [mostrarResenas, setMostrarResenas] = useState(false);
     
     //Si no hay producto seleccionado, no hace nada
     if (!producto) return null;
@@ -17,6 +18,13 @@ const DetallesProducto = ({ producto, variante, onCerrar }) => {
     const nombre = variante?.nombre || producto.nombre;
     const imagen = variante?.imagen || producto.imagen;
     const extra = obtenerAtributoExtra(producto);
+    
+    const resenasGuardadas = JSON.parse(sessionStorage.getItem('resenas_productos') || "[]");
+const resenasProducto = resenasGuardadas.filter(r => r.productoId === (producto._id || producto.id));
+const media = resenasProducto.length > 0 
+    ? (resenasProducto.reduce((acc, r) => acc + r.puntuacion, 0) / resenasProducto.length).toFixed(1) 
+    : null;
+    
     return (
         // Fondo oscuro y borroso que cubre toda la pantalla
         <div className="modal-overlay-custom" onClick={onCerrar}>
@@ -44,10 +52,28 @@ const DetallesProducto = ({ producto, variante, onCerrar }) => {
                             {producto.nombre}{variante?.nombre ? ` - ${variante.nombre}` : ""}
                         </div>
 
-                        {/* Precio del producto */}
-                        <div className="modal-info-row purple-light">
-                            <span className="label">Precio:</span>
-                            <span className="value">{producto.precio}{DIVISA}</span>
+                        {/* Precio del producto y puntuación */}
+                        <div className="modal-info-row purple-light" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <span className="label">Precio:</span>
+                                <span className="value">{producto.precio}{DIVISA}</span>
+                            </div>
+
+                            {/* Aquí mostramos la puntuación si hay reseñas */}
+                            {media && (
+                                <span style={{ 
+                                    fontSize: '0.9rem', 
+                                    color: '#951f7c', 
+                                    fontWeight: 'bold', 
+                                    backgroundColor: '#fff', 
+                                    padding: '2px 8px', 
+                                    borderRadius: '15px', 
+                                    border: '1px solid #951f7c',
+                                    marginLeft: '10px'
+                                }}>
+                                    ★ {media}
+                                </span>
+                            )}
                         </div>
 
                         <div className="modal-info-row gray-light">
@@ -66,9 +92,29 @@ const DetallesProducto = ({ producto, variante, onCerrar }) => {
                                 {producto.descripcion}
                             </div>
                         </div>
+
+                        <button 
+                            type="button" 
+                            onClick={() => setMostrarResenas(true)}
+                            className="btn btn-sm text-white"
+                            style={{ backgroundColor: '#6A1B9A', fontWeight: '600', borderRadius: '8px', padding: '10px 15px', marginTop: '20px', width: '100%', border: 'none' }}
+                        >
+                            Ver Reseñas y Opiniones
+                        </button>
                     </div>
                 </div>
             </div>
+
+            {mostrarResenas && (
+                <div className="modal-overlay-custom" 
+                    onClick={() => setMostrarResenas(false)} 
+                    style={{ zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <ResenasProducto 
+                        productoId={producto._id || producto.id} 
+                        onCerrar={() => setMostrarResenas(false)} 
+                    />
+                </div>
+            )}
         </div>
     );
 };

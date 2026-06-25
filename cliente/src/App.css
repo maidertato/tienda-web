@@ -1217,6 +1217,27 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   margin-bottom: 5px;
 }
 
+.resenas-scroll-container {
+    max-height: 400px; /* Ajusta este valor según prefieras el alto máximo */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.resenas-scroll-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.resenas-scroll-container::-webkit-scrollbar-thumb {
+    background: #a362bc;
+    border-radius: 10px;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+}
+
+.resenas-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
 /* Contenedor del Carrito (Esquina Superior Derecha) */
 /* Contenedor de Deseos (Esquina Superior Izquierda) */
 .btn-deseos-container {
@@ -1554,6 +1575,36 @@ CARRITO DE COMPRAS (PANEL LATERAL)
   padding-right: 10px;
   max-height: 60vh;
 
+}
+
+.resenas-container {
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.resenas-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.resenas-container::-webkit-scrollbar-thumb {
+    background: #a362bc;
+    border-radius: 10px;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+}
+
+.resenas-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Ajustes de tipografía para las reseñas */
+.resena-item {
+    background-color: #f9f5fc;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.95rem; /* Un poco más grande */
+    border-left: 3px solid #a362bc;
 }
 
 /* Botón cerrar X */
